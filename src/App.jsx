@@ -24,6 +24,19 @@ const DB = {
         lines: {
           blblt: {
             label: "BL / BLT", desc: "Bone Level e Bone Level Tapered — conexão CrossFit® (RC)", icon: "⬡", connection: "CrossFit® RC",
+            scanning: {
+              digital: [
+                { label: "Scanbody peek RC ∅3,5mm", sku: "025.2915" },
+                { label: "Scanbody peek RC ∅4,6mm", sku: "025.0001" },
+                { label: "Análogo reposicionável RC", sku: "025.0008" },
+              ],
+              analogico: [
+                { label: "Transferente moldeira fechada (12,3mm)", sku: "025.2201" },
+                { label: "Transferente moldeira aberta curto (16,5mm)", sku: "025.2202" },
+                { label: "Transferente moldeira aberta longo (30mm)", sku: "025.2205" },
+                { label: "Análogo convencional RC", sku: "025.2101" },
+              ],
+            },
             objectives: {
               unitaria: {
                 label: "Prótese Unitária", desc: "Componente: Variobase® — coroa parafusada ou cimentada", icon: "🔩",
@@ -43,6 +56,22 @@ const DB = {
           },
           blxblc: {
             label: "BLX / BLC", desc: "Bone Level Xtend e Bone Level Xtend Conical — conexão TorcFit®", icon: "⭐", connection: "TorcFit® BLX",
+            scanning: {
+              digital: [
+                { label: "Scanbody peek RB/WB (nível implante)", sku: "065.0021" },
+                { label: "Análogo reposicionável RB", sku: "065.0023" },
+                { label: "Análogo reposicionável WB", sku: "065.0024" },
+              ],
+              analogico: [
+                { label: "Transferente moldeira aberta RB (16,5mm)", sku: "065.0031" },
+                { label: "Transferente moldeira aberta RB (24mm)", sku: "065.0033" },
+                { label: "Transferente moldeira fechada RB (13mm)", sku: "065.4310" },
+                { label: "Transferente moldeira aberta WB (16,5mm)", sku: "065.0032" },
+                { label: "Transferente moldeira fechada WB (13mm)", sku: "065.4810" },
+                { label: "Análogo convencional RB", sku: "065.0035" },
+                { label: "Análogo convencional WB", sku: "065.0022" },
+              ],
+            },
             objectives: {
               unitaria: {
                 label: "Prótese Unitária", desc: "Componente: Variobase® BLX — coroa parafusada ou cimentada", icon: "🔩",
@@ -68,6 +97,20 @@ const DB = {
         lines: {
           tl: {
             label: "TL (Tissue Level clássico)", desc: "Tissue Level RN — conexão SynOcta® (∅4,8mm). Colar transmucoso 1,8mm.", icon: "⬡", connection: "SynOcta® RN",
+            scanning: {
+              digital: [
+                { label: "Scanbody peek RN (nível pilar)", sku: "048.168" },
+                { label: "Scanbody peek WN (nível pilar)", sku: "048.169" },
+                { label: "Análogo reposicionável (digital)", sku: "032.018" },
+              ],
+              analogico: [
+                { label: "Transferente (coping de moldagem) RN", sku: "048.017V4" },
+                { label: "Transferente moldeira fechada RN", sku: "048.108" },
+                { label: "Transferente moldeira aberta (parafuso curto)", sku: "048.010" },
+                { label: "Transferente moldeira aberta (parafuso longo)", sku: "048.090" },
+                { label: "Análogo convencional RN ∅4,8mm", sku: "048.160" },
+              ],
+            },
             objectives: {
               unitaria: {
                 label: "Prótese Unitária", desc: "Componente: Variobase® TL — coroa parafusada ou cimentada", icon: "🔩",
@@ -87,6 +130,25 @@ const DB = {
           },
           tlx: {
             label: "TLX / TLC (Tissue Level Xtend)", desc: "Tissue Level Xtend — conexão TorcFit®. Plataformas NT, RT e WT.", icon: "⭐", connection: "TorcFit® TLX", isTLX: true,
+            scanning: {
+              digital: [
+                { label: "CARES® Scanbody mono (NT, RT e WT)", sku: "036.3220", note: "Mesmo scanbody para as 3 plataformas" },
+                { label: "Análogo reposicionável NT", sku: "036.1102" },
+                { label: "Análogo reposicionável RT", sku: "036.2100" },
+                { label: "Análogo reposicionável WT", sku: "036.2102" },
+              ],
+              analogico: [
+                { label: "Transferente moldeira aberta NT (15mm)", sku: "036.0000" },
+                { label: "Transferente moldeira fechada NT (12,7mm)", sku: "036.0002" },
+                { label: "Análogo convencional NT", sku: "036.0100" },
+                { label: "Transferente moldeira aberta RT (15mm)", sku: "036.1000" },
+                { label: "Transferente moldeira fechada RT (12,7mm)", sku: "036.1002" },
+                { label: "Análogo convencional RT", sku: "036.0102" },
+                { label: "Transferente moldeira aberta WT (15mm)", sku: "036.2000" },
+                { label: "Transferente moldeira fechada WT (12,7mm)", sku: "036.2002" },
+                { label: "Análogo convencional WT", sku: "036.2102" },
+              ],
+            },
             tlxPlatforms: [
               { key: "NT", label: "NT — Narrow TorcFit™", diam: "∅ 3,5 mm", desc: "Implantes de diâmetro reduzido. Chave AS 046.786.", color: "#818cf8", dot: "•" },
               { key: "RT", label: "RT — Regular TorcFit™", diam: "∅ 4,8 mm", desc: "Plataforma regular — indicação mais ampla. Chave AS 046.787.", color: "#3b82f6", dot: "••" },
@@ -682,8 +744,31 @@ function Result({ state, go, reset }) {
         </div>
         <div style={{ display: "flex", gap: 9, marginBottom: 14 }}>
           <ImplantShape shape={comp.shape || "variobase"} size={90} />
-          <Placeholder label="Scan Body / Transfer" />
+          <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 6 }}>
+            <div style={{ padding: "8px 10px", borderRadius: 9, background: "rgba(99,102,241,.12)", border: "1px solid rgba(99,102,241,.35)", flex: 1 }}>
+              <div style={{ fontSize: 8, fontWeight: 700, color: "#a5b4fc", letterSpacing: .5, textTransform: "uppercase", marginBottom: 5 }}>📡 Fluxo Digital</div>
+              {(line.scanning?.digital || []).filter(s => !isTLX || !s.label.includes(" NT") && !s.label.includes(" RT") && !s.label.includes(" WT") || s.label.includes(state.tlxPlatform || "")).map((s, i) => (
+                <div key={i} style={{ marginBottom: 3 }}>
+                  <div style={{ fontSize: 8, color: "#94a3b8", lineHeight: 1.3 }}>{s.label}{s.note ? <span style={{ color: "#6366f1", fontStyle: "italic" }}> — {s.note}</span> : ""}</div>
+                  <span style={{ fontFamily: "monospace", fontSize: 9, fontWeight: 700, color: "#a5b4fc" }}>{s.sku}</span>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
+        {line.scanning?.analogico && (
+          <div style={{ padding: "10px 12px", borderRadius: 10, background: "rgba(245,158,11,.08)", border: "1px solid rgba(245,158,11,.3)", marginBottom: 12 }}>
+            <div style={{ fontSize: 8, fontWeight: 700, color: "#fbbf24", letterSpacing: .5, textTransform: "uppercase", marginBottom: 6 }}>🧪 Fluxo Analógico (Moldagem Convencional)</div>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 5 }}>
+              {line.scanning.analogico.filter(s => !isTLX || s.label.includes(state.tlxPlatform || "") || (!s.label.includes(" NT") && !s.label.includes(" RT") && !s.label.includes(" WT"))).map((s, i) => (
+                <div key={i} style={{ padding: "4px 8px", borderRadius: 6, background: "rgba(30,41,59,0.9)", border: "1px solid #475569" }}>
+                  <div style={{ fontSize: 8, color: "#94a3b8", marginBottom: 1 }}>{s.label}</div>
+                  <span style={{ fontFamily: "monospace", fontSize: 9, fontWeight: 700, color: "#fbbf24" }}>{s.sku}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 6 }}>
           <div style={{ padding: "11px", borderRadius: 9, background: "rgba(245,158,11,.12)", border: "1px solid rgba(245,158,11,.4)" }}>
             <div style={{ display: "flex", alignItems: "center", gap: 4, marginBottom: 4 }}><Zap size={9} color="#f59e0b" /><span style={{ fontSize: 8, color: "#fcd34d", fontWeight: 700, textTransform: "uppercase" }}>Torque</span></div>
