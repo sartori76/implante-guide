@@ -54,38 +54,84 @@ const DB = {
               },
             }
           },
-          blxblc: {
-            label: "BLX / BLC", desc: "Bone Level Xtend e Bone Level Xtend Conical — conexão TorcFit®", icon: "⭐", connection: "TorcFit® BLX",
+          blxrb: {
+            label: "BLX RB — Regular Base", desc: "∅ 3,5 a 4,5 mm — perfil de emergência fino. Para coroas unitárias e pontes.", icon: "⭐", connection: "TorcFit® BLX",
             scanning: {
               digital: [
                 { label: "Scanbody peek RB/WB (nível implante)", sku: "065.0021" },
                 { label: "Análogo reposicionável RB", sku: "065.0023" },
-                { label: "Análogo reposicionável WB", sku: "065.0024" },
               ],
               analogico: [
                 { label: "Transferente moldeira aberta RB (16,5mm)", sku: "065.0031" },
                 { label: "Transferente moldeira aberta RB (24mm)", sku: "065.0033" },
                 { label: "Transferente moldeira fechada RB (13mm)", sku: "065.4310" },
-                { label: "Transferente moldeira aberta WB (16,5mm)", sku: "065.0032" },
-                { label: "Transferente moldeira fechada WB (13mm)", sku: "065.4810" },
                 { label: "Análogo convencional RB", sku: "065.0035" },
+              ],
+            },
+            objectives: {
+              unitaria_rbwb: {
+                label: "Prótese Unitária — Variobase RB/WB", desc: "Encaixa em implantes RB e WB. ∅ emergência 3,8mm ou 4,5mm.", icon: "🔩",
+                infobox: "✅ Variobase RB/WB encaixa tanto em implante RB quanto WB — versatilidade clínica máxima.",
+                subtypes: [
+                  { key: "vb_blx_38", label: "Variobase® BLX ∅3,8mm (RB/WB)", icon: "⬡", desc: "Perfil fino — GH 1,5 / 2,5 / 3,5mm. Para implantes RB e WB.", heights: gh("Variobase BLX ∅3,8mm", { torque: "35 Ncm", chave: "SCS 1.25mm", type: "Variobase BLX RB/WB", material: "Ti Grau 5", shape: "variobase" }, [["1.5", "062.4934"], ["2.5", "062.4935"], ["3.5", "062.4936"]]) },
+                  { key: "vb_blx_45_rbwb", label: "Variobase® BLX ∅4,5mm (RB/WB)", icon: "⬡", desc: "Perfil médio — GH 1,5 / 2,5 / 3,5mm. Para implantes RB e WB.", heights: gh("Variobase BLX ∅4,5mm", { torque: "35 Ncm", chave: "SCS 1.25mm", type: "Variobase BLX RB/WB", material: "Ti Grau 5", shape: "variobase_wide" }, [["1.5", "062.4944"], ["2.5", "062.4945"], ["3.5", "062.4946"]]) },
+                  { key: "pilar_blx_rb", label: "Pilar Anatômico BLX 0° / 17° (RB/WB)", icon: "↗", desc: "∅ emergência 3,8mm. Corrige angulação 0° ou 17°. Para RB e WB.", heights: gh("Pilar Anatômico BLX 0°", { torque: "35 Ncm", chave: "SCS 1.25mm", type: "Pilar Anatômico BLX", material: "Ti Grau 5", shape: "pilar_ang" }, [["2.5", "062.4103"], ["3.5", "062.4104"]]) },
+                  { key: "vb_blxc_rbwb", label: "Variobase® BLX C ∅4,5mm — Cimentado (RB/WB)", icon: "🪝", desc: "Restauração cimentada — ∅4,5mm. Compatível RB e WB. GH 1,5mm.", heights: gh("Variobase BLX C ∅4,5mm", { torque: "35 Ncm", chave: "SCS 1.25mm", type: "Variobase BLX C", material: "Ti Grau 5", shape: "pilar_cim" }, [["1.5", "062.4961"]]) },
+                ]
+              },
+              unitaria_wb: {
+                label: "Prótese Unitária — Variobase WB Exclusivo", desc: "Encaixa SOMENTE em implantes WB (∅5,0–6,5mm). ∅ emergência 5,5mm.", icon: "🔷",
+                infobox: "⚠️ Variobase WB exclusivo — encaixa SOMENTE em implantes de plataforma WB (∅5,0 a 6,5mm). Não instalar em implante RB.",
+                subtypes: [
+                  { key: "vb_blx_55_wb", label: "Variobase® BLX ∅5,5mm (WB exclusivo)", icon: "⬡", desc: "Perfil extra largo — GH 0,75 / 1,5mm. Somente implantes WB ∅5,0–6,5mm.", heights: gh("Variobase BLX ∅5,5mm WB", { torque: "35 Ncm", chave: "SCS 1.25mm", type: "Variobase BLX WB", material: "Ti Grau 5", shape: "variobase_wide" }, [["0.75", "062.4953"], ["1.5", "062.4954"]]) },
+                  { key: "vb_blxc_55_wb", label: "Variobase® C ∅5,5mm — Cimentado (WB exclusivo)", icon: "🪝", desc: "Restauração cimentada — ∅5,5mm. Somente implantes WB. GH 1,5mm.", heights: gh("Variobase C BLX ∅5,5mm WB", { torque: "35 Ncm", chave: "SCS 1.25mm", type: "Variobase BLX C WB", material: "Ti Grau 5", shape: "pilar_cim" }, [["1.5", "062.4983"]]) },
+                ]
+              },
+              multipla: {
+                label: "Prótese Unida / Múltipla", desc: "Componente: SRA BLX — para próteses fixas múltiplas parafusadas", icon: "⬢",
+                subtypes: [
+                  { key: "sra_blx_rb", label: "SRA BLX — Screw-Retained Abutment", icon: "⬢", desc: "Pilar SRA BLX para próteses fixas múltiplas. 0°, 17° e 30°.", heights: gh("SRA BLX 0°", { torque: "15 Ncm", chave: "SCS 1.25mm", type: "SRA Multi-Unit BLX", material: "Ti Grau 5", shape: "sra" }, [["1.5", "062.4722S"], ["2.5", "062.4723S"], ["3.5", "062.4724S"], ["4.5", "062.4725S"]]) },
+                ]
+              },
+            }
+          },
+          blxwb: {
+            label: "BLX WB — Wide Base", desc: "∅ 5,0 a 6,5 mm — perfil de emergência largo. Para dentes posteriores e implantes largos.", icon: "⭐", connection: "TorcFit® BLX",
+            scanning: {
+              digital: [
+                { label: "Scanbody peek RB/WB (nível implante)", sku: "065.0021" },
+                { label: "Análogo reposicionável WB", sku: "065.0024" },
+              ],
+              analogico: [
+                { label: "Transferente moldeira aberta WB (16,5mm)", sku: "065.0032" },
+                { label: "Transferente moldeira aberta WB (24mm)", sku: "065.0034" },
+                { label: "Transferente moldeira fechada WB (13mm)", sku: "065.4810" },
                 { label: "Análogo convencional WB", sku: "065.0022" },
               ],
             },
             objectives: {
-              unitaria: {
-                label: "Prótese Unitária", desc: "Componente: Variobase® BLX — coroa parafusada ou cimentada", icon: "🔩",
+              unitaria_rbwb: {
+                label: "Prótese Unitária — Variobase RB/WB", desc: "Encaixa em implantes WB também. ∅ emergência 3,8mm ou 4,5mm.", icon: "🔩",
+                infobox: "✅ Variobase RB/WB encaixa tanto em implante RB quanto WB — versátil para qualquer plataforma.",
                 subtypes: [
-                  { key: "vb_blx_38", label: "Variobase® BLX ∅3,8mm", icon: "⬡", desc: "Variobase BLX perfil fino — implantes RB e WB (∅3,5–6,5mm). Ideal para carga imediata.", heights: gh("Variobase BLX ∅3,8mm", { torque: "35 Ncm", chave: "SCS 1.25mm", type: "Variobase BLX", material: "Ti Grau 5", shape: "variobase" }, [["1.5", "062.4934"], ["2.5", "062.4935"], ["3.5", "062.4936"]]) },
-                  { key: "vb_blx_45", label: "Variobase® BLX ∅4,5mm", icon: "⬡", desc: "Variobase BLX perfil largo — maior perfil de emergência. Para implantes RB e WB.", heights: gh("Variobase BLX ∅4,5mm", { torque: "35 Ncm", chave: "SCS 1.25mm", type: "Variobase BLX", material: "Ti Grau 5", shape: "variobase_wide" }, [["1.5", "062.4944"], ["2.5", "062.4945"], ["3.5", "062.4946"]]) },
-                  { key: "pilar_blx", label: "Pilar Anatômico BLX (0° / 17°)", icon: "↗", desc: "Pilar anatômico BLX — corrige angulação 0° ou 17°. ∅ emergência 3,8mm.", heights: gh("Pilar Anatômico BLX 0°", { torque: "35 Ncm", chave: "SCS 1.25mm", type: "Pilar Anatômico BLX", material: "Ti Grau 5", shape: "pilar_ang" }, [["2.5", "062.4103"], ["3.5", "062.4104"]]) },
-                  { key: "vb_blxc", label: "Variobase® BLX C (Cimentado)", icon: "🪝", desc: "Variobase BLX C para restaurações cimentadas — ∅4,5mm.", heights: gh("Variobase BLX C ∅4,5mm", { torque: "35 Ncm", chave: "SCS 1.25mm", type: "Variobase BLX Cimentado", material: "Ti Grau 5", shape: "pilar_cim" }, [["1.5", "062.4961"]]) },
+                  { key: "vb_blx_38_wb", label: "Variobase® BLX ∅3,8mm (RB/WB)", icon: "⬡", desc: "Perfil fino — GH 1,5 / 2,5 / 3,5mm. Para implantes RB e WB.", heights: gh("Variobase BLX ∅3,8mm", { torque: "35 Ncm", chave: "SCS 1.25mm", type: "Variobase BLX RB/WB", material: "Ti Grau 5", shape: "variobase" }, [["1.5", "062.4934"], ["2.5", "062.4935"], ["3.5", "062.4936"]]) },
+                  { key: "vb_blx_45_wb2", label: "Variobase® BLX ∅4,5mm (RB/WB)", icon: "⬡", desc: "Perfil médio — GH 1,5 / 2,5 / 3,5mm. Para implantes RB e WB.", heights: gh("Variobase BLX ∅4,5mm", { torque: "35 Ncm", chave: "SCS 1.25mm", type: "Variobase BLX RB/WB", material: "Ti Grau 5", shape: "variobase_wide" }, [["1.5", "062.4944"], ["2.5", "062.4945"], ["3.5", "062.4946"]]) },
+                  { key: "pilar_blx_wb2", label: "Pilar Anatômico BLX 0° / 17° (RB/WB)", icon: "↗", desc: "∅ emergência 3,8mm. Corrige angulação 0° ou 17°. Para RB e WB.", heights: gh("Pilar Anatômico BLX 0°", { torque: "35 Ncm", chave: "SCS 1.25mm", type: "Pilar Anatômico BLX", material: "Ti Grau 5", shape: "pilar_ang" }, [["2.5", "062.4103"], ["3.5", "062.4154"]]) },
+                  { key: "vb_blxc_wb2", label: "Variobase® BLX C ∅4,5mm — Cimentado (RB/WB)", icon: "🪝", desc: "Restauração cimentada — ∅4,5mm. Compatível RB e WB. GH 1,5mm.", heights: gh("Variobase BLX C ∅4,5mm", { torque: "35 Ncm", chave: "SCS 1.25mm", type: "Variobase BLX C", material: "Ti Grau 5", shape: "pilar_cim" }, [["1.5", "062.4961"]]) },
+                ]
+              },
+              unitaria_wb: {
+                label: "Prótese Unitária — Variobase WB Exclusivo", desc: "Encaixa SOMENTE em implantes WB (∅5,0–6,5mm). ∅ emergência 5,5mm.", icon: "🔷",
+                infobox: "⚠️ Variobase WB exclusivo — encaixa SOMENTE em implantes de plataforma WB (∅5,0 a 6,5mm). Não instalar em implante RB.",
+                subtypes: [
+                  { key: "vb_blx_55_wb2", label: "Variobase® BLX ∅5,5mm (WB exclusivo)", icon: "⬡", desc: "Perfil extra largo — GH 0,75 / 1,5mm. Somente implantes WB ∅5,0–6,5mm.", heights: gh("Variobase BLX ∅5,5mm WB", { torque: "35 Ncm", chave: "SCS 1.25mm", type: "Variobase BLX WB", material: "Ti Grau 5", shape: "variobase_wide" }, [["0.75", "062.4953"], ["1.5", "062.4954"]]) },
+                  { key: "vb_blxc_55_wb2", label: "Variobase® C ∅5,5mm — Cimentado (WB exclusivo)", icon: "🪝", desc: "Restauração cimentada — ∅5,5mm. Somente implantes WB. GH 1,5mm.", heights: gh("Variobase C BLX ∅5,5mm WB", { torque: "35 Ncm", chave: "SCS 1.25mm", type: "Variobase BLX C WB", material: "Ti Grau 5", shape: "pilar_cim" }, [["1.5", "062.4983"]]) },
                 ]
               },
               multipla: {
-                label: "Prótese Unida / Múltipla", desc: "Componente: SRA BLX — Screw-Retained Abutment para próteses fixas unidas", icon: "⬢",
+                label: "Prótese Unida / Múltipla", desc: "Componente: SRA BLX — para próteses fixas múltiplas parafusadas", icon: "⬢",
                 subtypes: [
-                  { key: "sra_blx", label: "SRA BLX — Screw-Retained Abutment", icon: "⬢", desc: "Pilar SRA BLX para próteses fixas múltiplas. Disponível em 0°, 17° e 30°.", heights: gh("SRA BLX 0°", { torque: "15 Ncm", chave: "SCS 1.25mm", type: "SRA Multi-Unit BLX", material: "Ti Grau 5", shape: "sra" }, [["1.5", "062.4722S"], ["2.5", "062.4723S"], ["3.5", "062.4724S"], ["4.5", "062.4725S"]]) },
+                  { key: "sra_blx_wb", label: "SRA BLX — Screw-Retained Abutment", icon: "⬢", desc: "Pilar SRA BLX para próteses fixas múltiplas WB. 0°, 17° e 30°.", heights: gh("SRA BLX WB 0°", { torque: "15 Ncm", chave: "SCS 1.25mm", type: "SRA Multi-Unit BLX WB", material: "Ti Grau 5", shape: "sra" }, [["1.5", "062.4733S"], ["2.5", "062.4743S"], ["3.5", "062.4744S"]]) },
                 ]
               },
             }
@@ -616,17 +662,24 @@ function ObjectiveSelect({ state, go }) {
       <Hdr title="Objetivo Protético" sub="Unitária ou Prótese Unida?" onBack={() => go(backScreen, state)} />
       <Breadcrumb steps={[brand.label, fam.label, line.label, tlxPlat ? `${tlxPlat.key} ${tlxPlat.diam}` : null].filter(Boolean)} />
       <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-        {Object.entries(line.objectives).map(([key, obj]) => (
-          <button key={key} className="hov" onClick={() => go("subtypeSelect", { ...state, objective: key })}
-            style={{ ...card, padding: "18px", border: `1px solid ${key === "unitaria" ? "rgba(59,130,246,.35)" : "rgba(16,185,129,.35)"}` }}>
-            <div style={{ fontSize: 26, width: 50, height: 50, borderRadius: 12, background: key === "unitaria" ? "rgba(59,130,246,.18)" : "rgba(16,185,129,.15)", border: `1px solid ${key === "unitaria" ? "rgba(59,130,246,.4)" : "rgba(16,185,129,.4)"}`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>{obj.icon}</div>
-            <div style={{ flex: 1 }}>
-              <div style={{ fontWeight: 700, color: "white", fontSize: 14, marginBottom: 4 }}>{obj.label}</div>
-              <div style={{ fontSize: 10, color: "#94a3b8", lineHeight: 1.5 }}>{obj.desc}</div>
-            </div>
-            <ChevronRight size={14} color="#475569" />
-          </button>
-        ))}
+        {Object.entries(line.objectives).map(([key, obj]) => {
+          const isWBexclusivo = key === "unitaria_wb";
+          const isRBWB = key === "unitaria_rbwb";
+          const color = isWBexclusivo ? "#f59e0b" : isRBWB ? "#3b82f6" : "#10b981";
+          return (
+            <button key={key} className="hov" onClick={() => go("subtypeSelect", { ...state, objective: key })}
+              style={{ ...card, padding: "18px", border: `1px solid ${color}44` }}>
+              <div style={{ fontSize: 26, width: 50, height: 50, borderRadius: 12, background: `${color}18`, border: `1px solid ${color}44`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>{obj.icon}</div>
+              <div style={{ flex: 1 }}>
+                <div style={{ fontWeight: 700, color: "white", fontSize: 13, marginBottom: 4 }}>{obj.label}</div>
+                <div style={{ fontSize: 10, color: "#94a3b8", lineHeight: 1.5 }}>{obj.desc}</div>
+                {isWBexclusivo && <div style={{ marginTop: 5, fontSize: 9, color: "#f59e0b", fontWeight: 700 }}>⚠️ Somente implante WB</div>}
+                {isRBWB && <div style={{ marginTop: 5, fontSize: 9, color: "#60a5fa", fontWeight: 700 }}>✅ Compatível RB e WB</div>}
+              </div>
+              <ChevronRight size={14} color="#475569" />
+            </button>
+          );
+        })}
       </div>
       <InfoBox color="#f59e0b" icon={<Info size={11} color="#f59e0b" style={{ flexShrink: 0, marginTop: 1 }} />}>
         <strong>Unitária:</strong> Variobase® (coroa única). &nbsp;<strong>Unida:</strong> SRA / MUA (múltiplos implantes em prótese fixa unida).
@@ -649,6 +702,11 @@ function SubtypeSelect({ state, go }) {
       <Sty />
       <Hdr title="Componente Protético" sub={obj.label} onBack={() => go("objectiveSelect", state)} />
       <Breadcrumb steps={[brand.label, fam.label, line.label, tlxPlat ? tlxPlat.key : null, obj.label].filter(Boolean)} />
+      {obj.infobox && (
+        <InfoBox color={obj.infobox.startsWith("⚠️") ? "#f59e0b" : "#3b82f6"} icon={<Info size={11} color={obj.infobox.startsWith("⚠️") ? "#f59e0b" : "#3b82f6"} style={{ flexShrink: 0, marginTop: 1 }} />}>
+          {obj.infobox}
+        </InfoBox>
+      )}
       <div style={{ display: "flex", flexDirection: "column", gap: 9 }}>
         {subs.map((st) => (
           <button key={st.key} className="hov" onClick={() => go(isTLX ? "result" : "heightSelect", { ...state, subtype: st.key, gengivalHeight: isTLX ? "unico" : null })}
