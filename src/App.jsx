@@ -261,7 +261,7 @@ function Logo() {
   );
 }
 function Back({ onClick }) {
-  return <button onClick={onClick} style={{ width: 34, height: 34, borderRadius: 9, background: "rgba(30,41,59,0.9)", border: "1px solid #475569", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", flexShrink: 0 }}><ChevronLeft size={15} color="#e2e8f0" /></button>;
+  return <button onClick={onClick} style={{ width: 34, height: 34, borderRadius: 9, background: "rgba(30,41,59,0.9)", border: "1px solid #475569", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", flexShrink: 0, fontSize: 18, color: "#e2e8f0", lineHeight: 1 }}>‹</button>;
 }
 function Hdr({ title, sub, color = "#94a3b8", onBack }) {
   return <div style={G.row}><Back onClick={onBack} /><div><h2 style={{ margin: 0, fontSize: 16, fontWeight: 700, color: "white" }}>{title}</h2>{sub && <p style={{ margin: 0, fontSize: 11, color }}>{sub}</p>}</div></div>;
