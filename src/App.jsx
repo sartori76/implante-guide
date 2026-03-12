@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   ChevronRight, ChevronLeft, CheckCircle, ShoppingCart,
   ExternalLink, RotateCcw, Zap, Shield, Home, ArrowRight,
-  Info, Search, AlertTriangle, Layers
+  Info, Search, AlertTriangle, Layers, Trash2
 } from "lucide-react";
 
 // ─── Helper ──────────────────────────────────────────────────────────────────
@@ -24,19 +24,6 @@ const DB = {
         lines: {
           blblt: {
             label: "BL / BLT", desc: "Bone Level e Bone Level Tapered — conexão CrossFit® (RC)", icon: "⬡", connection: "CrossFit® RC",
-            scanning: {
-              digital: [
-                { label: "Scanbody peek RC ∅3,5mm", sku: "025.2915" },
-                { label: "Scanbody peek RC ∅4,6mm", sku: "025.0001" },
-                { label: "Análogo reposicionável RC", sku: "025.0008" },
-              ],
-              analogico: [
-                { label: "Transferente moldeira fechada (12,3mm)", sku: "025.2201" },
-                { label: "Transferente moldeira aberta curto (16,5mm)", sku: "025.2202" },
-                { label: "Transferente moldeira aberta longo (30mm)", sku: "025.2205" },
-                { label: "Análogo convencional RC", sku: "025.2101" },
-              ],
-            },
             objectives: {
               unitaria: {
                 label: "Prótese Unitária", desc: "Componente: Variobase® — coroa parafusada ou cimentada", icon: "🔩",
@@ -54,84 +41,22 @@ const DB = {
               },
             }
           },
-          blxrb: {
-            label: "BLX RB — Regular Base", desc: "∅ 3,5 a 4,5 mm — perfil de emergência fino. Para coroas unitárias e pontes.", icon: "⭐", connection: "TorcFit® BLX",
-            scanning: {
-              digital: [
-                { label: "Scanbody peek RB/WB (nível implante)", sku: "065.0021" },
-                { label: "Análogo reposicionável RB", sku: "065.0023" },
-              ],
-              analogico: [
-                { label: "Transferente moldeira aberta RB (16,5mm)", sku: "065.0031" },
-                { label: "Transferente moldeira aberta RB (24mm)", sku: "065.0033" },
-                { label: "Transferente moldeira fechada RB (13mm)", sku: "065.4310" },
-                { label: "Análogo convencional RB", sku: "065.0035" },
-              ],
-            },
+          blxblc: {
+            label: "BLX / BLC", desc: "Bone Level Xtend e Bone Level Xtend Conical — conexão TorcFit®", icon: "⭐", connection: "TorcFit® BLX",
             objectives: {
-              unitaria_rbwb: {
-                label: "Prótese Unitária — Variobase RB/WB", desc: "Encaixa em implantes RB e WB. ∅ emergência 3,8mm ou 4,5mm.", icon: "🔩",
-                infobox: "✅ Variobase RB/WB encaixa tanto em implante RB quanto WB — versatilidade clínica máxima.",
+              unitaria: {
+                label: "Prótese Unitária", desc: "Componente: Variobase® BLX — coroa parafusada ou cimentada", icon: "🔩",
                 subtypes: [
-                  { key: "vb_blx_38", label: "Variobase® BLX ∅3,8mm (RB/WB)", icon: "⬡", desc: "Perfil fino — GH 1,5 / 2,5 / 3,5mm. Para implantes RB e WB.", heights: gh("Variobase BLX ∅3,8mm", { torque: "35 Ncm", chave: "SCS 1.25mm", type: "Variobase BLX RB/WB", material: "Ti Grau 5", shape: "variobase" }, [["1.5", "062.4934"], ["2.5", "062.4935"], ["3.5", "062.4936"]]) },
-                  { key: "vb_blx_45_rbwb", label: "Variobase® BLX ∅4,5mm (RB/WB)", icon: "⬡", desc: "Perfil médio — GH 1,5 / 2,5 / 3,5mm. Para implantes RB e WB.", heights: gh("Variobase BLX ∅4,5mm", { torque: "35 Ncm", chave: "SCS 1.25mm", type: "Variobase BLX RB/WB", material: "Ti Grau 5", shape: "variobase_wide" }, [["1.5", "062.4944"], ["2.5", "062.4945"], ["3.5", "062.4946"]]) },
-                  { key: "pilar_blx_rb", label: "Pilar Anatômico BLX 0° / 17° (RB/WB)", icon: "↗", desc: "∅ emergência 3,8mm. Corrige angulação 0° ou 17°. Para RB e WB.", heights: gh("Pilar Anatômico BLX 0°", { torque: "35 Ncm", chave: "SCS 1.25mm", type: "Pilar Anatômico BLX", material: "Ti Grau 5", shape: "pilar_ang" }, [["2.5", "062.4103"], ["3.5", "062.4104"]]) },
-                  { key: "vb_blxc_rbwb", label: "Variobase® BLX C ∅4,5mm — Cimentado (RB/WB)", icon: "🪝", desc: "Restauração cimentada — ∅4,5mm. Compatível RB e WB. GH 1,5mm.", heights: gh("Variobase BLX C ∅4,5mm", { torque: "35 Ncm", chave: "SCS 1.25mm", type: "Variobase BLX C", material: "Ti Grau 5", shape: "pilar_cim" }, [["1.5", "062.4961"]]) },
-                ]
-              },
-              unitaria_wb: {
-                label: "Prótese Unitária — Variobase WB Exclusivo", desc: "Encaixa SOMENTE em implantes WB (∅5,0–6,5mm). ∅ emergência 5,5mm.", icon: "🔷",
-                infobox: "⚠️ Variobase WB exclusivo — encaixa SOMENTE em implantes de plataforma WB (∅5,0 a 6,5mm). Não instalar em implante RB.",
-                subtypes: [
-                  { key: "vb_blx_55_wb", label: "Variobase® BLX ∅5,5mm (WB exclusivo)", icon: "⬡", desc: "Perfil extra largo — GH 0,75 / 1,5mm. Somente implantes WB ∅5,0–6,5mm.", heights: gh("Variobase BLX ∅5,5mm WB", { torque: "35 Ncm", chave: "SCS 1.25mm", type: "Variobase BLX WB", material: "Ti Grau 5", shape: "variobase_wide" }, [["0.75", "062.4953"], ["1.5", "062.4954"]]) },
-                  { key: "vb_blxc_55_wb", label: "Variobase® C ∅5,5mm — Cimentado (WB exclusivo)", icon: "🪝", desc: "Restauração cimentada — ∅5,5mm. Somente implantes WB. GH 1,5mm.", heights: gh("Variobase C BLX ∅5,5mm WB", { torque: "35 Ncm", chave: "SCS 1.25mm", type: "Variobase BLX C WB", material: "Ti Grau 5", shape: "pilar_cim" }, [["1.5", "062.4983"]]) },
+                  { key: "vb_blx_38", label: "Variobase® BLX ∅3,8mm", icon: "⬡", desc: "Variobase BLX perfil fino — implantes RB e WB (∅3,5–6,5mm). Ideal para carga imediata.", heights: gh("Variobase BLX ∅3,8mm", { torque: "35 Ncm", chave: "SCS 1.25mm", type: "Variobase BLX", material: "Ti Grau 5", shape: "variobase" }, [["1.5", "062.4934"], ["2.5", "062.4935"], ["3.5", "062.4936"]]) },
+                  { key: "vb_blx_45", label: "Variobase® BLX ∅4,5mm", icon: "⬡", desc: "Variobase BLX perfil largo — maior perfil de emergência. Para implantes RB e WB.", heights: gh("Variobase BLX ∅4,5mm", { torque: "35 Ncm", chave: "SCS 1.25mm", type: "Variobase BLX", material: "Ti Grau 5", shape: "variobase_wide" }, [["1.5", "062.4944"], ["2.5", "062.4945"], ["3.5", "062.4946"]]) },
+                  { key: "pilar_blx", label: "Pilar Anatômico BLX (0° / 17°)", icon: "↗", desc: "Pilar anatômico BLX — corrige angulação 0° ou 17°. ∅ emergência 3,8mm.", heights: gh("Pilar Anatômico BLX 0°", { torque: "35 Ncm", chave: "SCS 1.25mm", type: "Pilar Anatômico BLX", material: "Ti Grau 5", shape: "pilar_ang" }, [["2.5", "062.4103"], ["3.5", "062.4104"]]) },
+                  { key: "vb_blxc", label: "Variobase® BLX C (Cimentado)", icon: "🪝", desc: "Variobase BLX C para restaurações cimentadas — ∅4,5mm.", heights: gh("Variobase BLX C ∅4,5mm", { torque: "35 Ncm", chave: "SCS 1.25mm", type: "Variobase BLX Cimentado", material: "Ti Grau 5", shape: "pilar_cim" }, [["1.5", "062.4961"]]) },
                 ]
               },
               multipla: {
-                label: "Prótese Unida / Múltipla", desc: "Componente: SRA BLX — para próteses fixas múltiplas parafusadas", icon: "⬢",
+                label: "Prótese Unida / Múltipla", desc: "Componente: SRA BLX — Screw-Retained Abutment para próteses fixas unidas", icon: "⬢",
                 subtypes: [
-                  { key: "sra_blx_rb", label: "SRA BLX — Screw-Retained Abutment", icon: "⬢", desc: "Pilar SRA BLX para próteses fixas múltiplas. 0°, 17° e 30°.", heights: gh("SRA BLX 0°", { torque: "15 Ncm", chave: "SCS 1.25mm", type: "SRA Multi-Unit BLX", material: "Ti Grau 5", shape: "sra" }, [["1.5", "062.4722S"], ["2.5", "062.4723S"], ["3.5", "062.4724S"], ["4.5", "062.4725S"]]) },
-                ]
-              },
-            }
-          },
-          blxwb: {
-            label: "BLX WB — Wide Base", desc: "∅ 5,0 a 6,5 mm — perfil de emergência largo. Para dentes posteriores e implantes largos.", icon: "⭐", connection: "TorcFit® BLX",
-            scanning: {
-              digital: [
-                { label: "Scanbody peek RB/WB (nível implante)", sku: "065.0021" },
-                { label: "Análogo reposicionável WB", sku: "065.0024" },
-              ],
-              analogico: [
-                { label: "Transferente moldeira aberta WB (16,5mm)", sku: "065.0032" },
-                { label: "Transferente moldeira aberta WB (24mm)", sku: "065.0034" },
-                { label: "Transferente moldeira fechada WB (13mm)", sku: "065.4810" },
-                { label: "Análogo convencional WB", sku: "065.0022" },
-              ],
-            },
-            objectives: {
-              unitaria_rbwb: {
-                label: "Prótese Unitária — Variobase RB/WB", desc: "Encaixa em implantes WB também. ∅ emergência 3,8mm ou 4,5mm.", icon: "🔩",
-                infobox: "✅ Variobase RB/WB encaixa tanto em implante RB quanto WB — versátil para qualquer plataforma.",
-                subtypes: [
-                  { key: "vb_blx_38_wb", label: "Variobase® BLX ∅3,8mm (RB/WB)", icon: "⬡", desc: "Perfil fino — GH 1,5 / 2,5 / 3,5mm. Para implantes RB e WB.", heights: gh("Variobase BLX ∅3,8mm", { torque: "35 Ncm", chave: "SCS 1.25mm", type: "Variobase BLX RB/WB", material: "Ti Grau 5", shape: "variobase" }, [["1.5", "062.4934"], ["2.5", "062.4935"], ["3.5", "062.4936"]]) },
-                  { key: "vb_blx_45_wb2", label: "Variobase® BLX ∅4,5mm (RB/WB)", icon: "⬡", desc: "Perfil médio — GH 1,5 / 2,5 / 3,5mm. Para implantes RB e WB.", heights: gh("Variobase BLX ∅4,5mm", { torque: "35 Ncm", chave: "SCS 1.25mm", type: "Variobase BLX RB/WB", material: "Ti Grau 5", shape: "variobase_wide" }, [["1.5", "062.4944"], ["2.5", "062.4945"], ["3.5", "062.4946"]]) },
-                  { key: "pilar_blx_wb2", label: "Pilar Anatômico BLX 0° / 17° (RB/WB)", icon: "↗", desc: "∅ emergência 3,8mm. Corrige angulação 0° ou 17°. Para RB e WB.", heights: gh("Pilar Anatômico BLX 0°", { torque: "35 Ncm", chave: "SCS 1.25mm", type: "Pilar Anatômico BLX", material: "Ti Grau 5", shape: "pilar_ang" }, [["2.5", "062.4103"], ["3.5", "062.4154"]]) },
-                  { key: "vb_blxc_wb2", label: "Variobase® BLX C ∅4,5mm — Cimentado (RB/WB)", icon: "🪝", desc: "Restauração cimentada — ∅4,5mm. Compatível RB e WB. GH 1,5mm.", heights: gh("Variobase BLX C ∅4,5mm", { torque: "35 Ncm", chave: "SCS 1.25mm", type: "Variobase BLX C", material: "Ti Grau 5", shape: "pilar_cim" }, [["1.5", "062.4961"]]) },
-                ]
-              },
-              unitaria_wb: {
-                label: "Prótese Unitária — Variobase WB Exclusivo", desc: "Encaixa SOMENTE em implantes WB (∅5,0–6,5mm). ∅ emergência 5,5mm.", icon: "🔷",
-                infobox: "⚠️ Variobase WB exclusivo — encaixa SOMENTE em implantes de plataforma WB (∅5,0 a 6,5mm). Não instalar em implante RB.",
-                subtypes: [
-                  { key: "vb_blx_55_wb2", label: "Variobase® BLX ∅5,5mm (WB exclusivo)", icon: "⬡", desc: "Perfil extra largo — GH 0,75 / 1,5mm. Somente implantes WB ∅5,0–6,5mm.", heights: gh("Variobase BLX ∅5,5mm WB", { torque: "35 Ncm", chave: "SCS 1.25mm", type: "Variobase BLX WB", material: "Ti Grau 5", shape: "variobase_wide" }, [["0.75", "062.4953"], ["1.5", "062.4954"]]) },
-                  { key: "vb_blxc_55_wb2", label: "Variobase® C ∅5,5mm — Cimentado (WB exclusivo)", icon: "🪝", desc: "Restauração cimentada — ∅5,5mm. Somente implantes WB. GH 1,5mm.", heights: gh("Variobase C BLX ∅5,5mm WB", { torque: "35 Ncm", chave: "SCS 1.25mm", type: "Variobase BLX C WB", material: "Ti Grau 5", shape: "pilar_cim" }, [["1.5", "062.4983"]]) },
-                ]
-              },
-              multipla: {
-                label: "Prótese Unida / Múltipla", desc: "Componente: SRA BLX — para próteses fixas múltiplas parafusadas", icon: "⬢",
-                subtypes: [
-                  { key: "sra_blx_wb", label: "SRA BLX — Screw-Retained Abutment", icon: "⬢", desc: "Pilar SRA BLX para próteses fixas múltiplas WB. 0°, 17° e 30°.", heights: gh("SRA BLX WB 0°", { torque: "15 Ncm", chave: "SCS 1.25mm", type: "SRA Multi-Unit BLX WB", material: "Ti Grau 5", shape: "sra" }, [["1.5", "062.4733S"], ["2.5", "062.4743S"], ["3.5", "062.4744S"]]) },
+                  { key: "sra_blx", label: "SRA BLX — Screw-Retained Abutment", icon: "⬢", desc: "Pilar SRA BLX para próteses fixas múltiplas. Disponível em 0°, 17° e 30°.", heights: gh("SRA BLX 0°", { torque: "35 Ncm", chave: "SCS 1.25mm", type: "SRA Multi-Unit BLX", material: "Ti Grau 5", shape: "sra" }, [["1.5", "062.4722S"], ["2.5", "062.4723S"], ["3.5", "062.4724S"], ["4.5", "062.4725S"]]) },
                 ]
               },
             }
@@ -143,20 +68,6 @@ const DB = {
         lines: {
           tl: {
             label: "TL (Tissue Level clássico)", desc: "Tissue Level RN — conexão SynOcta® (∅4,8mm). Colar transmucoso 1,8mm.", icon: "⬡", connection: "SynOcta® RN",
-            scanning: {
-              digital: [
-                { label: "Scanbody peek RN (nível pilar)", sku: "048.168" },
-                { label: "Scanbody peek WN (nível pilar)", sku: "048.169" },
-                { label: "Análogo reposicionável (digital)", sku: "032.018" },
-              ],
-              analogico: [
-                { label: "Transferente (coping de moldagem) RN", sku: "048.017V4" },
-                { label: "Transferente moldeira fechada RN", sku: "048.108" },
-                { label: "Transferente moldeira aberta (parafuso curto)", sku: "048.010" },
-                { label: "Transferente moldeira aberta (parafuso longo)", sku: "048.090" },
-                { label: "Análogo convencional RN ∅4,8mm", sku: "048.160" },
-              ],
-            },
             objectives: {
               unitaria: {
                 label: "Prótese Unitária", desc: "Componente: Variobase® TL — coroa parafusada ou cimentada", icon: "🔩",
@@ -176,25 +87,6 @@ const DB = {
           },
           tlx: {
             label: "TLX / TLC (Tissue Level Xtend)", desc: "Tissue Level Xtend — conexão TorcFit®. Plataformas NT, RT e WT.", icon: "⭐", connection: "TorcFit® TLX", isTLX: true,
-            scanning: {
-              digital: [
-                { label: "CARES® Scanbody mono (NT, RT e WT)", sku: "036.3220", note: "Mesmo scanbody para as 3 plataformas" },
-                { label: "Análogo reposicionável NT", sku: "036.1102" },
-                { label: "Análogo reposicionável RT", sku: "036.2100" },
-                { label: "Análogo reposicionável WT", sku: "036.2102" },
-              ],
-              analogico: [
-                { label: "Transferente moldeira aberta NT (15mm)", sku: "036.0000" },
-                { label: "Transferente moldeira fechada NT (12,7mm)", sku: "036.0002" },
-                { label: "Análogo convencional NT", sku: "036.0100" },
-                { label: "Transferente moldeira aberta RT (15mm)", sku: "036.1000" },
-                { label: "Transferente moldeira fechada RT (12,7mm)", sku: "036.1002" },
-                { label: "Análogo convencional RT", sku: "036.0102" },
-                { label: "Transferente moldeira aberta WT (15mm)", sku: "036.2000" },
-                { label: "Transferente moldeira fechada WT (12,7mm)", sku: "036.2002" },
-                { label: "Análogo convencional WT", sku: "036.2102" },
-              ],
-            },
             tlxPlatforms: [
               { key: "NT", label: "NT — Narrow TorcFit™", diam: "∅ 3,5 mm", desc: "Implantes de diâmetro reduzido. Chave AS 046.786.", color: "#818cf8", dot: "•" },
               { key: "RT", label: "RT — Regular TorcFit™", diam: "∅ 4,8 mm", desc: "Plataforma regular — indicação mais ampla. Chave AS 046.787.", color: "#3b82f6", dot: "••" },
@@ -335,6 +227,8 @@ const HEIGHT_DESCS = {
   "3.5": "Tecido espesso — GH 3,5mm (posterior / biótipo grosso)",
   "4.5": "Tecido muito espesso — GH 4,5mm (ganho ósseo / regeneração)"
 };
+
+// FIX 3: <Sty/> definido aqui mas renderizado UMA ÚNICA VEZ no App raiz
 const css = `
   @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700;800&display=swap');
   *{box-sizing:border-box} body{margin:0;background:#020617;font-family:'DM Sans',sans-serif;color:white}
@@ -348,6 +242,7 @@ const css = `
   .fadein{animation:fadeIn .22s ease both}
 `;
 function Sty() { return <style>{css}</style>; }
+
 const G = {
   page: { minHeight: "100vh", display: "flex", flexDirection: "column", padding: "20px 16px 40px", gap: 14, maxWidth: 450, margin: "0 auto" },
   row: { display: "flex", alignItems: "center", gap: 10 },
@@ -369,7 +264,7 @@ function Logo() {
   );
 }
 function Back({ onClick }) {
-  return <button onClick={onClick} style={{ width: 34, height: 34, borderRadius: 9, background: "rgba(30,41,59,0.9)", border: "1px solid #475569", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", flexShrink: 0, fontSize: 18, color: "#e2e8f0", lineHeight: 1 }}>‹</button>;
+  return <button onClick={onClick} style={{ width: 34, height: 34, borderRadius: 9, background: "rgba(30,41,59,0.9)", border: "1px solid #475569", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", flexShrink: 0 }}><ChevronLeft size={15} color="#e2e8f0" /></button>;
 }
 function Hdr({ title, sub, color = "#94a3b8", onBack }) {
   return <div style={G.row}><Back onClick={onBack} /><div><h2 style={{ margin: 0, fontSize: 16, fontWeight: 700, color: "white" }}>{title}</h2>{sub && <p style={{ margin: 0, fontSize: 11, color }}>{sub}</p>}</div></div>;
@@ -397,11 +292,10 @@ function Placeholder({ label }) {
   return <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center" }}><div style={{ width: 90, height: 90, borderRadius: 12, background: "linear-gradient(135deg,#0f172a,#1e293b)", border: "1px solid rgba(59,130,246,.3)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 3 }}><span style={{ fontSize: 22 }}>🦷</span><span style={{ fontSize: 8, color: "#94a3b8", textAlign: "center", padding: "0 5px", lineHeight: 1.3 }}>{label}</span></div></div>;
 }
 
-// ─── TELA HOME (original restaurada) ─────────────────────────────────────────
+// ─── TELA HOME ────────────────────────────────────────────────────────────────
 function HomeScreen({ go }) {
   return (
     <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "24px 16px" }}>
-      <Sty />
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 22, maxWidth: 420, width: "100%" }}>
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 11 }}>
           <Logo />
@@ -439,7 +333,7 @@ function HomeScreen({ go }) {
             <Search size={14} color="#94a3b8" />
           </button>
         </div>
-        <p style={{ margin: 0, fontSize: 9, color: "#475569" }}>v4.0 · Straumann & Neodent · SKUs oficiais</p>
+        <p style={{ margin: 0, fontSize: 9, color: "#475569" }}>v4.1 · Straumann & Neodent · SKUs oficiais</p>
       </div>
     </div>
   );
@@ -468,7 +362,6 @@ function Detective({ go }) {
     const brands = COMPATIBLE_BRANDS[ct] || [];
     return (
       <div style={G.page} className="fadein">
-        <Sty />
         <button onClick={() => { setDone(false); setStep(5); setSel(null); }} style={{ display: "flex", alignItems: "center", gap: 5, background: "none", border: "none", color: "#94a3b8", cursor: "pointer", padding: 0, fontSize: 11 }}><ChevronLeft size={13} />Rever</button>
         <div style={{ padding: 18, borderRadius: 14, background: "rgba(16,185,129,.12)", border: "1px solid rgba(16,185,129,.4)" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 10 }}><CheckCircle size={15} color="#10b981" /><span style={{ fontWeight: 700, color: "#10b981", fontSize: 13 }}>Análise Concluída</span></div>
@@ -491,7 +384,6 @@ function Detective({ go }) {
 
   return (
     <div style={G.page} className="fadein">
-      <Sty />
       <div style={G.row}>
         <Back onClick={() => step > 1 ? (setStep(step - 1), setSel(null)) : go("home", {})} />
         <div style={{ flex: 1 }}>
@@ -531,7 +423,6 @@ function Detective({ go }) {
 function BrandSelect({ go }) {
   return (
     <div style={G.page} className="fadein">
-      <Sty />
       <Hdr title="Selecionar Marca" sub="2 marcas disponíveis" onBack={() => go("home", {})} />
       <div style={{ display: "flex", flexDirection: "column", gap: 9 }}>
         {Object.entries(DB).map(([key, brand]) => (
@@ -559,7 +450,6 @@ function FamilySelect({ state, go }) {
   const isStr = state.brand === "straumann";
   return (
     <div style={G.page} className="fadein">
-      <Sty />
       <Hdr title={isStr ? "Tipo de Implante" : "Conexão Protética"} sub={brand.label} color={brand.color} onBack={() => go("brandSelect", {})} />
       <Breadcrumb steps={[brand.label]} />
       {isStr && <InfoBox color="#3b82f6" icon={<Info size={11} color="#3b82f6" style={{ flexShrink: 0, marginTop: 1 }} />}>
@@ -583,18 +473,23 @@ function FamilySelect({ state, go }) {
 }
 
 // ─── LINHA (BL/BLT vs BLX; TL vs TLX) ───────────────────────────────────────
+// FIX 2: substituído setTimeout por useEffect para evitar problema no React Strict Mode
 function LineSelect({ state, go }) {
   const brand = DB[state.brand];
   const fam = brand.families[state.family];
   const lines = Object.entries(fam.lines);
-  if (lines.length === 1) {
-    const [lineKey, line] = lines[0];
-    setTimeout(() => go(line.isTLX ? "tlxPlatform" : "objectiveSelect", { ...state, line: lineKey }), 0);
-    return <div style={G.page}><Sty /></div>;
-  }
+
+  useEffect(() => {
+    if (lines.length === 1) {
+      const [lineKey, line] = lines[0];
+      go(line.isTLX ? "tlxPlatform" : "objectiveSelect", { ...state, line: lineKey });
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  if (lines.length === 1) return <div style={G.page} />;
+
   return (
     <div style={G.page} className="fadein">
-      <Sty />
       <Hdr title="Linha do Implante" sub={`${brand.label} — ${fam.label}`} color={brand.color} onBack={() => go("familySelect", state)} />
       <Breadcrumb steps={[brand.label, fam.label]} />
       <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
@@ -621,7 +516,6 @@ function TLXPlatform({ state, go }) {
   const line = fam.lines[state.line];
   return (
     <div style={G.page} className="fadein">
-      <Sty />
       <Hdr title="Plataforma TLX" sub="Selecione o pescoço do implante" color="#3b82f6" onBack={() => go("lineSelect", state)} />
       <Breadcrumb steps={[brand.label, fam.label, line.label]} />
       <InfoBox color="#3b82f6" icon={<Info size={11} color="#3b82f6" style={{ flexShrink: 0, marginTop: 1 }} />}>
@@ -658,28 +552,20 @@ function ObjectiveSelect({ state, go }) {
   const tlxPlat = line.isTLX ? line.tlxPlatforms?.find(p => p.key === state.tlxPlatform) : null;
   return (
     <div style={G.page} className="fadein">
-      <Sty />
       <Hdr title="Objetivo Protético" sub="Unitária ou Prótese Unida?" onBack={() => go(backScreen, state)} />
       <Breadcrumb steps={[brand.label, fam.label, line.label, tlxPlat ? `${tlxPlat.key} ${tlxPlat.diam}` : null].filter(Boolean)} />
       <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-        {Object.entries(line.objectives).map(([key, obj]) => {
-          const isWBexclusivo = key === "unitaria_wb";
-          const isRBWB = key === "unitaria_rbwb";
-          const color = isWBexclusivo ? "#f59e0b" : isRBWB ? "#3b82f6" : "#10b981";
-          return (
-            <button key={key} className="hov" onClick={() => go("subtypeSelect", { ...state, objective: key })}
-              style={{ ...card, padding: "18px", border: `1px solid ${color}44` }}>
-              <div style={{ fontSize: 26, width: 50, height: 50, borderRadius: 12, background: `${color}18`, border: `1px solid ${color}44`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>{obj.icon}</div>
-              <div style={{ flex: 1 }}>
-                <div style={{ fontWeight: 700, color: "white", fontSize: 13, marginBottom: 4 }}>{obj.label}</div>
-                <div style={{ fontSize: 10, color: "#94a3b8", lineHeight: 1.5 }}>{obj.desc}</div>
-                {isWBexclusivo && <div style={{ marginTop: 5, fontSize: 9, color: "#f59e0b", fontWeight: 700 }}>⚠️ Somente implante WB</div>}
-                {isRBWB && <div style={{ marginTop: 5, fontSize: 9, color: "#60a5fa", fontWeight: 700 }}>✅ Compatível RB e WB</div>}
-              </div>
-              <ChevronRight size={14} color="#475569" />
-            </button>
-          );
-        })}
+        {Object.entries(line.objectives).map(([key, obj]) => (
+          <button key={key} className="hov" onClick={() => go("subtypeSelect", { ...state, objective: key })}
+            style={{ ...card, padding: "18px", border: `1px solid ${key === "unitaria" ? "rgba(59,130,246,.35)" : "rgba(16,185,129,.35)"}` }}>
+            <div style={{ fontSize: 26, width: 50, height: 50, borderRadius: 12, background: key === "unitaria" ? "rgba(59,130,246,.18)" : "rgba(16,185,129,.15)", border: `1px solid ${key === "unitaria" ? "rgba(59,130,246,.4)" : "rgba(16,185,129,.4)"}`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>{obj.icon}</div>
+            <div style={{ flex: 1 }}>
+              <div style={{ fontWeight: 700, color: "white", fontSize: 14, marginBottom: 4 }}>{obj.label}</div>
+              <div style={{ fontSize: 10, color: "#94a3b8", lineHeight: 1.5 }}>{obj.desc}</div>
+            </div>
+            <ChevronRight size={14} color="#475569" />
+          </button>
+        ))}
       </div>
       <InfoBox color="#f59e0b" icon={<Info size={11} color="#f59e0b" style={{ flexShrink: 0, marginTop: 1 }} />}>
         <strong>Unitária:</strong> Variobase® (coroa única). &nbsp;<strong>Unida:</strong> SRA / MUA (múltiplos implantes em prótese fixa unida).
@@ -699,14 +585,8 @@ function SubtypeSelect({ state, go }) {
   const tlxPlat = isTLX ? line.tlxPlatforms?.find(p => p.key === state.tlxPlatform) : null;
   return (
     <div style={G.page} className="fadein">
-      <Sty />
       <Hdr title="Componente Protético" sub={obj.label} onBack={() => go("objectiveSelect", state)} />
       <Breadcrumb steps={[brand.label, fam.label, line.label, tlxPlat ? tlxPlat.key : null, obj.label].filter(Boolean)} />
-      {obj.infobox && (
-        <InfoBox color={obj.infobox.startsWith("⚠️") ? "#f59e0b" : "#3b82f6"} icon={<Info size={11} color={obj.infobox.startsWith("⚠️") ? "#f59e0b" : "#3b82f6"} style={{ flexShrink: 0, marginTop: 1 }} />}>
-          {obj.infobox}
-        </InfoBox>
-      )}
       <div style={{ display: "flex", flexDirection: "column", gap: 9 }}>
         {subs.map((st) => (
           <button key={st.key} className="hov" onClick={() => go(isTLX ? "result" : "heightSelect", { ...state, subtype: st.key, gengivalHeight: isTLX ? "unico" : null })}
@@ -733,7 +613,6 @@ function HeightSelect({ state, go }) {
   const st = obj.subtypes.find(s => s.key === state.subtype);
   return (
     <div style={G.page} className="fadein">
-      <Sty />
       <Hdr title="Altura Gengival" sub={st?.label} color="#10b981" onBack={() => go("subtypeSelect", state)} />
       <Breadcrumb steps={[brand.label, fam.label, line.label, obj.label, st?.label]} />
       <InfoBox color="#10b981" icon={<Info size={11} color="#10b981" style={{ flexShrink: 0, marginTop: 1 }} />}>
@@ -762,7 +641,8 @@ function HeightSelect({ state, go }) {
 }
 
 // ─── RESULTADO ────────────────────────────────────────────────────────────────
-function Result({ state, go, reset }) {
+// FIX 1: addToCart agora realmente persiste o item no estado global do App
+function Result({ state, go, reset, addToCart }) {
   const [added, setAdded] = useState(false);
   const brand = DB[state.brand];
   const fam = brand.families[state.family];
@@ -776,9 +656,19 @@ function Result({ state, go, reset }) {
 
   if (!comp) return <div style={{ padding: 20, color: "white" }}><p>Componente não encontrado.</p><button onClick={reset} style={{ color: "#3b82f6", background: "none", border: "none", cursor: "pointer" }}>↩ Recomeçar</button></div>;
 
+  const handleAddToCart = () => {
+    addToCart({
+      ...comp,
+      brandLabel: brand.label,
+      brandColor: brand.color,
+      lineConnection: line.connection,
+    });
+    setAdded(true);
+    setTimeout(() => setAdded(false), 2500);
+  };
+
   return (
     <div style={G.page} className="fadein">
-      <Sty />
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         <Back onClick={() => go(backScreen, state)} />
         <span style={{ fontSize: 9, color: "#10b981", fontWeight: 700, textTransform: "uppercase", letterSpacing: .8 }}>✓ Componente Encontrado</span>
@@ -802,31 +692,8 @@ function Result({ state, go, reset }) {
         </div>
         <div style={{ display: "flex", gap: 9, marginBottom: 14 }}>
           <ImplantShape shape={comp.shape || "variobase"} size={90} />
-          <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 6 }}>
-            <div style={{ padding: "8px 10px", borderRadius: 9, background: "rgba(99,102,241,.12)", border: "1px solid rgba(99,102,241,.35)", flex: 1 }}>
-              <div style={{ fontSize: 8, fontWeight: 700, color: "#a5b4fc", letterSpacing: .5, textTransform: "uppercase", marginBottom: 5 }}>📡 Fluxo Digital</div>
-              {(line.scanning?.digital || []).filter(s => !isTLX || !s.label.includes(" NT") && !s.label.includes(" RT") && !s.label.includes(" WT") || s.label.includes(state.tlxPlatform || "")).map((s, i) => (
-                <div key={i} style={{ marginBottom: 3 }}>
-                  <div style={{ fontSize: 8, color: "#94a3b8", lineHeight: 1.3 }}>{s.label}{s.note ? <span style={{ color: "#6366f1", fontStyle: "italic" }}> — {s.note}</span> : ""}</div>
-                  <span style={{ fontFamily: "monospace", fontSize: 9, fontWeight: 700, color: "#a5b4fc" }}>{s.sku}</span>
-                </div>
-              ))}
-            </div>
-          </div>
+          <Placeholder label="Scan Body / Transfer" />
         </div>
-        {line.scanning?.analogico && (
-          <div style={{ padding: "10px 12px", borderRadius: 10, background: "rgba(245,158,11,.08)", border: "1px solid rgba(245,158,11,.3)", marginBottom: 12 }}>
-            <div style={{ fontSize: 8, fontWeight: 700, color: "#fbbf24", letterSpacing: .5, textTransform: "uppercase", marginBottom: 6 }}>🧪 Fluxo Analógico (Moldagem Convencional)</div>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: 5 }}>
-              {line.scanning.analogico.filter(s => !isTLX || s.label.includes(state.tlxPlatform || "") || (!s.label.includes(" NT") && !s.label.includes(" RT") && !s.label.includes(" WT"))).map((s, i) => (
-                <div key={i} style={{ padding: "4px 8px", borderRadius: 6, background: "rgba(30,41,59,0.9)", border: "1px solid #475569" }}>
-                  <div style={{ fontSize: 8, color: "#94a3b8", marginBottom: 1 }}>{s.label}</div>
-                  <span style={{ fontFamily: "monospace", fontSize: 9, fontWeight: 700, color: "#fbbf24" }}>{s.sku}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 6 }}>
           <div style={{ padding: "11px", borderRadius: 9, background: "rgba(245,158,11,.12)", border: "1px solid rgba(245,158,11,.4)" }}>
             <div style={{ display: "flex", alignItems: "center", gap: 4, marginBottom: 4 }}><Zap size={9} color="#f59e0b" /><span style={{ fontSize: 8, color: "#fcd34d", fontWeight: 700, textTransform: "uppercase" }}>Torque</span></div>
@@ -847,9 +714,9 @@ function Result({ state, go, reset }) {
           </div>
         </div>
       </div>
-      <button onClick={() => { setAdded(true); setTimeout(() => setAdded(false), 2500); }}
+      <button onClick={handleAddToCart}
         style={{ padding: "14px", borderRadius: 12, border: "none", cursor: "pointer", background: added ? "linear-gradient(135deg,#059669,#10b981)" : "linear-gradient(135deg,#1d4ed8,#3b82f6)", color: "white", fontWeight: 700, fontSize: 13, display: "flex", alignItems: "center", justifyContent: "center", gap: 7, transition: "all .35s ease" }}>
-        {added ? <><CheckCircle size={14} />Adicionado!</> : <><ShoppingCart size={14} />Adicionar ao Pedido</>}
+        {added ? <><CheckCircle size={14} />Adicionado ao pedido!</> : <><ShoppingCart size={14} />Adicionar ao Pedido</>}
       </button>
       <a href={`https://${brand.site}`} target="_blank" rel="noopener noreferrer"
         style={{ padding: "11px", borderRadius: 11, border: "1px solid #475569", color: "#cbd5e1", fontWeight: 600, fontSize: 11, display: "flex", alignItems: "center", justifyContent: "center", gap: 6, textDecoration: "none", background: "rgba(30,41,59,0.9)" }}>
@@ -862,16 +729,118 @@ function Result({ state, go, reset }) {
   );
 }
 
+// ─── TELA DE PEDIDO (CARRINHO) ────────────────────────────────────────────────
+// FIX 1: CartScreen — nova tela que lista e gerencia os componentes adicionados
+function CartScreen({ cart, removeFromCart, go }) {
+  return (
+    <div style={G.page} className="fadein">
+      <Hdr
+        title="Pedido"
+        sub={cart.length > 0 ? `${cart.length} componente(s) selecionado(s)` : "Nenhum componente"}
+        onBack={() => go("home", {})}
+      />
+      {cart.length === 0 ? (
+        <div style={{ textAlign: "center", padding: "48px 20px", display: "flex", flexDirection: "column", alignItems: "center", gap: 14 }}>
+          <div style={{ fontSize: 44 }}>🛒</div>
+          <p style={{ margin: 0, color: "#64748b", fontSize: 13 }}>Nenhum componente adicionado ainda.</p>
+          <button onClick={() => go("home", {})}
+            style={{ padding: "12px 24px", borderRadius: 11, background: "linear-gradient(135deg,#1d4ed8,#3b82f6)", border: "none", cursor: "pointer", color: "white", fontWeight: 700, fontSize: 12 }}>
+            Iniciar Seleção
+          </button>
+        </div>
+      ) : (
+        <>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {cart.map((item) => (
+              <div key={item.id} style={{ padding: "14px 16px", borderRadius: 12, background: "rgba(30,41,59,0.95)", border: "1px solid rgba(71,85,105,0.8)", display: "flex", gap: 10, alignItems: "flex-start" }}>
+                <div style={{ flex: 1 }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 4 }}>
+                    <div style={{ padding: "2px 7px", borderRadius: 5, background: `${item.brandColor}33`, border: `1px solid ${item.brandColor}66` }}>
+                      <span style={{ fontSize: 8, fontWeight: 700, color: "white" }}>{item.brandLabel}</span>
+                    </div>
+                    <span style={{ fontSize: 8, color: "#64748b" }}>{item.lineConnection}</span>
+                  </div>
+                  <div style={{ fontSize: 8, color: "#94a3b8", textTransform: "uppercase", letterSpacing: .5, marginBottom: 2 }}>{item.type}</div>
+                  <div style={{ fontSize: 13, fontWeight: 700, color: "white", marginBottom: 5 }}>{item.name}</div>
+                  <div style={{ display: "flex", gap: 6, alignItems: "center", marginBottom: 5 }}>
+                    <span style={{ fontSize: 8, color: "#64748b" }}>REF.</span>
+                    <span style={{ fontFamily: "monospace", fontSize: 10, color: "#60a5fa", background: "rgba(59,130,246,.15)", padding: "2px 6px", borderRadius: 5 }}>{item.sku}</span>
+                  </div>
+                  <div style={{ display: "flex", gap: 12 }}>
+                    <span style={{ fontSize: 9, color: "#f59e0b" }}>⚡ {item.torque}</span>
+                    <span style={{ fontSize: 9, color: "#60a5fa" }}>🔑 {item.chave}</span>
+                  </div>
+                </div>
+                <button onClick={() => removeFromCart(item.id)}
+                  style={{ width: 30, height: 30, borderRadius: 8, background: "rgba(239,68,68,.12)", border: "1px solid rgba(239,68,68,.3)", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", flexShrink: 0 }}>
+                  <Trash2 size={12} color="#ef4444" />
+                </button>
+              </div>
+            ))}
+          </div>
+          <InfoBox color="#10b981" icon={<CheckCircle size={11} color="#10b981" style={{ flexShrink: 0, marginTop: 1 }} />}>
+            Confirme os SKUs com o catálogo oficial do fabricante antes de realizar o pedido.
+          </InfoBox>
+          <button onClick={() => go("home", {})}
+            style={{ padding: "11px", borderRadius: 11, border: "1px solid #334155", cursor: "pointer", background: "transparent", color: "#64748b", fontSize: 11, display: "flex", alignItems: "center", justifyContent: "center", gap: 5 }}>
+            <Home size={11} />Nova consulta
+          </button>
+        </>
+      )}
+    </div>
+  );
+}
+
 // ─── APP ──────────────────────────────────────────────────────────────────────
 export default function App() {
   const [screen, setScreen] = useState("home");
   const [state, setState] = useState({});
 
+  // FIX 1: estado global do carrinho
+  const [cart, setCart] = useState([]);
+
+  // FIX 5: histórico de navegação para suportar botão "voltar" do browser
+  const navHistoryRef = useRef([]);
+
   const go = (newScreen, newState = {}) => {
+    // Registra a tela atual antes de navegar
+    navHistoryRef.current.push({ screen, state });
     setState(newState);
     setScreen(newScreen);
+    // Adiciona entrada no histórico do browser
+    window.history.pushState(null, "");
   };
-  const reset = () => { setState({}); setScreen("home"); };
+
+  const reset = () => {
+    navHistoryRef.current = [];
+    setState({});
+    setScreen("home");
+  };
+
+  // FIX 1: funções do carrinho
+  const addToCart = (item) => {
+    setCart((prev) => [...prev, { ...item, id: Date.now() }]);
+  };
+  const removeFromCart = (id) => {
+    setCart((prev) => prev.filter((item) => item.id !== id));
+  };
+
+  // FIX 5: listener do botão voltar do browser
+  useEffect(() => {
+    // Garante que há um estado inicial no histórico do browser
+    window.history.pushState(null, "");
+    const handlePopState = () => {
+      const prev = navHistoryRef.current.pop();
+      if (prev) {
+        setScreen(prev.screen);
+        setState(prev.state);
+        // Re-adiciona ao histórico do browser para manter sempre um estado disponível
+        window.history.pushState(null, "");
+      }
+    };
+    window.addEventListener("popstate", handlePopState);
+    return () => window.removeEventListener("popstate", handlePopState);
+  }, []);
 
   const screens = {
     home: <HomeScreen go={go} />,
@@ -883,8 +852,58 @@ export default function App() {
     objectiveSelect: <ObjectiveSelect state={state} go={go} />,
     subtypeSelect: <SubtypeSelect state={state} go={go} />,
     heightSelect: <HeightSelect state={state} go={go} />,
-    result: <Result state={state} go={go} reset={reset} />,
+    result: <Result state={state} go={go} reset={reset} addToCart={addToCart} />,
+    cart: <CartScreen cart={cart} removeFromCart={removeFromCart} go={go} />,
   };
 
-  return <div style={{ background: "#020617", minHeight: "100vh", color: "white" }}>{screens[screen] || screens.home}</div>;
+  return (
+    // FIX 3: <Sty/> renderizado UMA ÚNICA VEZ aqui no root, removido de todas as telas filhas
+    <div style={{ background: "#020617", minHeight: "100vh", color: "white" }}>
+      <Sty />
+      {screens[screen] || screens.home}
+
+      {/* FIX 1: botão flutuante do carrinho — aparece quando há itens, some na tela do carrinho */}
+      {cart.length > 0 && screen !== "cart" && (
+        <button
+          onClick={() => go("cart", {})}
+          style={{
+            position: "fixed",
+            top: 16,
+            right: 16,
+            zIndex: 100,
+            width: 46,
+            height: 46,
+            borderRadius: 13,
+            background: "linear-gradient(135deg,#1d4ed8,#3b82f6)",
+            border: "none",
+            cursor: "pointer",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            boxShadow: "0 4px 16px rgba(59,130,246,.45)",
+          }}
+        >
+          <ShoppingCart size={17} color="white" />
+          <span style={{
+            position: "absolute",
+            top: -5,
+            right: -5,
+            width: 19,
+            height: 19,
+            borderRadius: "50%",
+            background: "#ef4444",
+            fontSize: 10,
+            fontWeight: 800,
+            color: "white",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            lineHeight: 1,
+          }}>
+            {cart.length}
+          </span>
+        </button>
+      )}
+    </div>
+  );
 }
