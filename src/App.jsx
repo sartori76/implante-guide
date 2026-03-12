@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import {
   ChevronRight, ChevronLeft, CheckCircle, ShoppingCart,
   ExternalLink, RotateCcw, Zap, Shield, Home, ArrowRight,
-  Info, Search, AlertTriangle, Layers, Trash2
+  Info, Search, AlertTriangle, Layers, X
 } from "lucide-react";
 
 // ─── Helper ──────────────────────────────────────────────────────────────────
@@ -202,7 +202,7 @@ const DB = {
   }
 };
 
-// ─── Detective (Investigador) ─────────────────────────────────────────────────
+// ─── Detective ────────────────────────────────────────────────────────────────
 const DETECTIVE_STEPS = [
   { id: 1, title: "Corpo do Implante", subtitle: "Qual é o formato geral do corpo?", icon: "🦷", options: [{ value: "conico", label: "Cônico", desc: "Afila progressivamente da plataforma ao ápice", icon: "▽" }, { value: "cilindrico", label: "Cilíndrico", desc: "Diâmetro uniforme ao longo do corpo", icon: "▭" }] },
   { id: 2, title: "Pescoço / Cervical", subtitle: "Onde está o nível da plataforma protética?", icon: "🔬", options: [{ value: "tissueLevel", label: "Tissue Level", desc: "Plataforma ao nível do tecido mole", icon: "↑" }, { value: "boneLevel", label: "Bone Level", desc: "Plataforma ao nível ósseo", icon: "↓" }] },
@@ -228,7 +228,6 @@ const HEIGHT_DESCS = {
   "4.5": "Tecido muito espesso — GH 4,5mm (ganho ósseo / regeneração)"
 };
 
-// FIX 3: <Sty/> definido aqui mas renderizado UMA ÚNICA VEZ no App raiz
 const css = `
   @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700;800&display=swap');
   *{box-sizing:border-box} body{margin:0;background:#020617;font-family:'DM Sans',sans-serif;color:white}
@@ -292,7 +291,7 @@ function Placeholder({ label }) {
   return <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center" }}><div style={{ width: 90, height: 90, borderRadius: 12, background: "linear-gradient(135deg,#0f172a,#1e293b)", border: "1px solid rgba(59,130,246,.3)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 3 }}><span style={{ fontSize: 22 }}>🦷</span><span style={{ fontSize: 8, color: "#94a3b8", textAlign: "center", padding: "0 5px", lineHeight: 1.3 }}>{label}</span></div></div>;
 }
 
-// ─── TELA HOME ────────────────────────────────────────────────────────────────
+// ─── HOME ─────────────────────────────────────────────────────────────────────
 function HomeScreen({ go }) {
   return (
     <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "24px 16px" }}>
@@ -333,7 +332,7 @@ function HomeScreen({ go }) {
             <Search size={14} color="#94a3b8" />
           </button>
         </div>
-        <p style={{ margin: 0, fontSize: 9, color: "#475569" }}>v4.1 · Straumann & Neodent · SKUs oficiais</p>
+        <p style={{ margin: 0, fontSize: 9, color: "#475569" }}>v4.2 · Straumann & Neodent · SKUs oficiais</p>
       </div>
     </div>
   );
@@ -444,7 +443,7 @@ function BrandSelect({ go }) {
   );
 }
 
-// ─── FAMÍLIA (Bone Level / Tissue Level) ─────────────────────────────────────
+// ─── FAMÍLIA ──────────────────────────────────────────────────────────────────
 function FamilySelect({ state, go }) {
   const brand = DB[state.brand];
   const isStr = state.brand === "straumann";
@@ -472,8 +471,7 @@ function FamilySelect({ state, go }) {
   );
 }
 
-// ─── LINHA (BL/BLT vs BLX; TL vs TLX) ───────────────────────────────────────
-// FIX 2: substituído setTimeout por useEffect para evitar problema no React Strict Mode
+// ─── LINHA ────────────────────────────────────────────────────────────────────
 function LineSelect({ state, go }) {
   const brand = DB[state.brand];
   const fam = brand.families[state.family];
@@ -542,7 +540,7 @@ function TLXPlatform({ state, go }) {
   );
 }
 
-// ─── OBJETIVO (Unitária vs Múltipla) ─────────────────────────────────────────
+// ─── OBJETIVO ─────────────────────────────────────────────────────────────────
 function ObjectiveSelect({ state, go }) {
   const brand = DB[state.brand];
   const fam = brand.families[state.family];
@@ -574,7 +572,7 @@ function ObjectiveSelect({ state, go }) {
   );
 }
 
-// ─── SUBTIPO DE COMPONENTE ────────────────────────────────────────────────────
+// ─── SUBTIPO ──────────────────────────────────────────────────────────────────
 function SubtypeSelect({ state, go }) {
   const brand = DB[state.brand];
   const fam = brand.families[state.family];
@@ -641,7 +639,6 @@ function HeightSelect({ state, go }) {
 }
 
 // ─── RESULTADO ────────────────────────────────────────────────────────────────
-// FIX 1: addToCart agora realmente persiste o item no estado global do App
 function Result({ state, go, reset, addToCart }) {
   const [added, setAdded] = useState(false);
   const brand = DB[state.brand];
@@ -657,12 +654,7 @@ function Result({ state, go, reset, addToCart }) {
   if (!comp) return <div style={{ padding: 20, color: "white" }}><p>Componente não encontrado.</p><button onClick={reset} style={{ color: "#3b82f6", background: "none", border: "none", cursor: "pointer" }}>↩ Recomeçar</button></div>;
 
   const handleAddToCart = () => {
-    addToCart({
-      ...comp,
-      brandLabel: brand.label,
-      brandColor: brand.color,
-      lineConnection: line.connection,
-    });
+    addToCart({ ...comp, brandLabel: brand.label, brandColor: brand.color, lineConnection: line.connection });
     setAdded(true);
     setTimeout(() => setAdded(false), 2500);
   };
@@ -729,8 +721,7 @@ function Result({ state, go, reset, addToCart }) {
   );
 }
 
-// ─── TELA DE PEDIDO (CARRINHO) ────────────────────────────────────────────────
-// FIX 1: CartScreen — nova tela que lista e gerencia os componentes adicionados
+// ─── CARRINHO ─────────────────────────────────────────────────────────────────
 function CartScreen({ cart, removeFromCart, go }) {
   return (
     <div style={G.page} className="fadein">
@@ -771,9 +762,10 @@ function CartScreen({ cart, removeFromCart, go }) {
                     <span style={{ fontSize: 9, color: "#60a5fa" }}>🔑 {item.chave}</span>
                   </div>
                 </div>
+                {/* Botão remover — usa ícone X (compatível com todas as versões do lucide-react) */}
                 <button onClick={() => removeFromCart(item.id)}
                   style={{ width: 30, height: 30, borderRadius: 8, background: "rgba(239,68,68,.12)", border: "1px solid rgba(239,68,68,.3)", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", flexShrink: 0 }}>
-                  <Trash2 size={12} color="#ef4444" />
+                  <X size={13} color="#ef4444" />
                 </button>
               </div>
             ))}
@@ -795,19 +787,13 @@ function CartScreen({ cart, removeFromCart, go }) {
 export default function App() {
   const [screen, setScreen] = useState("home");
   const [state, setState] = useState({});
-
-  // FIX 1: estado global do carrinho
   const [cart, setCart] = useState([]);
-
-  // FIX 5: histórico de navegação para suportar botão "voltar" do browser
   const navHistoryRef = useRef([]);
 
   const go = (newScreen, newState = {}) => {
-    // Registra a tela atual antes de navegar
     navHistoryRef.current.push({ screen, state });
     setState(newState);
     setScreen(newScreen);
-    // Adiciona entrada no histórico do browser
     window.history.pushState(null, "");
   };
 
@@ -817,24 +803,16 @@ export default function App() {
     setScreen("home");
   };
 
-  // FIX 1: funções do carrinho
-  const addToCart = (item) => {
-    setCart((prev) => [...prev, { ...item, id: Date.now() }]);
-  };
-  const removeFromCart = (id) => {
-    setCart((prev) => prev.filter((item) => item.id !== id));
-  };
+  const addToCart = (item) => setCart((prev) => [...prev, { ...item, id: Date.now() }]);
+  const removeFromCart = (id) => setCart((prev) => prev.filter((i) => i.id !== id));
 
-  // FIX 5: listener do botão voltar do browser
   useEffect(() => {
-    // Garante que há um estado inicial no histórico do browser
     window.history.pushState(null, "");
     const handlePopState = () => {
       const prev = navHistoryRef.current.pop();
       if (prev) {
         setScreen(prev.screen);
         setState(prev.state);
-        // Re-adiciona ao histórico do browser para manter sempre um estado disponível
         window.history.pushState(null, "");
       }
     };
@@ -857,48 +835,27 @@ export default function App() {
   };
 
   return (
-    // FIX 3: <Sty/> renderizado UMA ÚNICA VEZ aqui no root, removido de todas as telas filhas
     <div style={{ background: "#020617", minHeight: "100vh", color: "white" }}>
       <Sty />
       {screens[screen] || screens.home}
-
-      {/* FIX 1: botão flutuante do carrinho — aparece quando há itens, some na tela do carrinho */}
       {cart.length > 0 && screen !== "cart" && (
         <button
           onClick={() => go("cart", {})}
           style={{
-            position: "fixed",
-            top: 16,
-            right: 16,
-            zIndex: 100,
-            width: 46,
-            height: 46,
-            borderRadius: 13,
+            position: "fixed", top: 16, right: 16, zIndex: 100,
+            width: 46, height: 46, borderRadius: 13,
             background: "linear-gradient(135deg,#1d4ed8,#3b82f6)",
-            border: "none",
-            cursor: "pointer",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
+            border: "none", cursor: "pointer",
+            display: "flex", alignItems: "center", justifyContent: "center",
             boxShadow: "0 4px 16px rgba(59,130,246,.45)",
           }}
         >
           <ShoppingCart size={17} color="white" />
           <span style={{
-            position: "absolute",
-            top: -5,
-            right: -5,
-            width: 19,
-            height: 19,
-            borderRadius: "50%",
-            background: "#ef4444",
-            fontSize: 10,
-            fontWeight: 800,
-            color: "white",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            lineHeight: 1,
+            position: "absolute", top: -5, right: -5,
+            width: 19, height: 19, borderRadius: "50%",
+            background: "#ef4444", fontSize: 10, fontWeight: 800,
+            color: "white", display: "flex", alignItems: "center", justifyContent: "center",
           }}>
             {cart.length}
           </span>
