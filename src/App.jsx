@@ -202,7 +202,7 @@ const DB = {
   }
 };
 
-// ─── Detective ────────────────────────────────────────────────────────────────
+// ─── Detective (Investigador) ─────────────────────────────────────────────────
 const DETECTIVE_STEPS = [
   { id: 1, title: "Corpo do Implante", subtitle: "Qual é o formato geral do corpo?", icon: "🦷", options: [{ value: "conico", label: "Cônico", desc: "Afila progressivamente da plataforma ao ápice", icon: "▽" }, { value: "cilindrico", label: "Cilíndrico", desc: "Diâmetro uniforme ao longo do corpo", icon: "▭" }] },
   { id: 2, title: "Pescoço / Cervical", subtitle: "Onde está o nível da plataforma protética?", icon: "🔬", options: [{ value: "tissueLevel", label: "Tissue Level", desc: "Plataforma ao nível do tecido mole", icon: "↑" }, { value: "boneLevel", label: "Bone Level", desc: "Plataforma ao nível ósseo", icon: "↓" }] },
@@ -241,7 +241,7 @@ const css = `
 `;
 function Sty() { return <style>{css}</style>; }
 const G = {
-  page: { minHeight: "100vh", display: "flex", flexDirection: "column", padding: "20px 16px 40px", gap: 14, maxWidth: 430, margin: "0 auto" },
+  page: { minHeight: "100vh", display: "flex", flexDirection: "column", padding: "20px 16px 120px", gap: 14, maxWidth: 430, margin: "0 auto" },
   row: { display: "flex", alignItems: "center", gap: 10 },
   mono: { fontFamily: "monospace" },
 };
@@ -261,7 +261,7 @@ function Logo() {
   );
 }
 
-// Botão Voltar — SVG inline com cor hardcoded, sem dependência de biblioteca
+// Botão Voltar — emoticon Unicode, sem dependência de biblioteca
 function Back({ onClick }) {
   return (
     <button
@@ -304,7 +304,7 @@ function Placeholder({ label }) {
 function HomeScreen({ go }) {
   return (
     <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "24px 16px" }}>
-      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 22, maxWidth: 420, width: "100%" }}>
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 22, width: "100%" }}>
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 11 }}>
           <Logo />
           <div style={{ textAlign: "center" }}>
@@ -371,10 +371,7 @@ function Detective({ go }) {
     return (
       <div style={G.page} className="fadein">
         <button onClick={() => { setDone(false); setStep(5); setSel(null); }} style={{ display: "flex", alignItems: "center", gap: 5, background: "none", border: "none", color: "#94a3b8", cursor: "pointer", padding: 0, fontSize: 11 }}>
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <polyline points="15 18 9 12 15 6" stroke="#94a3b8" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-          Rever
+          <span style={{ fontSize: 14 }}>←</span> Rever
         </button>
         <div style={{ padding: 18, borderRadius: 14, background: "rgba(16,185,129,.12)", border: "1px solid rgba(16,185,129,.4)" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 10 }}><CheckCircle size={15} color="#10b981" /><span style={{ fontWeight: 700, color: "#10b981", fontSize: 13 }}>Análise Concluída</span></div>
@@ -457,7 +454,7 @@ function BrandSelect({ go }) {
   );
 }
 
-// ─── FAMÍLIA ──────────────────────────────────────────────────────────────────
+// ─── FAMÍLIA (Bone Level / Tissue Level) ─────────────────────────────────────
 function FamilySelect({ state, go }) {
   const brand = DB[state.brand];
   const isStr = state.brand === "straumann";
@@ -485,7 +482,7 @@ function FamilySelect({ state, go }) {
   );
 }
 
-// ─── LINHA ────────────────────────────────────────────────────────────────────
+// ─── LINHA (BL/BLT vs BLX; TL vs TLX) ───────────────────────────────────────
 function LineSelect({ state, go }) {
   const brand = DB[state.brand];
   const fam = brand.families[state.family];
@@ -554,7 +551,7 @@ function TLXPlatform({ state, go }) {
   );
 }
 
-// ─── OBJETIVO ────────────────────────────────────────────────────────────────
+// ─── OBJETIVO (Unitária vs Múltipla) ─────────────────────────────────────────
 function ObjectiveSelect({ state, go }) {
   const brand = DB[state.brand];
   const fam = brand.families[state.family];
@@ -586,7 +583,7 @@ function ObjectiveSelect({ state, go }) {
   );
 }
 
-// ─── SUBTIPO ──────────────────────────────────────────────────────────────────
+// ─── SUBTIPO DE COMPONENTE ────────────────────────────────────────────────────
 function SubtypeSelect({ state, go }) {
   const brand = DB[state.brand];
   const fam = brand.families[state.family];
@@ -655,7 +652,6 @@ function HeightSelect({ state, go }) {
 // ─── RESULTADO ────────────────────────────────────────────────────────────────
 function Result({ state, go, addToCart, reset }) {
   const [added, setAdded] = useState(false);
-  const [imgError, setImgError] = useState(false);
   const brand = DB[state.brand];
   const fam = brand.families[state.family];
   const line = fam.lines[state.line];
@@ -670,11 +666,10 @@ function Result({ state, go, addToCart, reset }) {
 
   return (
     <div style={G.page} className="fadein">
-      {/* Barra superior: Voltar | status | Reiniciar */}
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         <Back onClick={() => go(backScreen, state)} />
         <span style={{ fontSize: 9, color: "#10b981", fontWeight: 700, textTransform: "uppercase", letterSpacing: .8 }}>✓ Componente Encontrado</span>
-        {/* Botão Reiniciar — SVG inline com cor hardcoded */}
+        {/* Botão Reiniciar — emoticon Unicode */}
         <button
           onClick={reset}
           aria-label="Reiniciar consulta"
@@ -683,9 +678,7 @@ function Result({ state, go, addToCart, reset }) {
           <span style={{ color: "#e2e8f0", fontSize: 20 }}>↺</span>
         </button>
       </div>
-
       <Breadcrumb steps={[brand.label, fam.label, line.label, tlxPlat ? tlxPlat.key : null, obj.label].filter(Boolean)} />
-
       <div style={{ borderRadius: 16, padding: "18px", background: "rgba(30,41,59,0.95)", border: "1px solid rgba(59,130,246,.4)", boxShadow: "0 16px 44px rgba(0,0,0,.5)" }}>
         <div style={{ display: "flex", flexWrap: "wrap", gap: 5, marginBottom: 13 }}>
           <div style={{ padding: "3px 8px", borderRadius: 6, background: `${brand.color}33`, border: `1px solid ${brand.color}77` }}><span style={{ fontSize: 9, fontWeight: 700, color: "white" }}>{brand.label}</span></div>
@@ -724,22 +717,12 @@ function Result({ state, go, addToCart, reset }) {
             </div>
           </div>
         </div>
-
-        {/* Foto de Referência */}
-        {st?.imgRef && !imgError && (
-          <div style={{ marginTop: 12 }}>
-            <div style={{ fontSize: 8, color: "#94a3b8", fontWeight: 600, letterSpacing: .5, textTransform: "uppercase", marginBottom: 6 }}>📷 Foto de Referência</div>
-            <div style={{ borderRadius: 10, overflow: "hidden", border: "1px solid rgba(59,130,246,.3)", background: "#f8fafc", display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <img src={st.imgRef} alt={`Referência: ${comp.name}`} onError={() => setImgError(true)} style={{ width: "100%", maxHeight: 180, objectFit: "contain", display: "block", padding: "8px" }} />
-            </div>
-          </div>
-        )}
       </div>
 
-      {/* Botão Adicionar ao Pedido — ícone carrinho SVG inline com cor hardcoded */}
+      {/* Botão Adicionar ao Pedido — SVG inline shopping bag, stroke hardcoded */}
       <button
         onClick={() => {
-          addToCart({ name: comp.name, sku: comp.sku, brand: brand.label });
+          addToCart({ id: Date.now(), name: comp.name, sku: comp.sku });
           setAdded(true);
           setTimeout(() => setAdded(false), 2500);
         }}
@@ -775,28 +758,14 @@ export default function App() {
   const [screen, setScreen] = useState("home");
   const [state, setState] = useState({});
   const [cart, setCart] = useState([]);
-  const navHistoryRef = useRef([]);
 
   const go = (newScreen, newState = {}) => {
-    navHistoryRef.current.push({ screen, state });
     setState(newState);
     setScreen(newScreen);
-    window.history.pushState(null, "");
   };
-
-  const addToCart = (item) => setCart((prev) => [...prev, { ...item, id: Date.now() }]);
-  const removeFromCart = (id) => setCart((prev) => prev.filter((i) => i.id !== id));
-  const reset = () => { setState({}); setScreen("home"); navHistoryRef.current = []; };
-
-  useEffect(() => {
-    window.history.pushState(null, "");
-    const handlePopState = () => {
-      const prev = navHistoryRef.current.pop();
-      if (prev) { setScreen(prev.screen); setState(prev.state); window.history.pushState(null, ""); }
-    };
-    window.addEventListener("popstate", handlePopState);
-    return () => window.removeEventListener("popstate", handlePopState);
-  }, []);
+  const reset = () => { setState({}); setScreen("home"); };
+  const addToCart = (item) => setCart(prev => [...prev, item]);
+  const removeFromCart = (id) => setCart(prev => prev.filter(i => i.id !== id));
 
   const screens = {
     home: <HomeScreen go={go} />,
@@ -812,17 +781,19 @@ export default function App() {
   };
 
   return (
-    <div style={{ background: "#020617", minHeight: "100vh", color: "white" }}>
+    // Container externo: fundo escuro cobre 100% da tela
+    <div style={{ background: "#020617", minHeight: "100vh", color: "white", display: "flex", justifyContent: "center" }}>
       <Sty />
-      <div style={{ maxWidth: 430, margin: "0 auto", minHeight: "100vh", position: "relative" }}>
+      {/* Wrapper centrado: maxWidth 430px (largura de celular) */}
+      <div style={{ width: "100%", maxWidth: 430, minHeight: "100vh", position: "relative" }}>
         {screens[screen] || screens.home}
       </div>
 
-      {/* Carrinho fixo na base */}
+      {/* Carrinho fixo na base — centralizado com maxWidth 430px */}
       {cart.length > 0 && (
         <div style={{ position: "fixed", bottom: 0, left: 0, right: 0, background: "rgba(2,6,23,0.97)", borderTop: "1px solid #1e293b", padding: "12px 16px", maxWidth: 430, margin: "0 auto", zIndex: 100, maxHeight: "40vh", overflowY: "auto" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 8 }}>
-            {/* Ícone carrinho no header da lista — SVG inline com cor hardcoded */}
+            {/* Ícone carrinho — SVG inline com cor hardcoded */}
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" stroke="#3b82f6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
               <line x1="3" y1="6" x2="21" y2="6" stroke="#3b82f6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -836,7 +807,7 @@ export default function App() {
                 <div style={{ fontSize: 11, color: "white", fontWeight: 600 }}>{item.name}</div>
                 <div style={{ fontSize: 9, color: "#60a5fa", fontFamily: "monospace" }}>{item.sku}</div>
               </div>
-              {/* Botão remover — SVG inline com cor hardcoded */}
+              {/* Botão remover — SVG inline X com cor hardcoded */}
               <button
                 onClick={() => removeFromCart(item.id)}
                 aria-label={`Remover ${item.name}`}
