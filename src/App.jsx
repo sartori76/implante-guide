@@ -1,9 +1,14 @@
 import { useState, useEffect, useRef } from "react";
 import {
-  ChevronRight, CheckCircle, ShoppingCart,
-  ExternalLink, RotateCcw, Zap, Shield, Home, ArrowRight,
-  Info, Search, AlertTriangle, Layers, X
+  ChevronRight, CheckCircle,
+  ExternalLink, Zap, Shield, Home, ArrowRight,
+  Info, Search, AlertTriangle, Layers
 } from "lucide-react";
+
+// SVG inline para ícones críticos (nunca falham por versão do lucide-react)
+const ShoppingCartSVG = () => <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>;
+const RotateCcwSVG = () => <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>;
+const XSVG = () => <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>;
 
 // ─── Helper ──────────────────────────────────────────────────────────────────
 function gh(baseName, baseInfo, pairs) {
@@ -675,7 +680,7 @@ function Result({ state, go, addToCart, reset }) {
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         <Back onClick={() => go(backScreen, state)} />
         <span style={{ fontSize: 9, color: "#10b981", fontWeight: 700, textTransform: "uppercase", letterSpacing: .8 }}>✓ Componente Encontrado</span>
-        <button onClick={reset} style={{ width: 34, height: 34, borderRadius: 9, background: "rgba(30,41,59,0.9)", border: "1px solid #475569", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}><RotateCcw size={12} color="#e2e8f0" /></button>
+        <button onClick={reset} style={{ width: 34, height: 34, borderRadius: 9, background: "rgba(30,41,59,0.9)", border: "1px solid #475569", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", color: "#e2e8f0" }}><RotateCcwSVG /></button>
       </div>
       <Breadcrumb steps={[brand.label, fam.label, line.label, tlxPlat ? tlxPlat.key : null, obj.label].filter(Boolean)} />
       <div style={{ borderRadius: 16, padding: "18px", background: "rgba(30,41,59,0.95)", border: "1px solid rgba(59,130,246,.4)", boxShadow: "0 16px 44px rgba(0,0,0,.5)" }}>
@@ -740,7 +745,7 @@ function Result({ state, go, addToCart, reset }) {
           setTimeout(() => setAdded(false), 2500);
         }}
         style={{ padding: "14px", borderRadius: 12, border: "none", cursor: "pointer", background: added ? "linear-gradient(135deg,#059669,#10b981)" : "linear-gradient(135deg,#1d4ed8,#3b82f6)", color: "white", fontWeight: 700, fontSize: 13, display: "flex", alignItems: "center", justifyContent: "center", gap: 7, transition: "all .35s ease" }}>
-        {added ? <><CheckCircle size={14} />Adicionado!</> : <><ShoppingCart size={14} />Adicionar ao Pedido</>}
+        {added ? <><CheckCircle size={14} />Adicionado!</> : <><ShoppingCartSVG />Adicionar ao Pedido</>}
       </button>
       <a href={`https://${brand.site}`} target="_blank" rel="noopener noreferrer"
         style={{ padding: "11px", borderRadius: 11, border: "1px solid #475569", color: "#cbd5e1", fontWeight: 600, fontSize: 11, display: "flex", alignItems: "center", justifyContent: "center", gap: 6, textDecoration: "none", background: "rgba(30,41,59,0.9)" }}>
@@ -814,7 +819,7 @@ export default function App() {
           maxHeight: "40vh", overflowY: "auto",
         }}>
           <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 8 }}>
-            <ShoppingCart size={13} color="#3b82f6" />
+            <div style={{ color: "#3b82f6" }}><ShoppingCartSVG /></div>
             <span style={{ fontSize: 11, fontWeight: 700, color: "white" }}>Pedido ({cart.length})</span>
           </div>
           {cart.map((item) => (
@@ -827,9 +832,9 @@ export default function App() {
               <button
                 onClick={() => removeFromCart(item.id)}
                 aria-label={`Remover ${item.name}`}
-                style={{ width: 26, height: 26, borderRadius: 6, background: "rgba(239,68,68,.2)", border: "1px solid rgba(239,68,68,.4)", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}
+                style={{ width: 26, height: 26, borderRadius: 6, background: "rgba(239,68,68,.2)", border: "1px solid rgba(239,68,68,.4)", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", color: "#ef4444" }}
               >
-                <X size={11} color="#ef4444" />
+                <XSVG />
               </button>
             </div>
           ))}
