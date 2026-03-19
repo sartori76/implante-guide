@@ -261,14 +261,11 @@ function Logo() {
   );
 }
 
-// Botão Voltar — emoticon Unicode, sem dependência de biblioteca
+// Botão Voltar — emoticon Unicode ←
 function Back({ onClick }) {
   return (
-    <button
-      onClick={onClick}
-      aria-label="Voltar"
-      style={{ width: 34, height: 34, borderRadius: 9, background: "rgba(30,41,59,0.9)", border: "1px solid #475569", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", flexShrink: 0 }}
-    >
+    <button onClick={onClick} aria-label="Voltar"
+      style={{ width: 34, height: 34, borderRadius: 9, background: "rgba(30,41,59,0.9)", border: "1px solid #475569", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", flexShrink: 0 }}>
       <span style={{ color: "#e2e8f0", fontSize: 20 }}>←</span>
     </button>
   );
@@ -370,7 +367,8 @@ function Detective({ go }) {
     const brands = COMPATIBLE_BRANDS[ct] || [];
     return (
       <div style={G.page} className="fadein">
-        <button onClick={() => { setDone(false); setStep(5); setSel(null); }} style={{ display: "flex", alignItems: "center", gap: 5, background: "none", border: "none", color: "#94a3b8", cursor: "pointer", padding: 0, fontSize: 11 }}>
+        <button onClick={() => { setDone(false); setStep(5); setSel(null); }}
+          style={{ display: "flex", alignItems: "center", gap: 5, background: "none", border: "none", color: "#94a3b8", cursor: "pointer", padding: 0, fontSize: 11 }}>
           <span style={{ fontSize: 14 }}>←</span> Rever
         </button>
         <div style={{ padding: 18, borderRadius: 14, background: "rgba(16,185,129,.12)", border: "1px solid rgba(16,185,129,.4)" }}>
@@ -454,7 +452,7 @@ function BrandSelect({ go }) {
   );
 }
 
-// ─── FAMÍLIA (Bone Level / Tissue Level) ─────────────────────────────────────
+// ─── FAMÍLIA ──────────────────────────────────────────────────────────────────
 function FamilySelect({ state, go }) {
   const brand = DB[state.brand];
   const isStr = state.brand === "straumann";
@@ -482,7 +480,7 @@ function FamilySelect({ state, go }) {
   );
 }
 
-// ─── LINHA (BL/BLT vs BLX; TL vs TLX) ───────────────────────────────────────
+// ─── LINHA ────────────────────────────────────────────────────────────────────
 function LineSelect({ state, go }) {
   const brand = DB[state.brand];
   const fam = brand.families[state.family];
@@ -551,7 +549,7 @@ function TLXPlatform({ state, go }) {
   );
 }
 
-// ─── OBJETIVO (Unitária vs Múltipla) ─────────────────────────────────────────
+// ─── OBJETIVO ─────────────────────────────────────────────────────────────────
 function ObjectiveSelect({ state, go }) {
   const brand = DB[state.brand];
   const fam = brand.families[state.family];
@@ -583,7 +581,7 @@ function ObjectiveSelect({ state, go }) {
   );
 }
 
-// ─── SUBTIPO DE COMPONENTE ────────────────────────────────────────────────────
+// ─── SUBTIPO ──────────────────────────────────────────────────────────────────
 function SubtypeSelect({ state, go }) {
   const brand = DB[state.brand];
   const fam = brand.families[state.family];
@@ -669,12 +667,9 @@ function Result({ state, go, addToCart, reset }) {
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         <Back onClick={() => go(backScreen, state)} />
         <span style={{ fontSize: 9, color: "#10b981", fontWeight: 700, textTransform: "uppercase", letterSpacing: .8 }}>✓ Componente Encontrado</span>
-        {/* Botão Reiniciar — emoticon Unicode */}
-        <button
-          onClick={reset}
-          aria-label="Reiniciar consulta"
-          style={{ width: 34, height: 34, borderRadius: 9, background: "rgba(30,41,59,0.9)", border: "1px solid #475569", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}
-        >
+        {/* Botão Reiniciar — emoticon Unicode ↺ */}
+        <button onClick={reset} aria-label="Reiniciar consulta"
+          style={{ width: 34, height: 34, borderRadius: 9, background: "rgba(30,41,59,0.9)", border: "1px solid #475569", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
           <span style={{ color: "#e2e8f0", fontSize: 20 }}>↺</span>
         </button>
       </div>
@@ -719,18 +714,12 @@ function Result({ state, go, addToCart, reset }) {
         </div>
       </div>
 
-      {/* Botão Adicionar ao Pedido — SVG inline shopping bag, stroke hardcoded */}
+      {/* Botão Adicionar ao Pedido — ícone SVG inline, stroke hardcoded */}
       <button
-        onClick={() => {
-          addToCart({ id: Date.now(), name: comp.name, sku: comp.sku });
-          setAdded(true);
-          setTimeout(() => setAdded(false), 2500);
-        }}
+        onClick={() => { addToCart({ id: Date.now(), name: comp.name, sku: comp.sku }); setAdded(true); setTimeout(() => setAdded(false), 2500); }}
         style={{ padding: "14px", borderRadius: 12, border: "none", cursor: "pointer", background: added ? "linear-gradient(135deg,#059669,#10b981)" : "linear-gradient(135deg,#1d4ed8,#3b82f6)", color: "white", fontWeight: 700, fontSize: 13, display: "flex", alignItems: "center", justifyContent: "center", gap: 7, transition: "all .35s ease" }}
       >
-        {added ? (
-          <><CheckCircle size={14} />Adicionado!</>
-        ) : (
+        {added ? (<><CheckCircle size={14} />Adicionado!</>) : (
           <>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -759,10 +748,7 @@ export default function App() {
   const [state, setState] = useState({});
   const [cart, setCart] = useState([]);
 
-  const go = (newScreen, newState = {}) => {
-    setState(newState);
-    setScreen(newScreen);
-  };
+  const go = (newScreen, newState = {}) => { setState(newState); setScreen(newScreen); };
   const reset = () => { setState({}); setScreen("home"); };
   const addToCart = (item) => setCart(prev => [...prev, item]);
   const removeFromCart = (id) => setCart(prev => prev.filter(i => i.id !== id));
@@ -781,7 +767,7 @@ export default function App() {
   };
 
   return (
-    // Container externo: fundo escuro cobre 100% da tela
+    // Fundo escuro cobre 100% da tela; flexbox centraliza o conteúdo
     <div style={{ background: "#020617", minHeight: "100vh", color: "white", display: "flex", justifyContent: "center" }}>
       <Sty />
       {/* Wrapper centrado: maxWidth 430px (largura de celular) */}
@@ -793,7 +779,6 @@ export default function App() {
       {cart.length > 0 && (
         <div style={{ position: "fixed", bottom: 0, left: 0, right: 0, background: "rgba(2,6,23,0.97)", borderTop: "1px solid #1e293b", padding: "12px 16px", maxWidth: 430, margin: "0 auto", zIndex: 100, maxHeight: "40vh", overflowY: "auto" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 8 }}>
-            {/* Ícone carrinho — SVG inline com cor hardcoded */}
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" stroke="#3b82f6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
               <line x1="3" y1="6" x2="21" y2="6" stroke="#3b82f6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -807,12 +792,8 @@ export default function App() {
                 <div style={{ fontSize: 11, color: "white", fontWeight: 600 }}>{item.name}</div>
                 <div style={{ fontSize: 9, color: "#60a5fa", fontFamily: "monospace" }}>{item.sku}</div>
               </div>
-              {/* Botão remover — SVG inline X com cor hardcoded */}
-              <button
-                onClick={() => removeFromCart(item.id)}
-                aria-label={`Remover ${item.name}`}
-                style={{ width: 26, height: 26, borderRadius: 6, background: "rgba(239,68,68,.2)", border: "1px solid rgba(239,68,68,.4)", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}
-              >
+              <button onClick={() => removeFromCart(item.id)} aria-label={`Remover ${item.name}`}
+                style={{ width: 26, height: 26, borderRadius: 6, background: "rgba(239,68,68,.2)", border: "1px solid rgba(239,68,68,.4)", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <line x1="18" y1="6" x2="6" y2="18" stroke="#ef4444" strokeWidth="2.5" strokeLinecap="round" />
                   <line x1="6" y1="6" x2="18" y2="18" stroke="#ef4444" strokeWidth="2.5" strokeLinecap="round" />
