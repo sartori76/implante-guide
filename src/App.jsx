@@ -241,7 +241,7 @@ const css = `
 `;
 function Sty() { return <style>{css}</style>; }
 const G = {
-  page: { minHeight: "100vh", display: "flex", flexDirection: "column", padding: "20px 16px 40px", gap: 14, maxWidth: 450, margin: "0 auto" },
+  page: { minHeight: "100vh", display: "flex", flexDirection: "column", padding: "20px 16px 40px", gap: 14, maxWidth: 430, margin: "0 auto" },
   row: { display: "flex", alignItems: "center", gap: 10 },
   mono: { fontFamily: "monospace" },
 };
@@ -814,11 +814,13 @@ export default function App() {
   return (
     <div style={{ background: "#020617", minHeight: "100vh", color: "white" }}>
       <Sty />
-      {screens[screen] || screens.home}
+      <div style={{ maxWidth: 430, margin: "0 auto", minHeight: "100vh", position: "relative" }}>
+        {screens[screen] || screens.home}
+      </div>
 
       {/* Carrinho fixo na base */}
       {cart.length > 0 && (
-        <div style={{ position: "fixed", bottom: 0, left: 0, right: 0, background: "rgba(2,6,23,0.97)", borderTop: "1px solid #1e293b", padding: "12px 16px", maxWidth: 450, margin: "0 auto", zIndex: 100, maxHeight: "40vh", overflowY: "auto" }}>
+        <div style={{ position: "fixed", bottom: 0, left: 0, right: 0, background: "rgba(2,6,23,0.97)", borderTop: "1px solid #1e293b", padding: "12px 16px", maxWidth: 430, margin: "0 auto", zIndex: 100, maxHeight: "40vh", overflowY: "auto" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 8 }}>
             {/* Ícone carrinho no header da lista — SVG inline com cor hardcoded */}
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
