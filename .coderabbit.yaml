@@ -1,0 +1,10 @@
+# Configuração personalizada para o CodeRabbit
+language: "pt-BR"
+reviews:
+  profile: "chill" # Um tom mais amigável e menos rígido
+  high_level_summary: true
+  poetic_summary: false # Desativa resumos em forma de poema (sim, ele faz isso!)
+  auto_review:
+    enabled: true
+chat:
+  auto_reply: true
