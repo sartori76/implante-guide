@@ -5,11 +5,6 @@ import {
   Info, Search, AlertTriangle, Layers
 } from "lucide-react";
 
-// SVG inline para ícones críticos (nunca falham por versão do lucide-react)
-const ShoppingCartSVG = () => <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>;
-const RotateCcwSVG = () => <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>;
-const XSVG = () => <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>;
-
 // ─── Helper ──────────────────────────────────────────────────────────────────
 function gh(baseName, baseInfo, pairs) {
   const out = {};
@@ -52,7 +47,6 @@ const DB = {
               unitaria: {
                 label: "Prótese Unitária", desc: "Componente: Variobase® BLX — coroa parafusada ou cimentada", icon: "🔩",
                 subtypes: [
-                  // FIX #1 — underline no nome do arquivo (era hífen: variobase-blx.jpg)
                   { key: "vb_blx_38", label: "Variobase® BLX ∅3,8mm", icon: "⬡", imgRef: "/variobase_blx.jpg", desc: "Variobase BLX perfil fino — implantes RB e WB (∅3,5–6,5mm). Ideal para carga imediata.", heights: gh("Variobase BLX ∅3,8mm", { torque: "35 Ncm", chave: "SCS 1.25mm", type: "Variobase BLX", material: "Ti Grau 5", shape: "variobase" }, [["1.5", "062.4934"], ["2.5", "062.4935"], ["3.5", "062.4936"]]) },
                   { key: "vb_blx_45", label: "Variobase® BLX ∅4,5mm", icon: "⬡", imgRef: "/variobase_blx.jpg", desc: "Variobase BLX perfil largo — maior perfil de emergência. Para implantes RB e WB.", heights: gh("Variobase BLX ∅4,5mm", { torque: "35 Ncm", chave: "SCS 1.25mm", type: "Variobase BLX", material: "Ti Grau 5", shape: "variobase_wide" }, [["1.5", "062.4944"], ["2.5", "062.4945"], ["3.5", "062.4946"]]) },
                   { key: "pilar_blx", label: "Pilar Anatômico BLX (0° / 17°)", icon: "↗", desc: "Pilar anatômico BLX — corrige angulação 0° ou 17°. ∅ emergência 3,8mm.", heights: gh("Pilar Anatômico BLX 0°", { torque: "35 Ncm", chave: "SCS 1.25mm", type: "Pilar Anatômico BLX", material: "Ti Grau 5", shape: "pilar_ang" }, [["2.5", "062.4103"], ["3.5", "062.4104"]]) },
@@ -208,7 +202,7 @@ const DB = {
   }
 };
 
-// ─── Detective (Investigador) ─────────────────────────────────────────────────
+// ─── Detective ────────────────────────────────────────────────────────────────
 const DETECTIVE_STEPS = [
   { id: 1, title: "Corpo do Implante", subtitle: "Qual é o formato geral do corpo?", icon: "🦷", options: [{ value: "conico", label: "Cônico", desc: "Afila progressivamente da plataforma ao ápice", icon: "▽" }, { value: "cilindrico", label: "Cilíndrico", desc: "Diâmetro uniforme ao longo do corpo", icon: "▭" }] },
   { id: 2, title: "Pescoço / Cervical", subtitle: "Onde está o nível da plataforma protética?", icon: "🔬", options: [{ value: "tissueLevel", label: "Tissue Level", desc: "Plataforma ao nível do tecido mole", icon: "↑" }, { value: "boneLevel", label: "Bone Level", desc: "Plataforma ao nível ósseo", icon: "↓" }] },
@@ -267,7 +261,7 @@ function Logo() {
   );
 }
 
-// FIX #2 — aria-label="Voltar" adicionado; SVG inline (sem dependência do lucide-react)
+// Botão Voltar — SVG inline com cor hardcoded, sem dependência de biblioteca
 function Back({ onClick }) {
   return (
     <button
@@ -275,8 +269,8 @@ function Back({ onClick }) {
       aria-label="Voltar"
       style={{ width: 34, height: 34, borderRadius: 9, background: "rgba(30,41,59,0.9)", border: "1px solid #475569", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", flexShrink: 0 }}
     >
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#e2e8f0" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-        <polyline points="15 18 9 12 15 6" />
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <polyline points="15 18 9 12 15 6" stroke="#e2e8f0" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
       </svg>
     </button>
   );
@@ -349,7 +343,7 @@ function HomeScreen({ go }) {
             <Search size={14} color="#94a3b8" />
           </button>
         </div>
-        <p style={{ margin: 0, fontSize: 9, color: "#475569" }}>v4.3 · Straumann & Neodent · SKUs oficiais</p>
+        <p style={{ margin: 0, fontSize: 9, color: "#475569" }}>v4.4 · Straumann & Neodent · SKUs oficiais</p>
       </div>
     </div>
   );
@@ -379,7 +373,9 @@ function Detective({ go }) {
     return (
       <div style={G.page} className="fadein">
         <button onClick={() => { setDone(false); setStep(5); setSel(null); }} style={{ display: "flex", alignItems: "center", gap: 5, background: "none", border: "none", color: "#94a3b8", cursor: "pointer", padding: 0, fontSize: 11 }}>
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6" /></svg>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <polyline points="15 18 9 12 15 6" stroke="#94a3b8" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
           Rever
         </button>
         <div style={{ padding: 18, borderRadius: 14, background: "rgba(16,185,129,.12)", border: "1px solid rgba(16,185,129,.4)" }}>
@@ -463,7 +459,7 @@ function BrandSelect({ go }) {
   );
 }
 
-// ─── FAMÍLIA (Bone Level / Tissue Level) ─────────────────────────────────────
+// ─── FAMÍLIA ──────────────────────────────────────────────────────────────────
 function FamilySelect({ state, go }) {
   const brand = DB[state.brand];
   const isStr = state.brand === "straumann";
@@ -491,13 +487,12 @@ function FamilySelect({ state, go }) {
   );
 }
 
-// ─── LINHA (BL/BLT vs BLX; TL vs TLX) ───────────────────────────────────────
+// ─── LINHA ────────────────────────────────────────────────────────────────────
 function LineSelect({ state, go }) {
   const brand = DB[state.brand];
   const fam = brand.families[state.family];
   const lines = Object.entries(fam.lines);
 
-  // useEffect evita loop no React Strict Mode (substitui setTimeout)
   useEffect(() => {
     if (lines.length === 1) {
       const [lineKey, line] = lines[0];
@@ -561,7 +556,7 @@ function TLXPlatform({ state, go }) {
   );
 }
 
-// ─── OBJETIVO (Unitária vs Múltipla) ─────────────────────────────────────────
+// ─── OBJETIVO ────────────────────────────────────────────────────────────────
 function ObjectiveSelect({ state, go }) {
   const brand = DB[state.brand];
   const fam = brand.families[state.family];
@@ -593,7 +588,7 @@ function ObjectiveSelect({ state, go }) {
   );
 }
 
-// ─── SUBTIPO DE COMPONENTE ────────────────────────────────────────────────────
+// ─── SUBTIPO ──────────────────────────────────────────────────────────────────
 function SubtypeSelect({ state, go }) {
   const brand = DB[state.brand];
   const fam = brand.families[state.family];
@@ -677,12 +672,25 @@ function Result({ state, go, addToCart, reset }) {
 
   return (
     <div style={G.page} className="fadein">
+      {/* Barra superior: Voltar | status | Reiniciar */}
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         <Back onClick={() => go(backScreen, state)} />
         <span style={{ fontSize: 9, color: "#10b981", fontWeight: 700, textTransform: "uppercase", letterSpacing: .8 }}>✓ Componente Encontrado</span>
-        <button onClick={reset} style={{ width: 34, height: 34, borderRadius: 9, background: "rgba(30,41,59,0.9)", border: "1px solid #475569", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", color: "#e2e8f0" }}><RotateCcwSVG /></button>
+        {/* Botão Reiniciar — SVG inline com cor hardcoded */}
+        <button
+          onClick={reset}
+          aria-label="Reiniciar consulta"
+          style={{ width: 34, height: 34, borderRadius: 9, background: "rgba(30,41,59,0.9)", border: "1px solid #475569", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <polyline points="1 4 1 10 7 10" stroke="#e2e8f0" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10" stroke="#e2e8f0" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </button>
       </div>
+
       <Breadcrumb steps={[brand.label, fam.label, line.label, tlxPlat ? tlxPlat.key : null, obj.label].filter(Boolean)} />
+
       <div style={{ borderRadius: 16, padding: "18px", background: "rgba(30,41,59,0.95)", border: "1px solid rgba(59,130,246,.4)", boxShadow: "0 16px 44px rgba(0,0,0,.5)" }}>
         <div style={{ display: "flex", flexWrap: "wrap", gap: 5, marginBottom: 13 }}>
           <div style={{ padding: "3px 8px", borderRadius: 6, background: `${brand.color}33`, border: `1px solid ${brand.color}77` }}><span style={{ fontSize: 9, fontWeight: 700, color: "white" }}>{brand.label}</span></div>
@@ -722,31 +730,40 @@ function Result({ state, go, addToCart, reset }) {
           </div>
         </div>
 
-        {/* ── Foto de Referência ── */}
+        {/* Foto de Referência */}
         {st?.imgRef && !imgError && (
           <div style={{ marginTop: 12 }}>
             <div style={{ fontSize: 8, color: "#94a3b8", fontWeight: 600, letterSpacing: .5, textTransform: "uppercase", marginBottom: 6 }}>📷 Foto de Referência</div>
             <div style={{ borderRadius: 10, overflow: "hidden", border: "1px solid rgba(59,130,246,.3)", background: "#f8fafc", display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <img
-                src={st.imgRef}
-                alt={`Referência: ${comp.name}`}
-                onError={() => setImgError(true)}
-                style={{ width: "100%", maxHeight: 180, objectFit: "contain", display: "block", padding: "8px" }}
-              />
+              <img src={st.imgRef} alt={`Referência: ${comp.name}`} onError={() => setImgError(true)} style={{ width: "100%", maxHeight: 180, objectFit: "contain", display: "block", padding: "8px" }} />
             </div>
           </div>
         )}
       </div>
 
+      {/* Botão Adicionar ao Pedido — ícone carrinho SVG inline com cor hardcoded */}
       <button
         onClick={() => {
           addToCart({ name: comp.name, sku: comp.sku, brand: brand.label });
           setAdded(true);
           setTimeout(() => setAdded(false), 2500);
         }}
-        style={{ padding: "14px", borderRadius: 12, border: "none", cursor: "pointer", background: added ? "linear-gradient(135deg,#059669,#10b981)" : "linear-gradient(135deg,#1d4ed8,#3b82f6)", color: "white", fontWeight: 700, fontSize: 13, display: "flex", alignItems: "center", justifyContent: "center", gap: 7, transition: "all .35s ease" }}>
-        {added ? <><CheckCircle size={14} />Adicionado!</> : <><ShoppingCartSVG />Adicionar ao Pedido</>}
+        style={{ padding: "14px", borderRadius: 12, border: "none", cursor: "pointer", background: added ? "linear-gradient(135deg,#059669,#10b981)" : "linear-gradient(135deg,#1d4ed8,#3b82f6)", color: "white", fontWeight: 700, fontSize: 13, display: "flex", alignItems: "center", justifyContent: "center", gap: 7, transition: "all .35s ease" }}
+      >
+        {added ? (
+          <><CheckCircle size={14} />Adicionado!</>
+        ) : (
+          <>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              <line x1="3" y1="6" x2="21" y2="6" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              <path d="M16 10a4 4 0 0 1-8 0" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+            Adicionar ao Pedido
+          </>
+        )}
       </button>
+
       <a href={`https://${brand.site}`} target="_blank" rel="noopener noreferrer"
         style={{ padding: "11px", borderRadius: 11, border: "1px solid #475569", color: "#cbd5e1", fontWeight: 600, fontSize: 11, display: "flex", alignItems: "center", justifyContent: "center", gap: 6, textDecoration: "none", background: "rgba(30,41,59,0.9)" }}>
         <ExternalLink size={11} />Ver no site do fabricante
@@ -776,16 +793,11 @@ export default function App() {
   const removeFromCart = (id) => setCart((prev) => prev.filter((i) => i.id !== id));
   const reset = () => { setState({}); setScreen("home"); navHistoryRef.current = []; };
 
-  // Suporte ao botão Voltar do navegador / gesto de swipe
   useEffect(() => {
     window.history.pushState(null, "");
     const handlePopState = () => {
       const prev = navHistoryRef.current.pop();
-      if (prev) {
-        setScreen(prev.screen);
-        setState(prev.state);
-        window.history.pushState(null, "");
-      }
+      if (prev) { setScreen(prev.screen); setState(prev.state); window.history.pushState(null, ""); }
     };
     window.addEventListener("popstate", handlePopState);
     return () => window.removeEventListener("popstate", handlePopState);
@@ -809,17 +821,16 @@ export default function App() {
       <Sty />
       {screens[screen] || screens.home}
 
-      {/* ── Carrinho fixo — FIX #3: maxHeight + overflow: auto ── */}
+      {/* Carrinho fixo na base */}
       {cart.length > 0 && (
-        <div style={{
-          position: "fixed", bottom: 0, left: 0, right: 0,
-          background: "rgba(2,6,23,0.97)", borderTop: "1px solid #1e293b",
-          padding: "12px 16px",
-          maxWidth: 450, margin: "0 auto", zIndex: 100,
-          maxHeight: "40vh", overflowY: "auto",
-        }}>
+        <div style={{ position: "fixed", bottom: 0, left: 0, right: 0, background: "rgba(2,6,23,0.97)", borderTop: "1px solid #1e293b", padding: "12px 16px", maxWidth: 450, margin: "0 auto", zIndex: 100, maxHeight: "40vh", overflowY: "auto" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 8 }}>
-            <div style={{ color: "#3b82f6" }}><ShoppingCartSVG /></div>
+            {/* Ícone carrinho no header da lista — SVG inline com cor hardcoded */}
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" stroke="#3b82f6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              <line x1="3" y1="6" x2="21" y2="6" stroke="#3b82f6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              <path d="M16 10a4 4 0 0 1-8 0" stroke="#3b82f6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
             <span style={{ fontSize: 11, fontWeight: 700, color: "white" }}>Pedido ({cart.length})</span>
           </div>
           {cart.map((item) => (
@@ -828,13 +839,16 @@ export default function App() {
                 <div style={{ fontSize: 11, color: "white", fontWeight: 600 }}>{item.name}</div>
                 <div style={{ fontSize: 9, color: "#60a5fa", fontFamily: "monospace" }}>{item.sku}</div>
               </div>
-              {/* FIX #4 — aria-label descritivo no botão de remoção */}
+              {/* Botão remover — SVG inline com cor hardcoded */}
               <button
                 onClick={() => removeFromCart(item.id)}
                 aria-label={`Remover ${item.name}`}
-                style={{ width: 26, height: 26, borderRadius: 6, background: "rgba(239,68,68,.2)", border: "1px solid rgba(239,68,68,.4)", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", color: "#ef4444" }}
+                style={{ width: 26, height: 26, borderRadius: 6, background: "rgba(239,68,68,.2)", border: "1px solid rgba(239,68,68,.4)", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}
               >
-                <XSVG />
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <line x1="18" y1="6" x2="6" y2="18" stroke="#ef4444" strokeWidth="2.5" strokeLinecap="round" />
+                  <line x1="6" y1="6" x2="18" y2="18" stroke="#ef4444" strokeWidth="2.5" strokeLinecap="round" />
+                </svg>
               </button>
             </div>
           ))}
