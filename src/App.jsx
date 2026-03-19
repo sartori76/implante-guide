@@ -47,10 +47,11 @@ const DB = {
               unitaria: {
                 label: "Prótese Unitária", desc: "Componente: Variobase® BLX — coroa parafusada ou cimentada", icon: "🔩",
                 subtypes: [
-                  { key: "vb_blx_38", label: "Variobase® BLX ∅3,8mm", icon: "⬡", imgRef: "/variobase-blx.jpg", desc: "Variobase BLX perfil fino — implantes RB e WB (∅3,5–6,5mm). Ideal para carga imediata.", heights: gh("Variobase BLX ∅3,8mm", { torque: "35 Ncm", chave: "SCS 1.25mm", type: "Variobase BLX", material: "Ti Grau 5", shape: "variobase" }, [["1.5", "062.4934"], ["2.5", "062.4935"], ["3.5", "062.4936"]]) },
-                  { key: "vb_blx_45", label: "Variobase® BLX ∅4,5mm", icon: "⬡", imgRef: "/variobase-blx.jpg", desc: "Variobase BLX perfil largo — maior perfil de emergência. Para implantes RB e WB.", heights: gh("Variobase BLX ∅4,5mm", { torque: "35 Ncm", chave: "SCS 1.25mm", type: "Variobase BLX", material: "Ti Grau 5", shape: "variobase_wide" }, [["1.5", "062.4944"], ["2.5", "062.4945"], ["3.5", "062.4946"]]) },
+                  // FIX #1 — underline no nome do arquivo (era hífen: variobase-blx.jpg)
+                  { key: "vb_blx_38", label: "Variobase® BLX ∅3,8mm", icon: "⬡", imgRef: "/variobase_blx.jpg", desc: "Variobase BLX perfil fino — implantes RB e WB (∅3,5–6,5mm). Ideal para carga imediata.", heights: gh("Variobase BLX ∅3,8mm", { torque: "35 Ncm", chave: "SCS 1.25mm", type: "Variobase BLX", material: "Ti Grau 5", shape: "variobase" }, [["1.5", "062.4934"], ["2.5", "062.4935"], ["3.5", "062.4936"]]) },
+                  { key: "vb_blx_45", label: "Variobase® BLX ∅4,5mm", icon: "⬡", imgRef: "/variobase_blx.jpg", desc: "Variobase BLX perfil largo — maior perfil de emergência. Para implantes RB e WB.", heights: gh("Variobase BLX ∅4,5mm", { torque: "35 Ncm", chave: "SCS 1.25mm", type: "Variobase BLX", material: "Ti Grau 5", shape: "variobase_wide" }, [["1.5", "062.4944"], ["2.5", "062.4945"], ["3.5", "062.4946"]]) },
                   { key: "pilar_blx", label: "Pilar Anatômico BLX (0° / 17°)", icon: "↗", desc: "Pilar anatômico BLX — corrige angulação 0° ou 17°. ∅ emergência 3,8mm.", heights: gh("Pilar Anatômico BLX 0°", { torque: "35 Ncm", chave: "SCS 1.25mm", type: "Pilar Anatômico BLX", material: "Ti Grau 5", shape: "pilar_ang" }, [["2.5", "062.4103"], ["3.5", "062.4104"]]) },
-                  { key: "vb_blxc", label: "Variobase® BLX C (Cimentado)", icon: "🪝", imgRef: "/variobase-blx.jpg", desc: "Variobase BLX C para restaurações cimentadas — ∅4,5mm.", heights: gh("Variobase BLX C ∅4,5mm", { torque: "35 Ncm", chave: "SCS 1.25mm", type: "Variobase BLX Cimentado", material: "Ti Grau 5", shape: "pilar_cim" }, [["1.5", "062.4961"]]) },
+                  { key: "vb_blxc", label: "Variobase® BLX C (Cimentado)", icon: "🪝", imgRef: "/variobase_blx.jpg", desc: "Variobase BLX C para restaurações cimentadas — ∅4,5mm.", heights: gh("Variobase BLX C ∅4,5mm", { torque: "35 Ncm", chave: "SCS 1.25mm", type: "Variobase BLX Cimentado", material: "Ti Grau 5", shape: "pilar_cim" }, [["1.5", "062.4961"]]) },
                 ]
               },
               multipla: {
@@ -261,10 +262,14 @@ function Logo() {
   );
 }
 
-// Back usa SVG inline — independente de qualquer versão do lucide-react
+// FIX #2 — aria-label="Voltar" adicionado; SVG inline (sem dependência do lucide-react)
 function Back({ onClick }) {
   return (
-    <button onClick={onClick} style={{ width: 34, height: 34, borderRadius: 9, background: "rgba(30,41,59,0.9)", border: "1px solid #475569", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", flexShrink: 0 }}>
+    <button
+      onClick={onClick}
+      aria-label="Voltar"
+      style={{ width: 34, height: 34, borderRadius: 9, background: "rgba(30,41,59,0.9)", border: "1px solid #475569", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", flexShrink: 0 }}
+    >
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#e2e8f0" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
         <polyline points="15 18 9 12 15 6" />
       </svg>
@@ -712,7 +717,7 @@ function Result({ state, go, addToCart, reset }) {
           </div>
         </div>
 
-        {/* ── Foto de Referência (só aparece se imgRef estiver definido no DB) ── */}
+        {/* ── Foto de Referência ── */}
         {st?.imgRef && !imgError && (
           <div style={{ marginTop: 12 }}>
             <div style={{ fontSize: 8, color: "#94a3b8", fontWeight: 600, letterSpacing: .5, textTransform: "uppercase", marginBottom: 6 }}>📷 Foto de Referência</div>
@@ -799,9 +804,15 @@ export default function App() {
       <Sty />
       {screens[screen] || screens.home}
 
-      {/* ── Carrinho de pedido (fixo na base da tela) ── */}
+      {/* ── Carrinho fixo — FIX #3: maxHeight + overflow: auto ── */}
       {cart.length > 0 && (
-        <div style={{ position: "fixed", bottom: 0, left: 0, right: 0, background: "rgba(2,6,23,0.97)", borderTop: "1px solid #1e293b", padding: "12px 16px", maxWidth: 450, margin: "0 auto", zIndex: 100 }}>
+        <div style={{
+          position: "fixed", bottom: 0, left: 0, right: 0,
+          background: "rgba(2,6,23,0.97)", borderTop: "1px solid #1e293b",
+          padding: "12px 16px",
+          maxWidth: 450, margin: "0 auto", zIndex: 100,
+          maxHeight: "40vh", overflowY: "auto",
+        }}>
           <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 8 }}>
             <ShoppingCart size={13} color="#3b82f6" />
             <span style={{ fontSize: 11, fontWeight: 700, color: "white" }}>Pedido ({cart.length})</span>
@@ -812,7 +823,12 @@ export default function App() {
                 <div style={{ fontSize: 11, color: "white", fontWeight: 600 }}>{item.name}</div>
                 <div style={{ fontSize: 9, color: "#60a5fa", fontFamily: "monospace" }}>{item.sku}</div>
               </div>
-              <button onClick={() => removeFromCart(item.id)} style={{ width: 26, height: 26, borderRadius: 6, background: "rgba(239,68,68,.2)", border: "1px solid rgba(239,68,68,.4)", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
+              {/* FIX #4 — aria-label descritivo no botão de remoção */}
+              <button
+                onClick={() => removeFromCart(item.id)}
+                aria-label={`Remover ${item.name}`}
+                style={{ width: 26, height: 26, borderRadius: 6, background: "rgba(239,68,68,.2)", border: "1px solid rgba(239,68,68,.4)", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}
+              >
                 <X size={11} color="#ef4444" />
               </button>
             </div>
