@@ -269,9 +269,7 @@ function Back({ onClick }) {
       aria-label="Voltar"
       style={{ width: 34, height: 34, borderRadius: 9, background: "rgba(30,41,59,0.9)", border: "1px solid #475569", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", flexShrink: 0 }}
     >
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <polyline points="15 18 9 12 15 6" stroke="#e2e8f0" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
-      </svg>
+      <span style={{ color: "#e2e8f0", fontSize: 18, lineHeight: 1 }}>←</span>
     </button>
   );
 }
