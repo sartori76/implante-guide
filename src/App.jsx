@@ -270,7 +270,7 @@ function Back({ onClick }) {
       style={{ width: 34, height: 34, borderRadius: 9, background: "rgba(30,41,59,0.9)", border: "1px solid #475569", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", flexShrink: 0 }}
     >
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <polyline points="15 18 9 12 15 6" stroke="#e2e8f0" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+        <polyline points="15 18 9 12 15 6" stroke="#e2e8f0" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
       </svg>
     </button>
   );
@@ -374,7 +374,7 @@ function Detective({ go }) {
       <div style={G.page} className="fadein">
         <button onClick={() => { setDone(false); setStep(5); setSel(null); }} style={{ display: "flex", alignItems: "center", gap: 5, background: "none", border: "none", color: "#94a3b8", cursor: "pointer", padding: 0, fontSize: 11 }}>
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <polyline points="15 18 9 12 15 6" stroke="#94a3b8" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+            <polyline points="15 18 9 12 15 6" stroke="#94a3b8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
           </svg>
           Rever
         </button>
@@ -683,8 +683,8 @@ function Result({ state, go, addToCart, reset }) {
           style={{ width: 34, height: 34, borderRadius: 9, background: "rgba(30,41,59,0.9)", border: "1px solid #475569", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}
         >
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <polyline points="1 4 1 10 7 10" stroke="#e2e8f0" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-            <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10" stroke="#e2e8f0" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+            <polyline points="1 4 1 10 7 10" stroke="#e2e8f0" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10" stroke="#e2e8f0" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
           </svg>
         </button>
       </div>
