@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import {
-  ChevronRight, ChevronLeft, CheckCircle, ShoppingCart,
+  ChevronRight, CheckCircle, ShoppingCart,
   ExternalLink, RotateCcw, Zap, Shield, Home, ArrowRight,
   Info, Search, AlertTriangle, Layers, X
 } from "lucide-react";
@@ -47,16 +47,17 @@ const DB = {
               unitaria: {
                 label: "Prótese Unitária", desc: "Componente: Variobase® BLX — coroa parafusada ou cimentada", icon: "🔩",
                 subtypes: [
-                  { key: "vb_blx_38", label: "Variobase® BLX ∅3,8mm", icon: "⬡", desc: "Variobase BLX perfil fino — implantes RB e WB (∅3,5–6,5mm). Ideal para carga imediata.", heights: gh("Variobase BLX ∅3,8mm", { torque: "35 Ncm", chave: "SCS 1.25mm", type: "Variobase BLX", material: "Ti Grau 5", shape: "variobase" }, [["1.5", "062.4934"], ["2.5", "062.4935"], ["3.5", "062.4936"]]) },
-                  { key: "vb_blx_45", label: "Variobase® BLX ∅4,5mm", icon: "⬡", desc: "Variobase BLX perfil largo — maior perfil de emergência. Para implantes RB e WB.", heights: gh("Variobase BLX ∅4,5mm", { torque: "35 Ncm", chave: "SCS 1.25mm", type: "Variobase BLX", material: "Ti Grau 5", shape: "variobase_wide" }, [["1.5", "062.4944"], ["2.5", "062.4945"], ["3.5", "062.4946"]]) },
+                  // FIX #1 — underline no nome do arquivo (era hífen: variobase-blx.jpg)
+                  { key: "vb_blx_38", label: "Variobase® BLX ∅3,8mm", icon: "⬡", imgRef: "/variobase_blx.jpg", desc: "Variobase BLX perfil fino — implantes RB e WB (∅3,5–6,5mm). Ideal para carga imediata.", heights: gh("Variobase BLX ∅3,8mm", { torque: "35 Ncm", chave: "SCS 1.25mm", type: "Variobase BLX", material: "Ti Grau 5", shape: "variobase" }, [["1.5", "062.4934"], ["2.5", "062.4935"], ["3.5", "062.4936"]]) },
+                  { key: "vb_blx_45", label: "Variobase® BLX ∅4,5mm", icon: "⬡", imgRef: "/variobase_blx.jpg", desc: "Variobase BLX perfil largo — maior perfil de emergência. Para implantes RB e WB.", heights: gh("Variobase BLX ∅4,5mm", { torque: "35 Ncm", chave: "SCS 1.25mm", type: "Variobase BLX", material: "Ti Grau 5", shape: "variobase_wide" }, [["1.5", "062.4944"], ["2.5", "062.4945"], ["3.5", "062.4946"]]) },
                   { key: "pilar_blx", label: "Pilar Anatômico BLX (0° / 17°)", icon: "↗", desc: "Pilar anatômico BLX — corrige angulação 0° ou 17°. ∅ emergência 3,8mm.", heights: gh("Pilar Anatômico BLX 0°", { torque: "35 Ncm", chave: "SCS 1.25mm", type: "Pilar Anatômico BLX", material: "Ti Grau 5", shape: "pilar_ang" }, [["2.5", "062.4103"], ["3.5", "062.4104"]]) },
-                  { key: "vb_blxc", label: "Variobase® BLX C (Cimentado)", icon: "🪝", desc: "Variobase BLX C para restaurações cimentadas — ∅4,5mm.", heights: gh("Variobase BLX C ∅4,5mm", { torque: "35 Ncm", chave: "SCS 1.25mm", type: "Variobase BLX Cimentado", material: "Ti Grau 5", shape: "pilar_cim" }, [["1.5", "062.4961"]]) },
+                  { key: "vb_blxc", label: "Variobase® BLX C (Cimentado)", icon: "🪝", imgRef: "/variobase_blx.jpg", desc: "Variobase BLX C para restaurações cimentadas — ∅4,5mm.", heights: gh("Variobase BLX C ∅4,5mm", { torque: "35 Ncm", chave: "SCS 1.25mm", type: "Variobase BLX Cimentado", material: "Ti Grau 5", shape: "pilar_cim" }, [["1.5", "062.4961"]]) },
                 ]
               },
               multipla: {
                 label: "Prótese Unida / Múltipla", desc: "Componente: SRA BLX — Screw-Retained Abutment para próteses fixas unidas", icon: "⬢",
                 subtypes: [
-                  { key: "sra_blx", label: "SRA BLX — Screw-Retained Abutment", icon: "⬢", desc: "Pilar SRA BLX para próteses fixas múltiplas. Disponível em 0°, 17° e 30°.", heights: gh("SRA BLX 0°", { torque: "35 Ncm", chave: "SCS 1.25mm", type: "SRA Multi-Unit BLX", material: "Ti Grau 5", shape: "sra" }, [["1.5", "062.4722S"], ["2.5", "062.4723S"], ["3.5", "062.4724S"], ["4.5", "062.4725S"]]) },
+                  { key: "sra_blx", label: "SRA BLX — Screw-Retained Abutment", icon: "⬢", desc: "Pilar SRA BLX para próteses fixas múltiplas. Disponível em 0°, 17° e 30°.", heights: gh("SRA BLX 0°", { torque: "15 Ncm", chave: "SCS 1.25mm", type: "SRA Multi-Unit BLX", material: "Ti Grau 5", shape: "sra" }, [["1.5", "062.4722S"], ["2.5", "062.4723S"], ["3.5", "062.4724S"], ["4.5", "062.4725S"]]) },
                 ]
               },
             }
@@ -202,7 +203,7 @@ const DB = {
   }
 };
 
-// ─── Detective ────────────────────────────────────────────────────────────────
+// ─── Detective (Investigador) ─────────────────────────────────────────────────
 const DETECTIVE_STEPS = [
   { id: 1, title: "Corpo do Implante", subtitle: "Qual é o formato geral do corpo?", icon: "🦷", options: [{ value: "conico", label: "Cônico", desc: "Afila progressivamente da plataforma ao ápice", icon: "▽" }, { value: "cilindrico", label: "Cilíndrico", desc: "Diâmetro uniforme ao longo do corpo", icon: "▭" }] },
   { id: 2, title: "Pescoço / Cervical", subtitle: "Onde está o nível da plataforma protética?", icon: "🔬", options: [{ value: "tissueLevel", label: "Tissue Level", desc: "Plataforma ao nível do tecido mole", icon: "↑" }, { value: "boneLevel", label: "Bone Level", desc: "Plataforma ao nível ósseo", icon: "↓" }] },
@@ -227,7 +228,6 @@ const HEIGHT_DESCS = {
   "3.5": "Tecido espesso — GH 3,5mm (posterior / biótipo grosso)",
   "4.5": "Tecido muito espesso — GH 4,5mm (ganho ósseo / regeneração)"
 };
-
 const css = `
   @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700;800&display=swap');
   *{box-sizing:border-box} body{margin:0;background:#020617;font-family:'DM Sans',sans-serif;color:white}
@@ -241,7 +241,6 @@ const css = `
   .fadein{animation:fadeIn .22s ease both}
 `;
 function Sty() { return <style>{css}</style>; }
-
 const G = {
   page: { minHeight: "100vh", display: "flex", flexDirection: "column", padding: "20px 16px 40px", gap: 14, maxWidth: 450, margin: "0 auto" },
   row: { display: "flex", alignItems: "center", gap: 10 },
@@ -262,9 +261,22 @@ function Logo() {
     </div>
   );
 }
+
+// FIX #2 — aria-label="Voltar" adicionado; SVG inline (sem dependência do lucide-react)
 function Back({ onClick }) {
-  return <button onClick={onClick} style={{ width: 34, height: 34, borderRadius: 9, background: "rgba(30,41,59,0.9)", border: "1px solid #475569", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", flexShrink: 0 }}><ChevronLeft size={15} color="#e2e8f0" /></button>;
+  return (
+    <button
+      onClick={onClick}
+      aria-label="Voltar"
+      style={{ width: 34, height: 34, borderRadius: 9, background: "rgba(30,41,59,0.9)", border: "1px solid #475569", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", flexShrink: 0 }}
+    >
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#e2e8f0" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+        <polyline points="15 18 9 12 15 6" />
+      </svg>
+    </button>
+  );
 }
+
 function Hdr({ title, sub, color = "#94a3b8", onBack }) {
   return <div style={G.row}><Back onClick={onBack} /><div><h2 style={{ margin: 0, fontSize: 16, fontWeight: 700, color: "white" }}>{title}</h2>{sub && <p style={{ margin: 0, fontSize: 11, color }}>{sub}</p>}</div></div>;
 }
@@ -291,7 +303,7 @@ function Placeholder({ label }) {
   return <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center" }}><div style={{ width: 90, height: 90, borderRadius: 12, background: "linear-gradient(135deg,#0f172a,#1e293b)", border: "1px solid rgba(59,130,246,.3)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 3 }}><span style={{ fontSize: 22 }}>🦷</span><span style={{ fontSize: 8, color: "#94a3b8", textAlign: "center", padding: "0 5px", lineHeight: 1.3 }}>{label}</span></div></div>;
 }
 
-// ─── HOME ─────────────────────────────────────────────────────────────────────
+// ─── TELA HOME ────────────────────────────────────────────────────────────────
 function HomeScreen({ go }) {
   return (
     <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "24px 16px" }}>
@@ -332,7 +344,7 @@ function HomeScreen({ go }) {
             <Search size={14} color="#94a3b8" />
           </button>
         </div>
-        <p style={{ margin: 0, fontSize: 9, color: "#475569" }}>v4.2 · Straumann & Neodent · SKUs oficiais</p>
+        <p style={{ margin: 0, fontSize: 9, color: "#475569" }}>v4.3 · Straumann & Neodent · SKUs oficiais</p>
       </div>
     </div>
   );
@@ -361,7 +373,10 @@ function Detective({ go }) {
     const brands = COMPATIBLE_BRANDS[ct] || [];
     return (
       <div style={G.page} className="fadein">
-        <button onClick={() => { setDone(false); setStep(5); setSel(null); }} style={{ display: "flex", alignItems: "center", gap: 5, background: "none", border: "none", color: "#94a3b8", cursor: "pointer", padding: 0, fontSize: 11 }}><ChevronLeft size={13} />Rever</button>
+        <button onClick={() => { setDone(false); setStep(5); setSel(null); }} style={{ display: "flex", alignItems: "center", gap: 5, background: "none", border: "none", color: "#94a3b8", cursor: "pointer", padding: 0, fontSize: 11 }}>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6" /></svg>
+          Rever
+        </button>
         <div style={{ padding: 18, borderRadius: 14, background: "rgba(16,185,129,.12)", border: "1px solid rgba(16,185,129,.4)" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 10 }}><CheckCircle size={15} color="#10b981" /><span style={{ fontWeight: 700, color: "#10b981", fontSize: 13 }}>Análise Concluída</span></div>
           <p style={{ margin: "0 0 3px", fontSize: 10, color: "#94a3b8" }}>Conexão identificada:</p>
@@ -443,7 +458,7 @@ function BrandSelect({ go }) {
   );
 }
 
-// ─── FAMÍLIA ──────────────────────────────────────────────────────────────────
+// ─── FAMÍLIA (Bone Level / Tissue Level) ─────────────────────────────────────
 function FamilySelect({ state, go }) {
   const brand = DB[state.brand];
   const isStr = state.brand === "straumann";
@@ -471,12 +486,13 @@ function FamilySelect({ state, go }) {
   );
 }
 
-// ─── LINHA ────────────────────────────────────────────────────────────────────
+// ─── LINHA (BL/BLT vs BLX; TL vs TLX) ───────────────────────────────────────
 function LineSelect({ state, go }) {
   const brand = DB[state.brand];
   const fam = brand.families[state.family];
   const lines = Object.entries(fam.lines);
 
+  // useEffect evita loop no React Strict Mode (substitui setTimeout)
   useEffect(() => {
     if (lines.length === 1) {
       const [lineKey, line] = lines[0];
@@ -540,7 +556,7 @@ function TLXPlatform({ state, go }) {
   );
 }
 
-// ─── OBJETIVO ─────────────────────────────────────────────────────────────────
+// ─── OBJETIVO (Unitária vs Múltipla) ─────────────────────────────────────────
 function ObjectiveSelect({ state, go }) {
   const brand = DB[state.brand];
   const fam = brand.families[state.family];
@@ -572,7 +588,7 @@ function ObjectiveSelect({ state, go }) {
   );
 }
 
-// ─── SUBTIPO ──────────────────────────────────────────────────────────────────
+// ─── SUBTIPO DE COMPONENTE ────────────────────────────────────────────────────
 function SubtypeSelect({ state, go }) {
   const brand = DB[state.brand];
   const fam = brand.families[state.family];
@@ -639,8 +655,9 @@ function HeightSelect({ state, go }) {
 }
 
 // ─── RESULTADO ────────────────────────────────────────────────────────────────
-function Result({ state, go, reset, addToCart }) {
+function Result({ state, go, addToCart, reset }) {
   const [added, setAdded] = useState(false);
+  const [imgError, setImgError] = useState(false);
   const brand = DB[state.brand];
   const fam = brand.families[state.family];
   const line = fam.lines[state.line];
@@ -652,12 +669,6 @@ function Result({ state, go, reset, addToCart }) {
   const backScreen = isTLX ? "subtypeSelect" : "heightSelect";
 
   if (!comp) return <div style={{ padding: 20, color: "white" }}><p>Componente não encontrado.</p><button onClick={reset} style={{ color: "#3b82f6", background: "none", border: "none", cursor: "pointer" }}>↩ Recomeçar</button></div>;
-
-  const handleAddToCart = () => {
-    addToCart({ ...comp, brandLabel: brand.label, brandColor: brand.color, lineConnection: line.connection });
-    setAdded(true);
-    setTimeout(() => setAdded(false), 2500);
-  };
 
   return (
     <div style={G.page} className="fadein">
@@ -705,10 +716,31 @@ function Result({ state, go, reset, addToCart }) {
             </div>
           </div>
         </div>
+
+        {/* ── Foto de Referência ── */}
+        {st?.imgRef && !imgError && (
+          <div style={{ marginTop: 12 }}>
+            <div style={{ fontSize: 8, color: "#94a3b8", fontWeight: 600, letterSpacing: .5, textTransform: "uppercase", marginBottom: 6 }}>📷 Foto de Referência</div>
+            <div style={{ borderRadius: 10, overflow: "hidden", border: "1px solid rgba(59,130,246,.3)", background: "#f8fafc", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <img
+                src={st.imgRef}
+                alt={`Referência: ${comp.name}`}
+                onError={() => setImgError(true)}
+                style={{ width: "100%", maxHeight: 180, objectFit: "contain", display: "block", padding: "8px" }}
+              />
+            </div>
+          </div>
+        )}
       </div>
-      <button onClick={handleAddToCart}
+
+      <button
+        onClick={() => {
+          addToCart({ name: comp.name, sku: comp.sku, brand: brand.label });
+          setAdded(true);
+          setTimeout(() => setAdded(false), 2500);
+        }}
         style={{ padding: "14px", borderRadius: 12, border: "none", cursor: "pointer", background: added ? "linear-gradient(135deg,#059669,#10b981)" : "linear-gradient(135deg,#1d4ed8,#3b82f6)", color: "white", fontWeight: 700, fontSize: 13, display: "flex", alignItems: "center", justifyContent: "center", gap: 7, transition: "all .35s ease" }}>
-        {added ? <><CheckCircle size={14} />Adicionado ao pedido!</> : <><ShoppingCart size={14} />Adicionar ao Pedido</>}
+        {added ? <><CheckCircle size={14} />Adicionado!</> : <><ShoppingCart size={14} />Adicionar ao Pedido</>}
       </button>
       <a href={`https://${brand.site}`} target="_blank" rel="noopener noreferrer"
         style={{ padding: "11px", borderRadius: 11, border: "1px solid #475569", color: "#cbd5e1", fontWeight: 600, fontSize: 11, display: "flex", alignItems: "center", justifyContent: "center", gap: 6, textDecoration: "none", background: "rgba(30,41,59,0.9)" }}>
@@ -717,68 +749,6 @@ function Result({ state, go, reset, addToCart }) {
       <button onClick={reset} style={{ padding: "10px", borderRadius: 11, border: "1px solid #334155", cursor: "pointer", background: "transparent", color: "#64748b", fontSize: 11, display: "flex", alignItems: "center", justifyContent: "center", gap: 5 }}>
         <Home size={11} />Nova consulta
       </button>
-    </div>
-  );
-}
-
-// ─── CARRINHO ─────────────────────────────────────────────────────────────────
-function CartScreen({ cart, removeFromCart, go }) {
-  return (
-    <div style={G.page} className="fadein">
-      <Hdr
-        title="Pedido"
-        sub={cart.length > 0 ? `${cart.length} componente(s) selecionado(s)` : "Nenhum componente"}
-        onBack={() => go("home", {})}
-      />
-      {cart.length === 0 ? (
-        <div style={{ textAlign: "center", padding: "48px 20px", display: "flex", flexDirection: "column", alignItems: "center", gap: 14 }}>
-          <div style={{ fontSize: 44 }}>🛒</div>
-          <p style={{ margin: 0, color: "#64748b", fontSize: 13 }}>Nenhum componente adicionado ainda.</p>
-          <button onClick={() => go("home", {})}
-            style={{ padding: "12px 24px", borderRadius: 11, background: "linear-gradient(135deg,#1d4ed8,#3b82f6)", border: "none", cursor: "pointer", color: "white", fontWeight: 700, fontSize: 12 }}>
-            Iniciar Seleção
-          </button>
-        </div>
-      ) : (
-        <>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {cart.map((item) => (
-              <div key={item.id} style={{ padding: "14px 16px", borderRadius: 12, background: "rgba(30,41,59,0.95)", border: "1px solid rgba(71,85,105,0.8)", display: "flex", gap: 10, alignItems: "flex-start" }}>
-                <div style={{ flex: 1 }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 4 }}>
-                    <div style={{ padding: "2px 7px", borderRadius: 5, background: `${item.brandColor}33`, border: `1px solid ${item.brandColor}66` }}>
-                      <span style={{ fontSize: 8, fontWeight: 700, color: "white" }}>{item.brandLabel}</span>
-                    </div>
-                    <span style={{ fontSize: 8, color: "#64748b" }}>{item.lineConnection}</span>
-                  </div>
-                  <div style={{ fontSize: 8, color: "#94a3b8", textTransform: "uppercase", letterSpacing: .5, marginBottom: 2 }}>{item.type}</div>
-                  <div style={{ fontSize: 13, fontWeight: 700, color: "white", marginBottom: 5 }}>{item.name}</div>
-                  <div style={{ display: "flex", gap: 6, alignItems: "center", marginBottom: 5 }}>
-                    <span style={{ fontSize: 8, color: "#64748b" }}>REF.</span>
-                    <span style={{ fontFamily: "monospace", fontSize: 10, color: "#60a5fa", background: "rgba(59,130,246,.15)", padding: "2px 6px", borderRadius: 5 }}>{item.sku}</span>
-                  </div>
-                  <div style={{ display: "flex", gap: 12 }}>
-                    <span style={{ fontSize: 9, color: "#f59e0b" }}>⚡ {item.torque}</span>
-                    <span style={{ fontSize: 9, color: "#60a5fa" }}>🔑 {item.chave}</span>
-                  </div>
-                </div>
-                {/* Botão remover — usa ícone X (compatível com todas as versões do lucide-react) */}
-                <button onClick={() => removeFromCart(item.id)}
-                  style={{ width: 30, height: 30, borderRadius: 8, background: "rgba(239,68,68,.12)", border: "1px solid rgba(239,68,68,.3)", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", flexShrink: 0 }}>
-                  <X size={13} color="#ef4444" />
-                </button>
-              </div>
-            ))}
-          </div>
-          <InfoBox color="#10b981" icon={<CheckCircle size={11} color="#10b981" style={{ flexShrink: 0, marginTop: 1 }} />}>
-            Confirme os SKUs com o catálogo oficial do fabricante antes de realizar o pedido.
-          </InfoBox>
-          <button onClick={() => go("home", {})}
-            style={{ padding: "11px", borderRadius: 11, border: "1px solid #334155", cursor: "pointer", background: "transparent", color: "#64748b", fontSize: 11, display: "flex", alignItems: "center", justifyContent: "center", gap: 5 }}>
-            <Home size={11} />Nova consulta
-          </button>
-        </>
-      )}
     </div>
   );
 }
@@ -797,15 +767,11 @@ export default function App() {
     window.history.pushState(null, "");
   };
 
-  const reset = () => {
-    navHistoryRef.current = [];
-    setState({});
-    setScreen("home");
-  };
-
   const addToCart = (item) => setCart((prev) => [...prev, { ...item, id: Date.now() }]);
   const removeFromCart = (id) => setCart((prev) => prev.filter((i) => i.id !== id));
+  const reset = () => { setState({}); setScreen("home"); navHistoryRef.current = []; };
 
+  // Suporte ao botão Voltar do navegador / gesto de swipe
   useEffect(() => {
     window.history.pushState(null, "");
     const handlePopState = () => {
@@ -830,36 +796,44 @@ export default function App() {
     objectiveSelect: <ObjectiveSelect state={state} go={go} />,
     subtypeSelect: <SubtypeSelect state={state} go={go} />,
     heightSelect: <HeightSelect state={state} go={go} />,
-    result: <Result state={state} go={go} reset={reset} addToCart={addToCart} />,
-    cart: <CartScreen cart={cart} removeFromCart={removeFromCart} go={go} />,
+    result: <Result state={state} go={go} addToCart={addToCart} reset={reset} />,
   };
 
   return (
     <div style={{ background: "#020617", minHeight: "100vh", color: "white" }}>
       <Sty />
       {screens[screen] || screens.home}
-      {cart.length > 0 && screen !== "cart" && (
-        <button
-          onClick={() => go("cart", {})}
-          style={{
-            position: "fixed", top: 16, right: 16, zIndex: 100,
-            width: 46, height: 46, borderRadius: 13,
-            background: "linear-gradient(135deg,#1d4ed8,#3b82f6)",
-            border: "none", cursor: "pointer",
-            display: "flex", alignItems: "center", justifyContent: "center",
-            boxShadow: "0 4px 16px rgba(59,130,246,.45)",
-          }}
-        >
-          <ShoppingCart size={17} color="white" />
-          <span style={{
-            position: "absolute", top: -5, right: -5,
-            width: 19, height: 19, borderRadius: "50%",
-            background: "#ef4444", fontSize: 10, fontWeight: 800,
-            color: "white", display: "flex", alignItems: "center", justifyContent: "center",
-          }}>
-            {cart.length}
-          </span>
-        </button>
+
+      {/* ── Carrinho fixo — FIX #3: maxHeight + overflow: auto ── */}
+      {cart.length > 0 && (
+        <div style={{
+          position: "fixed", bottom: 0, left: 0, right: 0,
+          background: "rgba(2,6,23,0.97)", borderTop: "1px solid #1e293b",
+          padding: "12px 16px",
+          maxWidth: 450, margin: "0 auto", zIndex: 100,
+          maxHeight: "40vh", overflowY: "auto",
+        }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 8 }}>
+            <ShoppingCart size={13} color="#3b82f6" />
+            <span style={{ fontSize: 11, fontWeight: 700, color: "white" }}>Pedido ({cart.length})</span>
+          </div>
+          {cart.map((item) => (
+            <div key={item.id} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "7px 10px", borderRadius: 8, background: "rgba(30,41,59,0.9)", border: "1px solid #334155", marginBottom: 4 }}>
+              <div>
+                <div style={{ fontSize: 11, color: "white", fontWeight: 600 }}>{item.name}</div>
+                <div style={{ fontSize: 9, color: "#60a5fa", fontFamily: "monospace" }}>{item.sku}</div>
+              </div>
+              {/* FIX #4 — aria-label descritivo no botão de remoção */}
+              <button
+                onClick={() => removeFromCart(item.id)}
+                aria-label={`Remover ${item.name}`}
+                style={{ width: 26, height: 26, borderRadius: 6, background: "rgba(239,68,68,.2)", border: "1px solid rgba(239,68,68,.4)", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}
+              >
+                <X size={11} color="#ef4444" />
+              </button>
+            </div>
+          ))}
+        </div>
       )}
     </div>
   );
