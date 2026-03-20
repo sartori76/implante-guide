@@ -229,7 +229,9 @@ const HEIGHT_DESCS = {
 };
 const css = `
   @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700;800&display=swap');
-  *{box-sizing:border-box} body{margin:0;background:#020617;font-family:'DM Sans',sans-serif;color:white}
+  html,body{margin:0;padding:0;width:100%;min-height:100vh}
+  #root{width:100%;min-height:100vh;display:flex;justify-content:center;background:#020617}
+  *{box-sizing:border-box} body{background:#020617;font-family:'DM Sans',sans-serif;color:white}
   @keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
   @keyframes sh{0%{background-position:-200% 0}100%{background-position:200% 0}}
   @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
@@ -767,13 +769,11 @@ export default function App() {
   };
 
   return (
-    // Fundo escuro cobre 100% da tela; flexbox centraliza o conteúdo
-    <div style={{ background: "#020617", minHeight: "100vh", color: "white", display: "flex", justifyContent: "center" }}>
+    // #root já tem display:flex + justify-content:center via CSS
+    // Este div é o wrapper de 430px centralizado
+    <div style={{ width: "100%", maxWidth: 430, minHeight: "100vh", position: "relative", color: "white" }}>
       <Sty />
-      {/* Wrapper centrado: maxWidth 430px (largura de celular) */}
-      <div style={{ width: "100%", maxWidth: 430, minHeight: "100vh", position: "relative" }}>
-        {screens[screen] || screens.home}
-      </div>
+      {screens[screen] || screens.home}
 
       {/* Carrinho fixo na base — centralizado com maxWidth 430px */}
       {cart.length > 0 && (
