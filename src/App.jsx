@@ -51,6 +51,7 @@ const DB = {
                   { key: "vb_blx_45", label: "Variobase® BLX ∅4,5mm", icon: "⬡", imgRef: "/variobase_blx.jpg", desc: "Variobase BLX perfil largo — maior perfil de emergência. Para implantes RB e WB.", heights: gh("Variobase BLX ∅4,5mm", { torque: "35 Ncm", chave: "SCS 1.25mm", type: "Variobase BLX", material: "Ti Grau 5", shape: "variobase_wide" }, [["1.5", "062.4944"], ["2.5", "062.4945"], ["3.5", "062.4946"]]) },
                   { key: "pilar_blx", label: "Pilar Anatômico BLX (0° / 17°)", icon: "↗", desc: "Pilar anatômico BLX — corrige angulação 0° ou 17°. ∅ emergência 3,8mm.", heights: gh("Pilar Anatômico BLX 0°", { torque: "35 Ncm", chave: "SCS 1.25mm", type: "Pilar Anatômico BLX", material: "Ti Grau 5", shape: "pilar_ang" }, [["2.5", "062.4103"], ["3.5", "062.4104"]]) },
                   { key: "vb_blxc", label: "Variobase® BLX C (Cimentado)", icon: "🪝", imgRef: "/variobase_blx.jpg", desc: "Variobase BLX C para restaurações cimentadas — ∅4,5mm.", heights: gh("Variobase BLX C ∅4,5mm", { torque: "35 Ncm", chave: "SCS 1.25mm", type: "Variobase BLX Cimentado", material: "Ti Grau 5", shape: "pilar_cim" }, [["1.5", "062.4961"]]) },
+                  { key: "vb_blx_as", label: "Variobase® AS BLX ∅4,5mm", icon: "↗", imgRef: "/variobase_as.jpg", desc: "Variobase BLX com acesso angulado (AS) — ∅4,5mm RB/WB. Acompanha parafuso SCS.", heights: { "1.5": { name: "Variobase AS BLX ∅4,5mm", sku: "062.4972", torque: "35 Ncm", chave: "SCS 1.25mm", type: "Variobase BLX AS", material: "Ti Grau 5 (Roxolid®)", shape: "pilar_ang" } } },
                 ]
               },
               multipla: {
@@ -728,6 +729,96 @@ const DB = {
       },
     }
   },
+  xxx: {
+    label: "XXX (Teste)", logo: "XXX", color: "#e2e8f0", site: "exemplo.com",
+    families: {
+      boneLevel: {
+        label: "Bone Level", desc: "Implante de nível ósseo — teste de navegação com seleção de corpo", icon: "🦴",
+        lines: {
+          bl_xxx: {
+            label: "BL", desc: "Bone Level básico — conexão interna circular.", icon: "⬡", connection: "BL Interno",
+            objectives: {
+              unitaria: {
+                label: "Prótese Unitária", desc: "Pilar BL parafusado ou cimentado", icon: "🔩",
+                subtypes: [
+                  { key: "pilar_bl_xxx", label: "Pilar BL XXX", icon: "🔩", desc: "Pilar para coroa unitária parafusada — BL", heights: gh("Pilar BL XXX", { torque: "35 Ncm", chave: "SCS 1.25mm", type: "Pilar Protético", material: "Ti Grau 5", shape: "variobase" }, [["1.5", "XXX-BL-15"], ["2.5", "XXX-BL-25"], ["3.5", "XXX-BL-35"]]) },
+                ]
+              },
+              multipla: {
+                label: "Prótese Unida / Múltipla", desc: "MUA BL para próteses fixas múltiplas", icon: "⬢",
+                subtypes: [
+                  { key: "mua_bl_xxx", label: "MUA BL XXX", icon: "⚙️", desc: "Multi-Unit Abutment BL para próteses fixas múltiplas", heights: gh("MUA BL XXX", { torque: "15 Ncm", chave: "SCS 1.25mm", type: "Multi-Unit Abutment", material: "Ti Grau 5", shape: "sra" }, [["1.5", "XXX-BL-MU-15"], ["2.5", "XXX-BL-MU-25"]]) },
+                ]
+              },
+            }
+          },
+          blt_xxx: {
+            label: "BLT", desc: "Bone Level Tapered — perfil cônico para maior estabilidade primária.", icon: "⬡", connection: "BLT Cônico",
+            objectives: {
+              unitaria: {
+                label: "Prótese Unitária", desc: "Pilar BLT parafusado ou cimentado", icon: "🔩",
+                subtypes: [
+                  { key: "pilar_blt_xxx", label: "Pilar BLT XXX", icon: "🔩", desc: "Pilar para coroa unitária parafusada — BLT", heights: gh("Pilar BLT XXX", { torque: "35 Ncm", chave: "SCS 1.25mm", type: "Pilar Protético", material: "Ti Grau 5", shape: "variobase" }, [["1.5", "XXX-BLT-15"], ["2.5", "XXX-BLT-25"], ["3.5", "XXX-BLT-35"]]) },
+                ]
+              },
+              multipla: {
+                label: "Prótese Unida / Múltipla", desc: "MUA BLT para próteses fixas múltiplas", icon: "⬢",
+                subtypes: [
+                  { key: "mua_blt_xxx", label: "MUA BLT XXX", icon: "⚙️", desc: "Multi-Unit Abutment BLT", heights: gh("MUA BLT XXX", { torque: "15 Ncm", chave: "SCS 1.25mm", type: "Multi-Unit Abutment", material: "Ti Grau 5", shape: "sra" }, [["1.5", "XXX-BLT-MU-15"], ["2.5", "XXX-BLT-MU-25"]]) },
+                ]
+              },
+            }
+          },
+          blxblc_xxx: {
+            label: "BLX / BLC", desc: "Bone Level Xtend — escolha o corpo: Regular Body (RB) ou Wide Body (WB).", icon: "⭐", connection: "BLX/BLC",
+            hasBodySelect: true,
+            bodyOptions: [
+              { key: "RB", label: "Regular Body (RB)", diam: "∅ 3,5 – 4,5 mm", desc: "Perfil regular — indicação padrão. Variobase ∅3,8mm.", color: "#3b82f6" },
+              { key: "WB", label: "Wide Body (WB)", diam: "∅ 5,0 – 6,5 mm", desc: "Perfil largo — maior estabilidade posterior. Variobase ∅4,5mm.", color: "#06b6d4" },
+            ],
+            objectives: {
+              unitaria: {
+                label: "Prótese Unitária", desc: "Variobase® BLX — RB (∅3,8mm) ou WB (∅4,5mm)", icon: "🔩",
+                subtypes: [
+                  { key: "vb_blx_rb_xxx", body: "RB", label: "Variobase® BLX ∅3,8mm (RB)", icon: "⬡", desc: "Variobase BLX perfil fino — Regular Body.", heights: gh("Variobase BLX RB", { torque: "35 Ncm", chave: "SCS 1.25mm", type: "Variobase BLX RB", material: "Ti Grau 5", shape: "variobase" }, [["1.5", "XXX-BLX-RB-15"], ["2.5", "XXX-BLX-RB-25"], ["3.5", "XXX-BLX-RB-35"]]) },
+                  { key: "vb_blx_wb_xxx", body: "WB", label: "Variobase® BLX ∅4,5mm (WB)", icon: "⬡", desc: "Variobase BLX perfil largo — Wide Body.", heights: gh("Variobase BLX WB", { torque: "35 Ncm", chave: "SCS 1.25mm", type: "Variobase BLX WB", material: "Ti Grau 5", shape: "variobase_wide" }, [["1.5", "XXX-BLX-WB-15"], ["2.5", "XXX-BLX-WB-25"], ["3.5", "XXX-BLX-WB-35"]]) },
+                  { key: "sra_blx_xxx", label: "SRA BLX (RB e WB)", icon: "⚙️", desc: "Screw-Retained Abutment BLX para próteses fixas múltiplas.", heights: gh("SRA BLX XXX", { torque: "15 Ncm", chave: "SCS 1.25mm", type: "SRA Multi-Unit", material: "Ti Grau 5", shape: "sra" }, [["1.5", "XXX-BLX-SRA-15"], ["2.5", "XXX-BLX-SRA-25"]]) },
+                ]
+              },
+              multipla: {
+                label: "Prótese Unida / Múltipla", desc: "SRA BLX para próteses fixas múltiplas", icon: "⬢",
+                subtypes: [
+                  { key: "sra_blx_mul_xxx", label: "SRA BLX XXX", icon: "⚙️", desc: "Screw-Retained Abutment BLX — disponível em 0°, 17° e 30°.", heights: gh("SRA BLX XXX Múltipla", { torque: "15 Ncm", chave: "SCS 1.25mm", type: "SRA Multi-Unit BLX", material: "Ti Grau 5", shape: "sra" }, [["1.5", "XXX-SRA-MU-15"], ["2.5", "XXX-SRA-MU-25"]]) },
+                ]
+              },
+            }
+          },
+        }
+      },
+      tissueLevel: {
+        label: "Tissue Level", desc: "Implante de nível gengival — colar transmucoso integrado (teste)", icon: "🫧",
+        lines: {
+          tl_xxx: {
+            label: "TL", desc: "Tissue Level clássico — colar transmucoso 1,8mm.", icon: "⬡", connection: "TL Clássico",
+            objectives: {
+              unitaria: {
+                label: "Prótese Unitária", desc: "Variobase TL", icon: "🔩",
+                subtypes: [
+                  { key: "vb_tl_xxx", label: "Variobase® TL XXX", icon: "⬡", desc: "Variobase para Tissue Level — perfil transmucoso integrado.", heights: gh("Variobase TL XXX", { torque: "35 Ncm", chave: "Chave AS", type: "Variobase TL", material: "Ti Grau 5", shape: "variobase" }, [["1.5", "XXX-TL-15"]]) },
+                ]
+              },
+              multipla: {
+                label: "Prótese Unida / Múltipla", desc: "Cilindro TL para múltiplas", icon: "⬢",
+                subtypes: [
+                  { key: "cil_tl_xxx", label: "Cilindro Calcinável TL XXX", icon: "⬢", desc: "Cilindro calcinável para próteses múltiplas — TL.", heights: gh("Cilindro TL XXX", { torque: "15 Ncm", chave: "Chave AS", type: "Cilindro Calcinável TL", material: "Plástico calcinável", shape: "cilindro" }, [["1.5", "XXX-TL-CIL-15"]]) },
+                ]
+              },
+            }
+          },
+        }
+      },
+    }
+  },
 };
 
 // ─── Detective (Investigador) ─────────────────────────────────────────────────
@@ -1008,6 +1099,10 @@ function FamilySelect({ state, go }) {
 }
 
 // ─── LINHA ────────────────────────────────────────────────────────────────────
+function lineNext(line) {
+  return line.hasBodySelect ? "bodySelect" : line.isTLX ? "tlxPlatform" : "objectiveSelect";
+}
+
 function LineSelect({ state, go }) {
   const brand = DB[state.brand];
   const fam = brand.families[state.family];
@@ -1016,7 +1111,7 @@ function LineSelect({ state, go }) {
   useEffect(() => {
     if (lines.length === 1) {
       const [lineKey, line] = lines[0];
-      go(line.isTLX ? "tlxPlatform" : "objectiveSelect", { ...state, line: lineKey });
+      go(lineNext(line), { ...state, line: lineKey });
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -1028,12 +1123,44 @@ function LineSelect({ state, go }) {
       <Breadcrumb steps={[brand.label, fam.label]} />
       <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
         {lines.map(([key, line]) => (
-          <button key={key} className="hov" onClick={() => go(line.isTLX ? "tlxPlatform" : "objectiveSelect", { ...state, line: key })}
+          <button key={key} className="hov" onClick={() => go(lineNext(line), { ...state, line: key })}
             style={{ ...card, padding: "16px" }}>
             <div style={{ fontSize: 22, width: 44, height: 44, borderRadius: 11, background: "rgba(51,65,85,0.8)", border: "1px solid #64748b", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>{line.icon}</div>
             <div style={{ flex: 1 }}>
               <div style={{ fontWeight: 700, color: "white", fontSize: 13, marginBottom: 3 }}>{line.label}</div>
               <div style={{ fontSize: 10, color: "#94a3b8", lineHeight: 1.4 }}>{line.desc}</div>
+            </div>
+            <ChevronRight size={14} color="#475569" />
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ─── SELEÇÃO DE CORPO (RB / WB) ───────────────────────────────────────────────
+function BodySelect({ state, go }) {
+  const brand = DB[state.brand];
+  const fam = brand.families[state.family];
+  const line = fam.lines[state.line];
+  return (
+    <div style={G.page} className="fadein">
+      <Hdr title="Corpo do Implante" sub="Regular Body (RB) ou Wide Body (WB)?" color={brand.color} onBack={() => go("lineSelect", state)} />
+      <Breadcrumb steps={[brand.label, fam.label, line.label]} />
+      <InfoBox color="#3b82f6" icon={<Info size={11} color="#3b82f6" style={{ flexShrink: 0, marginTop: 1 }} />}>
+        Verifique o <strong style={{ color: "white" }}>diâmetro do implante</strong> na documentação clínica ou na embalagem para identificar o corpo correto.
+      </InfoBox>
+      <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+        {line.bodyOptions.map((b) => (
+          <button key={b.key} className="hov" onClick={() => go("objectiveSelect", { ...state, body: b.key })}
+            style={{ ...card, padding: "16px", border: `1px solid ${b.color}55` }}>
+            <div style={{ width: 44, height: 44, borderRadius: 11, background: `${b.color}22`, border: `1px solid ${b.color}66`, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", flexShrink: 0, gap: 2 }}>
+              <span style={{ fontSize: 11, color: b.color, fontWeight: 800 }}>{b.key}</span>
+            </div>
+            <div style={{ flex: 1 }}>
+              <div style={{ fontWeight: 700, color: "white", fontSize: 13, marginBottom: 2 }}>{b.label}</div>
+              <div style={{ fontWeight: 800, color: b.color, fontSize: 12, marginBottom: 3 }}>{b.diam}</div>
+              <div style={{ fontSize: 10, color: "#94a3b8", lineHeight: 1.4 }}>{b.desc}</div>
             </div>
             <ChevronRight size={14} color="#475569" />
           </button>
@@ -1082,12 +1209,13 @@ function ObjectiveSelect({ state, go }) {
   const fam = brand.families[state.family];
   const line = fam.lines[state.line];
   const lines = Object.entries(fam.lines);
-  const backScreen = line.isTLX ? "tlxPlatform" : (lines.length > 1 ? "lineSelect" : "familySelect");
+  const backScreen = line.isTLX ? "tlxPlatform" : line.hasBodySelect ? "bodySelect" : (lines.length > 1 ? "lineSelect" : "familySelect");
   const tlxPlat = line.isTLX ? line.tlxPlatforms?.find(p => p.key === state.tlxPlatform) : null;
+  const bodyOpt = line.hasBodySelect && state.body ? line.bodyOptions?.find(b => b.key === state.body) : null;
   return (
     <div style={G.page} className="fadein">
       <Hdr title="Objetivo Protético" sub="Unitária ou Prótese Unida?" onBack={() => go(backScreen, state)} />
-      <Breadcrumb steps={[brand.label, fam.label, line.label, tlxPlat ? `${tlxPlat.key} ${tlxPlat.diam}` : null].filter(Boolean)} />
+      <Breadcrumb steps={[brand.label, fam.label, line.label, tlxPlat ? `${tlxPlat.key} ${tlxPlat.diam}` : bodyOpt ? bodyOpt.key : null, null].filter(Boolean)} />
       <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
         {Object.entries(line.objectives).map(([key, obj]) => (
           <button key={key} className="hov" onClick={() => go("subtypeSelect", { ...state, objective: key })}
@@ -1115,12 +1243,14 @@ function SubtypeSelect({ state, go }) {
   const line = fam.lines[state.line];
   const obj = line.objectives[state.objective];
   const isTLX = !!line.isTLX;
-  const subs = isTLX ? obj.subtypes.filter(s => s.plat === state.tlxPlatform) : obj.subtypes;
+  const allSubs = isTLX ? obj.subtypes.filter(s => s.plat === state.tlxPlatform) : obj.subtypes;
+  const subs = state.body ? allSubs.filter(s => !s.body || s.body === state.body) : allSubs;
   const tlxPlat = isTLX ? line.tlxPlatforms?.find(p => p.key === state.tlxPlatform) : null;
+  const bodyOpt = line.hasBodySelect && state.body ? line.bodyOptions?.find(b => b.key === state.body) : null;
   return (
     <div style={G.page} className="fadein">
       <Hdr title="Componente Protético" sub={obj.label} onBack={() => go("objectiveSelect", state)} />
-      <Breadcrumb steps={[brand.label, fam.label, line.label, tlxPlat ? tlxPlat.key : null, obj.label].filter(Boolean)} />
+      <Breadcrumb steps={[brand.label, fam.label, line.label, tlxPlat ? tlxPlat.key : bodyOpt ? bodyOpt.key : null, obj.label].filter(Boolean)} />
       <div style={{ display: "flex", flexDirection: "column", gap: 9 }}>
         {subs.map((st) => (
           <button key={st.key} className="hov" onClick={() => go(isTLX ? "result" : "heightSelect", { ...state, subtype: st.key, gengivalHeight: isTLX ? "unico" : null })}
@@ -1185,6 +1315,7 @@ function Result({ state, go, addToCart, reset }) {
   const isTLX = !!line.isTLX;
   const comp = st?.heights?.[isTLX ? "unico" : state.gengivalHeight];
   const tlxPlat = isTLX ? line.tlxPlatforms?.find(p => p.key === state.tlxPlatform) : null;
+  const bodyOpt = line.hasBodySelect && state.body ? line.bodyOptions?.find(b => b.key === state.body) : null;
   const backScreen = isTLX ? "subtypeSelect" : "heightSelect";
 
   if (!comp) return <div style={{ padding: 20, color: "white" }}><p>Componente não encontrado.</p><button onClick={reset} style={{ color: "#3b82f6", background: "none", border: "none", cursor: "pointer" }}>↩ Recomeçar</button></div>;
@@ -1200,7 +1331,7 @@ function Result({ state, go, addToCart, reset }) {
           <span style={{ color: "#e2e8f0", fontSize: 20 }}>↺</span>
         </button>
       </div>
-      <Breadcrumb steps={[brand.label, fam.label, line.label, tlxPlat ? tlxPlat.key : null, obj.label].filter(Boolean)} />
+      <Breadcrumb steps={[brand.label, fam.label, line.label, tlxPlat ? tlxPlat.key : bodyOpt ? bodyOpt.key : null, obj.label].filter(Boolean)} />
       <div style={{ borderRadius: 16, padding: "18px", background: "rgba(30,41,59,0.95)", border: "1px solid rgba(59,130,246,.4)", boxShadow: "0 16px 44px rgba(0,0,0,.5)" }}>
         <div style={{ display: "flex", flexWrap: "wrap", gap: 5, marginBottom: 13 }}>
           <div style={{ padding: "3px 8px", borderRadius: 6, background: `${brand.color}33`, border: `1px solid ${brand.color}77` }}><span style={{ fontSize: 9, fontWeight: 700, color: "white" }}>{brand.label}</span></div>
@@ -1209,6 +1340,7 @@ function Result({ state, go, addToCart, reset }) {
             ? <div style={{ padding: "3px 8px", borderRadius: 6, background: `${tlxPlat.color}22`, border: `1px solid ${tlxPlat.color}66` }}><span style={{ ...G.mono, fontSize: 9, color: tlxPlat.color, fontWeight: 700 }}>{tlxPlat.key} {tlxPlat.diam}</span></div>
             : <div style={{ padding: "3px 8px", borderRadius: 6, background: "rgba(16,185,129,.2)", border: "1px solid rgba(16,185,129,.5)" }}><span style={{ ...G.mono, fontSize: 9, color: "#10b981", fontWeight: 700 }}>↕ {state.gengivalHeight?.replace(".", ",")}mm</span></div>
           }
+          {bodyOpt && <div style={{ padding: "3px 8px", borderRadius: 6, background: `${bodyOpt.color}22`, border: `1px solid ${bodyOpt.color}66` }}><span style={{ ...G.mono, fontSize: 9, color: bodyOpt.color, fontWeight: 700 }}>{bodyOpt.key} · {bodyOpt.diam}</span></div>}
         </div>
         <div style={{ fontSize: 8, color: "#94a3b8", fontWeight: 600, letterSpacing: .5, textTransform: "uppercase", marginBottom: 3 }}>{comp.type}</div>
         <h3 style={{ margin: "0 0 7px", fontSize: 14, fontWeight: 700, color: "white", lineHeight: 1.3 }}>{comp.name}</h3>
@@ -1217,7 +1349,14 @@ function Result({ state, go, addToCart, reset }) {
           <span style={{ ...G.mono, fontSize: 11, fontWeight: 600, color: "#60a5fa", background: "rgba(59,130,246,.15)", padding: "2px 6px", borderRadius: 5 }}>{comp.sku}</span>
         </div>
         <div style={{ display: "flex", gap: 9, marginBottom: 14 }}>
-          <ImplantShape shape={comp.shape || "variobase"} size={90} />
+          {st.imgRef
+            ? <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <div style={{ width: 90, height: 90, borderRadius: 12, background: "linear-gradient(135deg,#0f172a,#1e293b)", border: "1px solid rgba(59,130,246,.35)", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }}>
+                  <img src={st.imgRef} alt={st.label} style={{ width: "100%", height: "100%", objectFit: "contain", padding: 4 }} onError={e => { e.target.style.display = "none"; }} />
+                </div>
+              </div>
+            : <ImplantShape shape={comp.shape || "variobase"} size={90} />
+          }
           <Placeholder label="Scan Body / Transfer" />
         </div>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 6 }}>
@@ -1286,6 +1425,7 @@ export default function App() {
     brandSelect: <BrandSelect go={go} />,
     familySelect: <FamilySelect state={state} go={go} />,
     lineSelect: <LineSelect state={state} go={go} />,
+    bodySelect: <BodySelect state={state} go={go} />,
     tlxPlatform: <TLXPlatform state={state} go={go} />,
     objectiveSelect: <ObjectiveSelect state={state} go={go} />,
     subtypeSelect: <SubtypeSelect state={state} go={go} />,
