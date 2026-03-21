@@ -1,10 +1,43 @@
-# Configuração personalizada para o CodeRabbit
+# yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
+
 language: "pt-BR"
+
 reviews:
-  profile: "chill" # Um tom mais amigável e menos rígido
+  profile: "assertive"
   high_level_summary: true
-  poetic_summary: false # Desativa resumos em forma de poema (sim, ele faz isso!)
+  high_level_summary_in_walkthrough: true
+  sequence_diagrams: true
+  poetic_summary: false
+  request_changes_workflow: true
+  related_issues: true
+  related_prs: true
+  assess_linked_issues: true
+  estimate_code_review_effort: true
   auto_review:
     enabled: true
+    drafts: false
+
+  path_instructions:
+    - path: "src/App.jsx"
+      instructions: |
+        - CRÍTICO: Verifique se os componentes Back e Reset possuem ícones ou emoticons visíveis. Botões vazios bloqueiam o merge.
+        - O botão Voltar deve ter aria-label="Voltar"
+        - O botão Reiniciar deve ter aria-label="Reiniciar consulta"
+        - Nunca usar lucide-react para ícones de navegação
+        - Verifique se a imagem usa /variobase_blx.jpg (underline, não hífen)
+        - Aponte componentes com mais de 50 linhas para refatoração
+
+    - path: "**/*.js"
+      instructions: |
+        - Prefira let/const em vez de var
+        - Verifique tratamento de erros em Promises e async/await
+
+    - path: "**/*.test.*"
+      instructions: |
+        - Verifique cobertura de casos de erro e edge cases
+        - Aponte testes sem assertions claras
+
+tone_instructions: "Forneça insights arquiteturais sobre design do sistema, escalabilidade e manutenibilidade a longo prazo."
+
 chat:
   auto_reply: true
