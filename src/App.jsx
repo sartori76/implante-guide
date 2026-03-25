@@ -856,6 +856,7 @@ const css = `
   @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
   input{box-sizing:border-box;outline:none} input::placeholder{color:#94a3b8}
   ::-webkit-scrollbar{width:3px} ::-webkit-scrollbar-track{background:#0f172a} ::-webkit-scrollbar-thumb{background:#334155;border-radius:2px}
+  @media print{body{background:white!important;color:black!important} .no-print{display:none!important} .print-card{background:white!important;border:1px solid #ccc!important;color:black!important} .print-sku{color:#1d4ed8!important} .print-brand{color:#555!important}}
   button{font-family:'DM Sans',sans-serif;}
   .hov:hover{transform:translateY(-1px);filter:brightness(1.12);box-shadow:0 6px 20px rgba(59,130,246,.22)}
   .fadein{animation:fadeIn .22s ease both}
@@ -1382,19 +1383,10 @@ function Result({ state, go, addToCart, reset }) {
 
       {/* Botão Adicionar ao Pedido — ícone SVG inline, stroke hardcoded */}
       <button
-        onClick={() => { addToCart({ id: Date.now(), name: comp.name, sku: comp.sku }); setAdded(true); setTimeout(() => setAdded(false), 2500); }}
+        onClick={() => { addToCart({ id: Date.now(), name: comp.name, sku: comp.sku, brandLabel: brand.label, brandSite: brand.site }); setAdded(true); setTimeout(() => setAdded(false), 2500); }}
         style={{ padding: "14px", borderRadius: 12, border: "none", cursor: "pointer", background: added ? "linear-gradient(135deg,#059669,#10b981)" : "linear-gradient(135deg,#1d4ed8,#3b82f6)", color: "white", fontWeight: 700, fontSize: 13, display: "flex", alignItems: "center", justifyContent: "center", gap: 7, transition: "all .35s ease" }}
       >
-        {added ? (<><CheckCircle size={14} />Adicionado!</>) : (
-          <>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-              <line x1="3" y1="6" x2="21" y2="6" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-              <path d="M16 10a4 4 0 0 1-8 0" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-            Adicionar ao Pedido
-          </>
-        )}
+        {added ? (<><CheckCircle size={14} />Adicionado!</>) : (<><span style={{ fontSize: 16 }}>🛒</span> Adicionar ao Pedido</>)}
       </button>
 
       <a href={`https://${brand.site}`} target="_blank" rel="noopener noreferrer"
@@ -1404,6 +1396,66 @@ function Result({ state, go, addToCart, reset }) {
       <button onClick={reset} style={{ padding: "10px", borderRadius: 11, border: "1px solid #334155", cursor: "pointer", background: "transparent", color: "#64748b", fontSize: 11, display: "flex", alignItems: "center", justifyContent: "center", gap: 5 }}>
         <Home size={11} />Nova consulta
       </button>
+    </div>
+  );
+}
+
+// ─── TELA CARRINHO ────────────────────────────────────────────────────────────
+function CartScreen({ cart, removeFromCart, clearCart, go }) {
+  const brandSites = [...new Set(cart.map(i => i.brandSite).filter(Boolean))];
+
+  return (
+    <div style={G.page} className="fadein">
+      <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 16 }}>
+        <Back onClick={() => go("home", {})} />
+        <h2 style={{ margin: 0, fontSize: 16, fontWeight: 700, color: "white" }}>🛒 Revisão do Pedido</h2>
+        <span style={{ marginLeft: "auto", fontSize: 11, color: "#94a3b8" }}>{cart.length} item(s)</span>
+      </div>
+
+      {cart.length === 0 ? (
+        <div style={{ textAlign: "center", padding: "48px 20px", color: "#64748b" }}>
+          <div style={{ fontSize: 48, marginBottom: 12 }}>🛒</div>
+          <p style={{ margin: 0, fontSize: 13 }}>Nenhum componente no pedido.</p>
+          <button onClick={() => go("home", {})} style={{ marginTop: 16, padding: "10px 20px", borderRadius: 10, border: "1px solid #475569", background: "rgba(30,41,59,0.9)", color: "#cbd5e1", fontSize: 12, cursor: "pointer" }}>
+            ← Voltar ao início
+          </button>
+        </div>
+      ) : (
+        <>
+          <div id="print-area">
+            {cart.map(item => (
+              <div key={item.id} className="print-card" style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", padding: "10px 12px", borderRadius: 10, background: "rgba(30,41,59,0.9)", border: "1px solid #334155", marginBottom: 6 }}>
+                <div>
+                  <div style={{ fontSize: 12, color: "white", fontWeight: 600 }}>{item.name}</div>
+                  <div className="print-sku" style={{ fontSize: 10, color: "#60a5fa", fontFamily: "monospace", marginTop: 2 }}>SKU: {item.sku}</div>
+                  {item.brandLabel && <div className="print-brand" style={{ fontSize: 10, color: "#94a3b8", marginTop: 2 }}>{item.brandLabel}</div>}
+                </div>
+                <button onClick={() => removeFromCart(item.id)} className="no-print" aria-label={`Remover ${item.name}`}
+                  style={{ width: 26, height: 26, borderRadius: 6, background: "rgba(239,68,68,.2)", border: "1px solid rgba(239,68,68,.4)", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", flexShrink: 0, marginLeft: 8 }}>
+                  <span style={{ color: "#ef4444", fontSize: 14, lineHeight: 1 }}>✕</span>
+                </button>
+              </div>
+            ))}
+          </div>
+
+          <div className="no-print" style={{ display: "flex", flexDirection: "column", gap: 8, marginTop: 16 }}>
+            <button onClick={() => window.print()}
+              style={{ padding: "13px", borderRadius: 12, border: "none", cursor: "pointer", background: "linear-gradient(135deg,#1d4ed8,#3b82f6)", color: "white", fontWeight: 700, fontSize: 13, display: "flex", alignItems: "center", justifyContent: "center", gap: 7 }}>
+              <span style={{ fontSize: 15 }}>🖨️</span> Imprimir Pedido
+            </button>
+            {brandSites.map(site => (
+              <a key={site} href={`https://${site}`} target="_blank" rel="noopener noreferrer"
+                style={{ padding: "11px", borderRadius: 11, border: "1px solid #475569", color: "#cbd5e1", fontWeight: 600, fontSize: 11, display: "flex", alignItems: "center", justifyContent: "center", gap: 6, textDecoration: "none", background: "rgba(30,41,59,0.9)" }}>
+                <span style={{ fontSize: 13 }}>🔗</span> Ir para a loja: {site}
+              </a>
+            ))}
+            <button onClick={() => { clearCart(); go("home", {}); }}
+              style={{ padding: "10px", borderRadius: 11, border: "1px solid #334155", cursor: "pointer", background: "transparent", color: "#64748b", fontSize: 11, display: "flex", alignItems: "center", justifyContent: "center", gap: 5 }}>
+              <span style={{ fontSize: 13 }}>🗑️</span> Limpar Pedido
+            </button>
+          </div>
+        </>
+      )}
     </div>
   );
 }
@@ -1418,6 +1470,7 @@ export default function App() {
   const reset = () => { setState({}); setScreen("home"); };
   const addToCart = (item) => setCart(prev => [...prev, item]);
   const removeFromCart = (id) => setCart(prev => prev.filter(i => i.id !== id));
+  const clearCart = () => setCart([]);
 
   const screens = {
     home: <HomeScreen go={go} />,
@@ -1431,6 +1484,7 @@ export default function App() {
     subtypeSelect: <SubtypeSelect state={state} go={go} />,
     heightSelect: <HeightSelect state={state} go={go} />,
     result: <Result state={state} go={go} addToCart={addToCart} reset={reset} />,
+    cart: <CartScreen cart={cart} removeFromCart={removeFromCart} clearCart={clearCart} go={go} />,
   };
 
   return (
@@ -1444,12 +1498,11 @@ export default function App() {
       {cart.length > 0 && (
         <div style={{ position: "fixed", bottom: 0, left: 0, right: 0, background: "rgba(2,6,23,0.97)", borderTop: "1px solid #1e293b", padding: "12px 16px", maxWidth: 430, margin: "0 auto", zIndex: 100, maxHeight: "40vh", overflowY: "auto" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 8 }}>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" stroke="#3b82f6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-              <line x1="3" y1="6" x2="21" y2="6" stroke="#3b82f6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-              <path d="M16 10a4 4 0 0 1-8 0" stroke="#3b82f6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
+            <span style={{ fontSize: 14 }}>🛒</span>
             <span style={{ fontSize: 11, fontWeight: 700, color: "white" }}>Pedido ({cart.length})</span>
+            <button onClick={() => go("cart", {})} style={{ marginLeft: "auto", padding: "4px 10px", borderRadius: 7, border: "1px solid #3b82f6", background: "rgba(59,130,246,.15)", color: "#60a5fa", fontSize: 10, fontWeight: 700, cursor: "pointer" }}>
+              Ver Pedido →
+            </button>
           </div>
           {cart.map((item) => (
             <div key={item.id} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "7px 10px", borderRadius: 8, background: "rgba(30,41,59,0.9)", border: "1px solid #334155", marginBottom: 4 }}>
