@@ -1432,7 +1432,7 @@ function CartScreen({ cart, removeFromCart, clearCart, go }) {
                 </div>
                 <button onClick={() => removeFromCart(item.id)} className="no-print" aria-label={`Remover ${item.name}`}
                   style={{ width: 26, height: 26, borderRadius: 6, background: "rgba(239,68,68,.2)", border: "1px solid rgba(239,68,68,.4)", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", flexShrink: 0, marginLeft: 8 }}>
-                  <span style={{ color: "#ef4444", fontSize: 14, lineHeight: 1 }}>✕</span>
+                  <span style={{ color: "white", fontSize: 16, lineHeight: 1 }}>✕</span>
                 </button>
               </div>
             ))}
@@ -1512,10 +1512,7 @@ export default function App() {
               </div>
               <button onClick={() => removeFromCart(item.id)} aria-label={`Remover ${item.name}`}
                 style={{ width: 26, height: 26, borderRadius: 6, background: "rgba(239,68,68,.2)", border: "1px solid rgba(239,68,68,.4)", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <line x1="18" y1="6" x2="6" y2="18" stroke="#ef4444" strokeWidth="2.5" strokeLinecap="round" />
-                  <line x1="6" y1="6" x2="18" y2="18" stroke="#ef4444" strokeWidth="2.5" strokeLinecap="round" />
-                </svg>
+                <span style={{ color: "white", fontSize: 16, lineHeight: 1 }}>✕</span>
               </button>
             </div>
           ))}
