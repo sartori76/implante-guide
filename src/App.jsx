@@ -1427,7 +1427,7 @@ function CartScreen({ cart, removeFromCart, clearCart, go }) {
               <div key={item.id} className="print-card" style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", padding: "10px 12px", borderRadius: 10, background: "rgba(30,41,59,0.9)", border: "1px solid #334155", marginBottom: 6 }}>
                 <div>
                   <div style={{ fontSize: 12, color: "white", fontWeight: 600 }}>{item.name}</div>
-                  <div className="print-sku" style={{ fontSize: 10, color: "#60a5fa", fontFamily: "monospace", marginTop: 2 }}>SKU: {item.sku}</div>
+                  <div className="print-sku" style={{ fontSize: 10, color: "#60a5fa", fontFamily: "monospace", marginTop: 2 }}>REF: {item.sku}</div>
                   {item.brandLabel && <div className="print-brand" style={{ fontSize: 10, color: "#94a3b8", marginTop: 2 }}>{item.brandLabel}</div>}
                 </div>
                 <button onClick={() => removeFromCart(item.id)} className="no-print" aria-label={`Remover ${item.name}`}
