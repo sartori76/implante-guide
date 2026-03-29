@@ -1221,7 +1221,7 @@ function ObjectiveSelect({ state, go }) {
         {Object.entries(line.objectives).map(([key, obj]) => (
           <button key={key} className="hov" onClick={() => go("subtypeSelect", { ...state, objective: key })}
             style={{ ...card, padding: "18px", border: `1px solid ${key === "unitaria" ? "rgba(59,130,246,.35)" : "rgba(16,185,129,.35)"}` }}>
-            <div style={{ fontSize: 26, width: 50, height: 50, borderRadius: 12, background: key === "unitaria" ? "rgba(59,130,246,.18)" : "rgba(16,185,129,.15)", border: `1px solid ${key === "unitaria" ? "rgba(59,130,246,.4)" : "rgba(16,185,129,.4)"}`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>{obj.icon}</div>
+            <div style={{ fontSize: key === "unitaria" ? 26 : 18, width: 50, height: 50, borderRadius: 12, background: key === "unitaria" ? "rgba(59,130,246,.18)" : "rgba(16,185,129,.15)", border: `1px solid ${key === "unitaria" ? "rgba(59,130,246,.4)" : "rgba(16,185,129,.4)"}`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, whiteSpace: "nowrap", letterSpacing: key === "unitaria" ? 0 : 1 }}>{obj.icon}</div>
             <div style={{ flex: 1 }}>
               <div style={{ fontWeight: 700, color: "white", fontSize: 14, marginBottom: 4 }}>{obj.label}</div>
               <div style={{ fontSize: 10, color: "#94a3b8", lineHeight: 1.5 }}>{obj.desc}</div>
