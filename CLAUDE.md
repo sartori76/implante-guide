@@ -10,18 +10,43 @@ App React para cirurgiões dentistas e protéticos escolherem componentes proté
 ## Stack Técnica
 - **Frontend:** React (JSX) — arquivo principal `src/App.jsx`
 - **Build:** Vite
-- **Deploy:** Vercel (automático ao fazer push na `main`)
+- **Deploy:** Vercel (automático ao fazer merge na `main`)
 - **Versionamento:** GitHub — `github.com/sartori76/implante-guide`
 - **Review de código:** CodeRabbit (revisa PRs automaticamente)
 - **Qualidade:** Biome + Prettier
 
+## Design Visual
+- **Cor de fundo:** Azul escuro (`#020617`)
+- **Cor primária botões:** Azul (`#3b82f6`)
+- **Cor secundária:** Cinza escuro (`rgba(30,41,59,0.9)`)
+- **Cor de destaque:** Verde (`#10b981`)
+- **Cor de alerta:** Vermelho (`#ef4444`)
+- **Fonte:** Padrão do sistema (definida pelo Claude)
+- **Largura máxima:** 430px — compatível com celular
+- **Centralização:** App centralizado horizontalmente na página
+- **Border radius padrão:** 9-16px nos cards e botões
+
+## Padrão de Botões — REGRA CRÍTICA
+**NUNCA usar lucide-react para ícones de botões de navegação.**
+**SEMPRE usar emoticons visíveis dentro dos botões.**
+
+| Botão | Estilo | Emoticon |
+|-------|--------|----------|
+| Voltar | Quadrado cinza escuro, borda `#475569` | ← |
+| Reiniciar | Quadrado cinza escuro, borda `#475569` | ↺ |
+| Carrinho | Fundo escuro | 🛒 |
+| Remover item | Vermelho `#ef4444` | ✕ |
+| Imprimir | Azul primário | 🖨️ |
+| Limpar pedido | Cinza | 🗑️ |
+| Ir para loja | Cinza | 🔗 |
+
 ## Fluxo de Desenvolvimento
-1. Gerar código no Claude Cowork
-2. Colar no VS Code (`Cmd+A` → `Cmd+V` → `Cmd+S`)
-3. Rodar `./deploy.sh "descricao da mudanca"`
+1. Pedir alteração ao Claude Code no VS Code
+2. Claude Code edita o `App.jsx` diretamente
+3. Claude Code faz commit e push
 4. Abrir PR no GitHub
-5. CodeRabbit revisa automaticamente
-6. Merge → Vercel faz deploy
+5. CodeRabbit revisa automaticamente 🐰
+6. Merge → Vercel faz deploy automático
 
 ## Marcas Disponíveis
 - Straumann
@@ -46,45 +71,47 @@ App React para cirurgiões dentistas e protéticos escolherem componentes proté
 - Seleção de Scan Body / Transfer
 - Exibição de especificações: REF, torque, chave, material, altura gengival
 - Foto de referência do componente
-- Carrinho de pedidos
+- Carrinho de pedidos com revisão
+- Impressão do pedido
+- Link direto para loja do fabricante
+- Limpar pedido
 
 ## Funcionalidades Futuras
-- [ ] Link direto para página de compra do fabricante por componente
-- [ ] Direcionamento para app/site do fabricante ao escolher componente
+- [ ] Expandir links para lojas de todos os fabricantes
 - [ ] Novas marcas e linhas de implantes
+- [ ] Filtro por especificação técnica
 
-## Regras Importantes do Código
-- **Ícones:** usar sempre emoticons ou SVG inline com `stroke` hardcoded — NUNCA `lucide-react` para botões de navegação
-- **Botão Voltar:** deve ter `aria-label="Voltar"` e ícone `←` visível
-- **Botão Reiniciar:** deve ter `aria-label="Reiniciar consulta"` e ícone `↺` visível
-- **Imagem Variobase:** referenciar como `/variobase_blx.jpg` (underline, não hífen)
-- **Centralização:** app centralizado na página com max-width de 430px
+## Regras Críticas do Código
+- **Ícones:** SEMPRE emoticons ou SVG inline com `stroke` hardcoded — NUNCA `lucide-react` para navegação
+- **Botão Voltar:** `aria-label="Voltar"` + emoticon ← visível
+- **Botão Reiniciar:** `aria-label="Reiniciar consulta"` + emoticon ↺ visível
+- **Botão Remover:** `aria-label` com nome do item + emoticon ✕ visível
+- **Imagem Variobase:** `/variobase_blx.jpg` (underline, não hífen)
+- **Layout:** max-width 430px, centralizado, responsivo para celular
 
 ## Estrutura de Pastas
 ```
 implante-guide/
 ├── src/
-│   └── App.jsx          ← arquivo principal com todo o código
+│   └── App.jsx          ← arquivo principal
 ├── public/
 │   └── variobase_blx.jpg
 ├── .coderabbit.yaml     ← configuração do CodeRabbit
 ├── biome.json           ← configuração do Biome
-├── deploy.sh            ← script para criar branch + commit + push
+├── deploy.sh            ← script de deploy
 ├── CLAUDE.md            ← este arquivo
 └── package.json
 ```
 
 ## Comandos Úteis
 ```bash
-# Deploy rápido
-./deploy.sh "descricao da mudanca"
-
-# Verificar status
+# Ver status do git
 git status
 
 # Ver últimos commits
 git log --oneline -5
 
-# Voltar para main
+# Voltar para main e atualizar
 git checkout main
+git pull origin main
 ```
