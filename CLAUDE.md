@@ -115,3 +115,36 @@ git log --oneline -5
 git checkout main
 git pull origin main
 ```
+
+## Funcionalidades de IA — Planejadas para o Lançamento
+
+### Chat de Dúvidas Clínicas
+Integração com API da Anthropic para responder dúvidas dos usuários diretamente no app.
+
+**Exemplos de uso:**
+- "Quais pilares são compatíveis com implante Straumann BLX?"
+- "Qual torque usar para este componente?"
+- "Qual a diferença entre Variobase RC e BLX?"
+
+**Como implementar:**
+1. Criar conta em `console.anthropic.com`
+2. Adicionar créditos (mínimo $5)
+3. Gerar API Key
+4. Adicionar chat no `App.jsx` via Claude Code
+5. Configurar API Key de forma segura no Vercel (nunca expor no GitHub)
+
+**Custo estimado:** menos de $5/mês na fase inicial
+
+---
+
+### Análise de Radiografia
+Upload de rx pelo usuário → IA analisa formato do implante, conexão e plataforma → compara com banco de dados → sugere marca e linha.
+
+---
+
+### Identificação de Implante por Foto
+Foto do implante ou componente → IA identifica marca e linha.
+
+---
+
+> ⚠️ Implementar apenas após finalizar todas as marcas e funcionalidades principais do app.
