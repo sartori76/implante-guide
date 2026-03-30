@@ -1465,6 +1465,7 @@ export default function App() {
   const [screen, setScreen] = useState("home");
   const [state, setState] = useState({});
   const [cart, setCart] = useState([]);
+  const [aiToast, setAiToast] = useState(false);
 
   const go = (newScreen, newState = {}) => { setState(newState); setScreen(newScreen); };
   const reset = () => { setState({}); setScreen("home"); };
@@ -1493,6 +1494,22 @@ export default function App() {
     <div style={{ width: "100%", maxWidth: 430, minHeight: "100vh", position: "relative", color: "white" }}>
       <Sty />
       {screens[screen] || screens.home}
+
+      {/* Botão flutuante IA */}
+      <div style={{ position: "fixed", bottom: cart.length > 0 ? 80 : 16, right: 16, zIndex: 101, display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 8 }}>
+        {aiToast && (
+          <div style={{ background: "rgba(15,23,42,0.97)", border: "1px solid #3b82f6", borderRadius: 10, padding: "10px 14px", fontSize: 12, color: "#93c5fd", fontWeight: 600, maxWidth: 220, textAlign: "center", boxShadow: "0 4px 20px rgba(59,130,246,.25)" }}>
+            Em breve: Assistente IA para dúvidas clínicas
+          </div>
+        )}
+        <button
+          onClick={() => { setAiToast(v => !v); }}
+          style={{ width: 48, height: 48, borderRadius: "50%", background: "linear-gradient(135deg,#1e3a8a,#1d4ed8)", border: "2px solid #3b82f6", fontSize: 22, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 0 16px rgba(59,130,246,.45)" }}
+          aria-label="Assistente IA"
+        >
+          🤖
+        </button>
+      </div>
 
       {/* Carrinho fixo na base — centralizado com maxWidth 430px */}
       {cart.length > 0 && (
