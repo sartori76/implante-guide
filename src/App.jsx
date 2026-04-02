@@ -1049,6 +1049,14 @@ function Detective({ go }) {
   );
 }
 
+// ─── HELPER: logo de conexão protética ────────────────────────────────────────
+function connLogo(label) {
+  if (label.includes("Cone Morse")) return "/logo_CM.png";
+  if (label.includes("Hexágono Externo")) return "/logo_HE.png";
+  if (label.includes("Hexágono Interno")) return "/logo_HI.png";
+  return null;
+}
+
 // ─── SELEÇÃO DE MARCA ─────────────────────────────────────────────────────────
 function BrandSelect({ go }) {
   return (
@@ -1086,7 +1094,9 @@ function FamilySelect({ state, go }) {
         {Object.entries(brand.families).map(([key, fam]) => (
           <button key={key} className="hov" onClick={() => go("lineSelect", { ...state, family: key })}
             style={{ ...card, padding: "16px" }}>
-            <div style={{ fontSize: 26, width: 48, height: 48, borderRadius: 12, background: "rgba(51,65,85,0.8)", border: "1px solid #64748b", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>{fam.icon}</div>
+            <div style={{ width: 48, height: 48, borderRadius: 12, background: "rgba(51,65,85,0.8)", border: "1px solid #64748b", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+              {connLogo(fam.label) ? <img src={connLogo(fam.label)} alt={fam.label} style={{ width: 36, height: 36, objectFit: "contain" }} /> : <span style={{ fontSize: 26 }}>{fam.icon}</span>}
+            </div>
             <div style={{ flex: 1 }}>
               <div style={{ fontWeight: 700, color: "white", fontSize: 14, marginBottom: 3 }}>{fam.label}</div>
               <div style={{ fontSize: 10, color: "#94a3b8", lineHeight: 1.4 }}>{fam.desc}</div>
@@ -1126,7 +1136,9 @@ function LineSelect({ state, go }) {
         {lines.map(([key, line]) => (
           <button key={key} className="hov" onClick={() => go(lineNext(line), { ...state, line: key })}
             style={{ ...card, padding: "16px" }}>
-            <div style={{ fontSize: 22, width: 44, height: 44, borderRadius: 11, background: "rgba(51,65,85,0.8)", border: "1px solid #64748b", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>{line.icon}</div>
+            <div style={{ width: 44, height: 44, borderRadius: 11, background: "rgba(51,65,85,0.8)", border: "1px solid #64748b", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+              {connLogo(line.label) ? <img src={connLogo(line.label)} alt={line.label} style={{ width: 32, height: 32, objectFit: "contain" }} /> : <span style={{ fontSize: 22 }}>{line.icon}</span>}
+            </div>
             <div style={{ flex: 1 }}>
               <div style={{ fontWeight: 700, color: "white", fontSize: 13, marginBottom: 3 }}>{line.label}</div>
               <div style={{ fontSize: 10, color: "#94a3b8", lineHeight: 1.4 }}>{line.desc}</div>
