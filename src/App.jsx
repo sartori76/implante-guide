@@ -1242,9 +1242,11 @@ function ObjectiveSelect({ state, go }) {
           </button>
         ))}
       </div>
-      <InfoBox color="#f59e0b" icon={<Info size={11} color="#f59e0b" style={{ flexShrink: 0, marginTop: 1 }} />}>
-        <strong>Unitária:</strong> Variobase® (coroa única). &nbsp;<strong>Unida:</strong> SRA / MUA (múltiplos implantes em prótese fixa unida).
-      </InfoBox>
+      {state.brand === "straumann" && (
+        <InfoBox color="#f59e0b" icon={<Info size={11} color="#f59e0b" style={{ flexShrink: 0, marginTop: 1 }} />}>
+          <strong>Unitária:</strong> Variobase® (coroa única). &nbsp;<strong>Unida:</strong> SRA / MUA (múltiplos implantes em prótese fixa unida).
+        </InfoBox>
+      )}
     </div>
   );
 }
