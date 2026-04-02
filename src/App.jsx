@@ -1051,6 +1051,8 @@ function Detective({ go }) {
 
 // ─── HELPER: logo de conexão protética ────────────────────────────────────────
 function connLogo(label) {
+  if (label === "Bone Level") return "/logo_BL.png";
+  if (label === "Tissue Level") return "/logo_TL.png";
   if (label.includes("Cone Morse") || label.includes("Grand Morse") || label.includes("NobelActive") || label.includes("Xive")) return "/logo_CM.png";
   if (label.includes("Hexágono Externo") || label.includes("Hex. Externo")) return "/logo_HE.png";
   if (label.includes("Hexágono Interno")) return "/logo_HI.png";
