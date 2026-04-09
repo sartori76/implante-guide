@@ -978,7 +978,102 @@ function HomeScreen({ go }) {
 }
 
 // ─── DETECTIVE ────────────────────────────────────────────────────────────────
+const RX_REFS = [
+  { key: "cm", label: "Cone Morse", desc: "Conexão cônica de alto engajamento", color: "#f59e0b" },
+  { key: "hi", label: "Hexágono Interno", desc: "Hexágono interno indexado", color: "#3b82f6" },
+  { key: "he", label: "Hexágono Externo", desc: "Hexágono externo tradicional", color: "#10b981" },
+  { key: "cmi", label: "Cone Morse Indexado", desc: "Cone morse com indexação rotacional", color: "#a78bfa" },
+];
+
+function DetectiveRX() {
+  const [img, setImg] = useState(null);
+  const [aiMsg, setAiMsg] = useState(false);
+  const [drag, setDrag] = useState(false);
+
+  const handleFile = (file) => {
+    if (!file || !file.type.startsWith("image/")) return;
+    const reader = new FileReader();
+    reader.onload = (e) => setImg(e.target.result);
+    reader.readAsDataURL(file);
+  };
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+      {/* Instrução */}
+      <div style={{ padding: "12px 14px", borderRadius: 11, background: "rgba(30,41,59,0.8)", border: "1px solid #334155" }}>
+        <div style={{ fontSize: 12, color: "#cbd5e1", lineHeight: 1.6 }}>
+          📋 Faça o upload da RX do implante desconhecido e compare com as referências abaixo.
+        </div>
+        <div style={{ fontSize: 10, color: "#64748b", marginTop: 6 }}>
+          💡 Para melhor resultado, use RX periapical com boa definição.
+        </div>
+      </div>
+
+      {/* Drop Zone */}
+      <div
+        onDragOver={(e) => { e.preventDefault(); setDrag(true); }}
+        onDragLeave={() => setDrag(false)}
+        onDrop={(e) => { e.preventDefault(); setDrag(false); handleFile(e.dataTransfer.files[0]); }}
+        onClick={() => document.getElementById("rx-upload-input").click()}
+        style={{ borderRadius: 14, border: `2px dashed ${drag ? "#3b82f6" : "#334155"}`, background: drag ? "rgba(59,130,246,.08)" : "rgba(15,23,42,0.6)", padding: "28px 16px", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 10, cursor: "pointer", transition: "all .2s", minHeight: 140 }}
+      >
+        <input id="rx-upload-input" type="file" accept="image/jpeg,image/png,image/webp" style={{ display: "none" }} onChange={(e) => handleFile(e.target.files[0])} />
+        {img ? (
+          <img src={img} alt="RX upload" style={{ maxWidth: "100%", maxHeight: 220, borderRadius: 10, objectFit: "contain" }} />
+        ) : (
+          <>
+            <div style={{ fontSize: 36 }}>📷</div>
+            <div style={{ fontSize: 13, fontWeight: 700, color: "white" }}>Arraste ou clique para enviar</div>
+            <div style={{ fontSize: 10, color: "#64748b" }}>JPG, PNG ou WEBP</div>
+          </>
+        )}
+      </div>
+
+      {/* Botões de ação */}
+      <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+        <button
+          onClick={() => setAiMsg(v => !v)}
+          style={{ padding: "14px", borderRadius: 12, border: "none", cursor: "pointer", background: "linear-gradient(135deg,#1d4ed8,#3b82f6)", color: "white", fontWeight: 700, fontSize: 13, display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}
+        >
+          🤖 Analisar com IA
+        </button>
+        {aiMsg && (
+          <div style={{ padding: "12px 14px", borderRadius: 10, background: "rgba(30,41,59,0.95)", border: "1px solid #3b82f6", fontSize: 12, color: "#93c5fd", textAlign: "center", lineHeight: 1.6 }}>
+            Em breve: Análise automática por IA. Por enquanto, compare manualmente com as referências abaixo.
+          </div>
+        )}
+        {img && (
+          <button onClick={() => setImg(null)}
+            style={{ padding: "10px", borderRadius: 10, border: "1px solid #334155", cursor: "pointer", background: "rgba(30,41,59,0.8)", color: "#94a3b8", fontSize: 12, display: "flex", alignItems: "center", justifyContent: "center", gap: 6 }}>
+            ✕ Remover imagem
+          </button>
+        )}
+      </div>
+
+      {/* Banco de referências */}
+      <div>
+        <div style={{ fontSize: 11, color: "#94a3b8", fontWeight: 700, textTransform: "uppercase", letterSpacing: 1, marginBottom: 10 }}>Referências por Conexão</div>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+          {RX_REFS.map(ref => (
+            <div key={ref.key} style={{ borderRadius: 12, background: "rgba(30,41,59,0.9)", border: `1px solid ${ref.color}44`, overflow: "hidden" }}>
+              <div style={{ padding: "10px 12px", borderBottom: `1px solid ${ref.color}22` }}>
+                <div style={{ fontSize: 11, fontWeight: 700, color: "white", marginBottom: 2 }}>{ref.label}</div>
+                <div style={{ fontSize: 9, color: "#64748b", lineHeight: 1.4 }}>{ref.desc}</div>
+              </div>
+              <div style={{ height: 90, background: "rgba(15,23,42,0.6)", display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", gap: 4 }}>
+                <div style={{ fontSize: 20 }}>🦷</div>
+                <div style={{ fontSize: 9, color: "#475569" }}>RX em breve</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function Detective({ go }) {
+  const [tab, setTab] = useState("rx");
   const [step, setStep] = useState(1);
   const [ans, setAns] = useState({});
   const [sel, setSel] = useState(null);
@@ -995,67 +1090,91 @@ function Detective({ go }) {
     }, 250);
   };
 
-  if (done) {
-    const ct = ans[5];
-    const brands = COMPATIBLE_BRANDS[ct] || [];
-    return (
-      <div style={G.page} className="fadein">
-        <button onClick={() => { setDone(false); setStep(5); setSel(null); }}
-          style={{ display: "flex", alignItems: "center", gap: 5, background: "none", border: "none", color: "#94a3b8", cursor: "pointer", padding: 0, fontSize: 11 }}>
-          <span style={{ fontSize: 14 }}>←</span> Rever
-        </button>
-        <div style={{ padding: 18, borderRadius: 14, background: "rgba(16,185,129,.12)", border: "1px solid rgba(16,185,129,.4)" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 10 }}><CheckCircle size={15} color="#10b981" /><span style={{ fontWeight: 700, color: "#10b981", fontSize: 13 }}>Análise Concluída</span></div>
-          <p style={{ margin: "0 0 3px", fontSize: 10, color: "#94a3b8" }}>Conexão identificada:</p>
-          <p style={{ margin: "0 0 12px", fontSize: 18, fontWeight: 800, color: "white" }}>{ct === "HE" ? "Hexágono Externo" : ct === "HI" ? "Hexágono Interno" : "Cone Morse"}</p>
-          <p style={{ margin: "0 0 7px", fontSize: 10, color: "#94a3b8" }}>Marcas possivelmente compatíveis:</p>
-          {brands.map((b, i) => (
-            <div key={i} style={{ padding: "8px 12px", borderRadius: 8, background: "rgba(30,41,59,0.9)", border: "1px solid #475569", display: "flex", alignItems: "center", gap: 7, marginBottom: 5 }}>
-              <div style={{ width: 6, height: 6, borderRadius: "50%", background: "#10b981", flexShrink: 0 }} />
-              <span style={{ color: "#e2e8f0", fontSize: 12 }}>{b}</span>
-            </div>
-          ))}
-        </div>
-        <InfoBox color="#f59e0b" icon={<AlertTriangle size={12} color="#f59e0b" style={{ flexShrink: 0, marginTop: 1 }} />}>Confirme a compatibilidade com a documentação do paciente antes do procedimento.</InfoBox>
-        <button onClick={() => go("brandSelect", {})} style={{ padding: "14px", borderRadius: 12, border: "none", cursor: "pointer", background: "linear-gradient(135deg,#1d4ed8,#3b82f6)", color: "white", fontWeight: 700, fontSize: 13, display: "flex", alignItems: "center", justifyContent: "center", gap: 6 }}>Prosseguir para seleção <ArrowRight size={14} /></button>
-        <button onClick={() => go("home", {})} style={{ padding: "11px", borderRadius: 11, border: "1px solid #475569", cursor: "pointer", background: "rgba(30,41,59,0.9)", color: "#cbd5e1", fontSize: 11, display: "flex", alignItems: "center", justifyContent: "center", gap: 5 }}><Home size={11} />Início</button>
-      </div>
-    );
-  }
+  const TABS = [{ key: "rx", label: "📸 Por RX" }, { key: "quiz", label: "🔬 Por Perguntas" }];
 
   return (
     <div style={G.page} className="fadein">
+      {/* Header */}
       <div style={G.row}>
-        <Back onClick={() => step > 1 ? (setStep(step - 1), setSel(null)) : go("home", {})} />
+        <Back onClick={() => go("home", {})} />
         <div style={{ flex: 1 }}>
-          <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 4 }}>
+          <div style={{ fontSize: 14, fontWeight: 700, color: "white" }}>Investigador</div>
+          <div style={{ fontSize: 10, color: "#64748b" }}>Identificar implante desconhecido</div>
+        </div>
+      </div>
+
+      {/* Abas */}
+      <div style={{ display: "flex", gap: 6, padding: "2px", background: "rgba(30,41,59,0.8)", borderRadius: 11, border: "1px solid #1e293b" }}>
+        {TABS.map(t => (
+          <button key={t.key} onClick={() => setTab(t.key)}
+            style={{ flex: 1, padding: "9px 0", borderRadius: 9, border: "none", cursor: "pointer", fontWeight: 700, fontSize: 12, transition: "all .2s", background: tab === t.key ? "rgba(59,130,246,.25)" : "transparent", color: tab === t.key ? "#60a5fa" : "#64748b" }}>
+            {t.label}
+          </button>
+        ))}
+      </div>
+
+      {/* Conteúdo da aba RX */}
+      {tab === "rx" && <DetectiveRX />}
+
+      {/* Conteúdo da aba Quiz */}
+      {tab === "quiz" && (done ? (
+        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+          <button onClick={() => { setDone(false); setStep(5); setSel(null); }}
+            style={{ display: "flex", alignItems: "center", gap: 5, background: "none", border: "none", color: "#94a3b8", cursor: "pointer", padding: 0, fontSize: 11 }}>
+            <span style={{ fontSize: 14 }}>←</span> Rever
+          </button>
+          <div style={{ padding: 18, borderRadius: 14, background: "rgba(16,185,129,.12)", border: "1px solid rgba(16,185,129,.4)" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 10 }}><CheckCircle size={15} color="#10b981" /><span style={{ fontWeight: 700, color: "#10b981", fontSize: 13 }}>Análise Concluída</span></div>
+            <p style={{ margin: "0 0 3px", fontSize: 10, color: "#94a3b8" }}>Conexão identificada:</p>
+            <p style={{ margin: "0 0 12px", fontSize: 18, fontWeight: 800, color: "white" }}>{ans[5] === "HE" ? "Hexágono Externo" : ans[5] === "HI" ? "Hexágono Interno" : "Cone Morse"}</p>
+            <p style={{ margin: "0 0 7px", fontSize: 10, color: "#94a3b8" }}>Marcas possivelmente compatíveis:</p>
+            {(COMPATIBLE_BRANDS[ans[5]] || []).map((b, i) => (
+              <div key={i} style={{ padding: "8px 12px", borderRadius: 8, background: "rgba(30,41,59,0.9)", border: "1px solid #475569", display: "flex", alignItems: "center", gap: 7, marginBottom: 5 }}>
+                <div style={{ width: 6, height: 6, borderRadius: "50%", background: "#10b981", flexShrink: 0 }} />
+                <span style={{ color: "#e2e8f0", fontSize: 12 }}>{b}</span>
+              </div>
+            ))}
+          </div>
+          <InfoBox color="#f59e0b" icon={<AlertTriangle size={12} color="#f59e0b" style={{ flexShrink: 0, marginTop: 1 }} />}>Confirme a compatibilidade com a documentação do paciente antes do procedimento.</InfoBox>
+          <button onClick={() => go("brandSelect", {})} style={{ padding: "14px", borderRadius: 12, border: "none", cursor: "pointer", background: "linear-gradient(135deg,#1d4ed8,#3b82f6)", color: "white", fontWeight: 700, fontSize: 13, display: "flex", alignItems: "center", justifyContent: "center", gap: 6 }}>Prosseguir para seleção <ArrowRight size={14} /></button>
+          <button onClick={() => go("home", {})} style={{ padding: "11px", borderRadius: 11, border: "1px solid #475569", cursor: "pointer", background: "rgba(30,41,59,0.9)", color: "#cbd5e1", fontSize: 11, display: "flex", alignItems: "center", justifyContent: "center", gap: 5 }}><Home size={11} />Início</button>
+        </div>
+      ) : (
+        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
             <span style={{ fontSize: 9, color: "#94a3b8", fontWeight: 600, letterSpacing: .5 }}>ANÁLISE RADIOGRÁFICA</span>
             <span style={{ ...G.mono, fontSize: 9, color: "#3b82f6", fontWeight: 700 }}>{step}/5</span>
           </div>
           <div style={{ height: 3, borderRadius: 2, background: "#1e293b", overflow: "hidden" }}>
             <div style={{ height: "100%", width: `${step / 5 * 100}%`, background: "linear-gradient(90deg,#3b82f6,#60a5fa)", transition: "width .45s ease" }} />
           </div>
+          <div style={{ textAlign: "center", padding: "8px 0" }}>
+            <div style={{ fontSize: 36, marginBottom: 7 }}>{cur.icon}</div>
+            <h2 style={{ margin: "0 0 4px", fontSize: 18, fontWeight: 700, color: "white" }}>{cur.title}</h2>
+            <p style={{ margin: 0, fontSize: 12, color: "#94a3b8" }}>{cur.subtitle}</p>
+          </div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {cur.options.map(o => (
+              <button key={o.value} onClick={() => pick(o.value)} className="hov"
+                style={{ ...card, background: sel === o.value ? "rgba(59,130,246,.25)" : "rgba(30,41,59,0.95)", border: `1px solid ${sel === o.value ? "#3b82f6" : "#475569"}` }}>
+                <div style={{ width: 36, height: 36, borderRadius: 9, flexShrink: 0, background: sel === o.value ? "rgba(59,130,246,.3)" : "rgba(51,65,85,0.8)", border: `1px solid ${sel === o.value ? "#3b82f6" : "#64748b"}`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16, color: "white" }}>{o.icon}</div>
+                <div style={{ flex: 1 }}>
+                  <div style={{ fontWeight: 700, color: "white", fontSize: 13, marginBottom: 2 }}>{o.label}</div>
+                  <div style={{ fontSize: 10, color: "#94a3b8", lineHeight: 1.4 }}>{o.desc}</div>
+                </div>
+                {sel === o.value && <CheckCircle size={14} color="#3b82f6" />}
+              </button>
+            ))}
+          </div>
+          {step > 1 && (
+            <button onClick={() => { setStep(step - 1); setSel(null); }}
+              style={{ display: "flex", alignItems: "center", gap: 5, background: "none", border: "none", color: "#94a3b8", cursor: "pointer", padding: 0, fontSize: 11, alignSelf: "flex-start" }}>
+              <span style={{ fontSize: 14 }}>←</span> Voltar
+            </button>
+          )}
+          {step === 5 && <InfoBox color="#3b82f6" icon={<Info size={11} color="#3b82f6" style={{ flexShrink: 0, marginTop: 1 }} />}><strong>Passo decisivo:</strong> A plataforma protética define a compatibilidade mecânica final.</InfoBox>}
         </div>
-      </div>
-      <div style={{ textAlign: "center", padding: "12px 0" }}>
-        <div style={{ fontSize: 36, marginBottom: 7 }}>{cur.icon}</div>
-        <h2 style={{ margin: "0 0 4px", fontSize: 18, fontWeight: 700, color: "white" }}>{cur.title}</h2>
-        <p style={{ margin: 0, fontSize: 12, color: "#94a3b8" }}>{cur.subtitle}</p>
-      </div>
-      <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-        {cur.options.map(o => (
-          <button key={o.value} onClick={() => pick(o.value)} className="hov"
-            style={{ ...card, background: sel === o.value ? "rgba(59,130,246,.25)" : "rgba(30,41,59,0.95)", border: `1px solid ${sel === o.value ? "#3b82f6" : "#475569"}` }}>
-            <div style={{ width: 36, height: 36, borderRadius: 9, flexShrink: 0, background: sel === o.value ? "rgba(59,130,246,.3)" : "rgba(51,65,85,0.8)", border: `1px solid ${sel === o.value ? "#3b82f6" : "#64748b"}`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16, color: "white" }}>{o.icon}</div>
-            <div style={{ flex: 1 }}>
-              <div style={{ fontWeight: 700, color: "white", fontSize: 13, marginBottom: 2 }}>{o.label}</div>
-              <div style={{ fontSize: 10, color: "#94a3b8", lineHeight: 1.4 }}>{o.desc}</div>
-            </div>
-            {sel === o.value && <CheckCircle size={14} color="#3b82f6" />}
-          </button>
-        ))}
-      </div>
-      {step === 5 && <InfoBox color="#3b82f6" icon={<Info size={11} color="#3b82f6" style={{ flexShrink: 0, marginTop: 1 }} />}><strong>Passo decisivo:</strong> A plataforma protética define a compatibilidade mecânica final.</InfoBox>}
+      ))}
     </div>
   );
 }
