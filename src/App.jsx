@@ -1071,21 +1071,46 @@ function connLogo(label) {
 }
 
 // ─── SELEÇÃO DE MARCA ─────────────────────────────────────────────────────────
-function BrandSelect({ go }) {
+function BrandSelect({ go, favorites, toggleFavorite }) {
   return (
     <div style={G.page} className="fadein">
       <Hdr title="Selecionar Marca" sub={`${Object.keys(DB).length} marcas disponíveis`} onBack={() => go("home", {})} />
+      {favorites.length > 0 && (
+        <div style={{ marginBottom: 8 }}>
+          <div style={{ fontSize: 10, color: "#94a3b8", fontWeight: 700, marginBottom: 6, textTransform: "uppercase", letterSpacing: 1 }}>⭐ Favoritas</div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 7 }}>
+            {favorites.map(key => { const brand = DB[key]; if (!brand) return null; return (
+              <button key={key} className="hov" onClick={() => go("familySelect", { brand: key })}
+                style={{ ...card, border: `1px solid ${brand.color}66`, background: `${brand.color}11` }}>
+                <div style={{ width: 38, height: 38, borderRadius: 10, background: `${brand.color}22`, border: `1px solid ${brand.color}66`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 10, fontWeight: 800, color: brand.color, fontFamily: "monospace", flexShrink: 0 }}>{brand.logo}</div>
+                <div style={{ flex: 1 }}>
+                  <div style={{ fontWeight: 700, color: "white", fontSize: 14 }}>{brand.label}</div>
+                </div>
+                <ChevronRight size={14} color={brand.color} />
+              </button>
+            ); })}
+          </div>
+          <div style={{ height: 1, background: "#1e293b", margin: "12px 0" }} />
+        </div>
+      )}
+      <div style={{ fontSize: 10, color: "#94a3b8", fontWeight: 700, marginBottom: 6, textTransform: "uppercase", letterSpacing: 1 }}>Todas as marcas</div>
       <div style={{ display: "flex", flexDirection: "column", gap: 9 }}>
         {Object.entries(DB).sort(([, a], [, b]) => a.label.localeCompare(b.label, "pt-BR")).map(([key, brand]) => (
-          <button key={key} className="hov" onClick={() => go("familySelect", { brand: key })}
-            style={{ ...card, border: `1px solid ${brand.color}44` }}>
-            <div style={{ width: 38, height: 38, borderRadius: 10, background: `${brand.color}22`, border: `1px solid ${brand.color}66`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 10, fontWeight: 800, color: brand.color, fontFamily: "monospace", flexShrink: 0 }}>{brand.logo}</div>
-            <div style={{ flex: 1 }}>
-              <div style={{ fontWeight: 700, color: "white", fontSize: 14 }}>{brand.label}</div>
-              <div style={{ fontSize: 10, color: "#94a3b8", marginTop: 1 }}>{Object.keys(brand.families).length} linhas de conexão</div>
-            </div>
-            <ChevronRight size={14} color={brand.color} />
-          </button>
+          <div key={key} style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <button className="hov" onClick={() => go("familySelect", { brand: key })}
+              style={{ ...card, border: `1px solid ${brand.color}44`, flex: 1 }}>
+              <div style={{ width: 38, height: 38, borderRadius: 10, background: `${brand.color}22`, border: `1px solid ${brand.color}66`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 10, fontWeight: 800, color: brand.color, fontFamily: "monospace", flexShrink: 0 }}>{brand.logo}</div>
+              <div style={{ flex: 1 }}>
+                <div style={{ fontWeight: 700, color: "white", fontSize: 14 }}>{brand.label}</div>
+                <div style={{ fontSize: 10, color: "#94a3b8", marginTop: 1 }}>{Object.keys(brand.families).length} linhas de conexão</div>
+              </div>
+              <ChevronRight size={14} color={brand.color} />
+            </button>
+            <button onClick={() => toggleFavorite(key)} aria-label={favorites.includes(key) ? "Remover favorito" : "Favoritar"}
+              style={{ width: 36, height: 36, borderRadius: 10, border: favorites.includes(key) ? "1px solid #f59e0b" : "1px solid #334155", background: favorites.includes(key) ? "rgba(245,158,11,.15)" : "rgba(30,41,59,0.8)", cursor: "pointer", fontSize: 16, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, transition: "all .2s" }}>
+              {favorites.includes(key) ? "⭐" : "☆"}
+            </button>
+          </div>
         ))}
       </div>
     </div>
@@ -1493,17 +1518,24 @@ export default function App() {
   const [state, setState] = useState({});
   const [cart, setCart] = useState([]);
   const [aiToast, setAiToast] = useState(false);
+  const [favorites, setFavorites] = useState(() => { try { return JSON.parse(localStorage.getItem("fav_brands") || "[]"); } catch { return []; } });
+  const [favOpen, setFavOpen] = useState(false);
 
-  const go = (newScreen, newState = {}) => { setState(newState); setScreen(newScreen); };
+  const go = (newScreen, newState = {}) => { setState(newState); setScreen(newScreen); setFavOpen(false); };
   const reset = () => { setState({}); setScreen("home"); };
   const addToCart = (item) => setCart(prev => [...prev, item]);
   const removeFromCart = (id) => setCart(prev => prev.filter(i => i.id !== id));
   const clearCart = () => setCart([]);
+  const toggleFavorite = (key) => setFavorites(prev => {
+    const next = prev.includes(key) ? prev.filter(k => k !== key) : [...prev, key];
+    localStorage.setItem("fav_brands", JSON.stringify(next));
+    return next;
+  });
 
   const screens = {
     home: <HomeScreen go={go} />,
     detective: <Detective go={go} />,
-    brandSelect: <BrandSelect go={go} />,
+    brandSelect: <BrandSelect go={go} favorites={favorites} toggleFavorite={toggleFavorite} />,
     familySelect: <FamilySelect state={state} go={go} />,
     lineSelect: <LineSelect state={state} go={go} />,
     bodySelect: <BodySelect state={state} go={go} />,
@@ -1521,6 +1553,28 @@ export default function App() {
     <div style={{ width: "100%", maxWidth: 430, minHeight: "100vh", position: "relative", color: "white" }}>
       <Sty />
       {screens[screen] || screens.home}
+
+      {/* Botão flutuante Favoritos */}
+      {favorites.length > 0 && (
+        <div style={{ position: "fixed", bottom: cart.length > 0 ? 80 : 16, left: 16, zIndex: 101, display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 8 }}>
+          {favOpen && (
+            <div style={{ background: "rgba(15,23,42,0.97)", border: "1px solid #f59e0b", borderRadius: 12, padding: "10px 12px", minWidth: 180, boxShadow: "0 4px 20px rgba(245,158,11,.2)" }}>
+              <div style={{ fontSize: 10, color: "#f59e0b", fontWeight: 700, marginBottom: 8, textTransform: "uppercase", letterSpacing: 1 }}>Acesso rápido</div>
+              {favorites.map(key => { const brand = DB[key]; if (!brand) return null; return (
+                <button key={key} onClick={() => go("familySelect", { brand: key })}
+                  style={{ display: "flex", alignItems: "center", gap: 8, width: "100%", background: "transparent", border: "none", cursor: "pointer", padding: "6px 4px", borderRadius: 8, marginBottom: 2 }}>
+                  <div style={{ width: 28, height: 28, borderRadius: 7, background: `${brand.color}22`, border: `1px solid ${brand.color}66`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 8, fontWeight: 800, color: brand.color, fontFamily: "monospace", flexShrink: 0 }}>{brand.logo}</div>
+                  <span style={{ color: "white", fontSize: 13, fontWeight: 600 }}>{brand.label}</span>
+                </button>
+              ); })}
+            </div>
+          )}
+          <button onClick={() => setFavOpen(v => !v)} aria-label="Marcas favoritas"
+            style={{ width: 48, height: 48, borderRadius: "50%", background: favOpen ? "linear-gradient(135deg,#92400e,#d97706)" : "linear-gradient(135deg,#78350f,#b45309)", border: `2px solid #f59e0b`, fontSize: 22, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 0 16px rgba(245,158,11,.4)" }}>
+            ⭐
+          </button>
+        </div>
+      )}
 
       {/* Botão flutuante IA */}
       <div style={{ position: "fixed", bottom: cart.length > 0 ? 80 : 16, right: 16, zIndex: 101, display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 8 }}>
