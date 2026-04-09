@@ -148,3 +148,24 @@ Foto do implante ou componente → IA identifica marca e linha.
 ---
 
 > ⚠️ Implementar apenas após finalizar todas as marcas e funcionalidades principais do app.
+
+## Funcionalidade Investigador — Identificação de Implante por RX
+
+### Fase 1 — Implementar agora (sem API)
+- Tela do Investigador com botão de upload de imagem de RX
+- Exibir a imagem carregada na tela
+- Banco de imagens de referência por marca para comparação manual
+- Botão "Analisar com IA" mostrando mensagem "Em breve"
+
+### Fase 2 — Implementar após integração da API
+- Botão "Analisar com IA" envia imagem para Claude Vision (API Anthropic)
+- IA compara imagem do usuário com banco de dados radiográfico
+- Retorna marcas mais prováveis com percentual de confiança
+
+### Banco de Dados Radiográfico
+- Existe um PDF com imagens padronizadas de RX identificadas por marca
+- PDF ainda não disponível — Rafael vai localizar e enviar para análise
+- Quando disponível: extrair imagens do PDF e criar banco visual no app
+- Cada imagem deve ter: marca, linha, conexão identificados
+
+> ⚠️ Aguardando PDF do banco de dados radiográfico para estruturar a Fase 2.
