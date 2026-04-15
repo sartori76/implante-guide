@@ -1109,8 +1109,8 @@ function Detective({ go }) {
       <div style={G.row}>
         <Back onClick={() => go("home", {})} />
         <div style={{ flex: 1 }}>
-          <div style={{ fontSize: 14, fontWeight: 700, color: "white" }}>Investigador</div>
-          <div style={{ fontSize: 10, color: "#64748b" }}>Identificar implante desconhecido</div>
+          <div style={{ fontSize: 14, fontWeight: 700, color: "white" }}>Identificar Implante</div>
+          <div style={{ fontSize: 10, color: "#64748b" }}>Descubra a marca pelo RX ou perguntas</div>
         </div>
       </div>
 
