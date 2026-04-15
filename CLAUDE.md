@@ -169,3 +169,47 @@ Foto do implante ou componente → IA identifica marca e linha.
 - Cada imagem deve ter: marca, linha, conexão identificados
 
 > ⚠️ Aguardando PDF do banco de dados radiográfico para estruturar a Fase 2.
+
+---
+
+## Skill UI UX Pro Max
+
+Motor de raciocínio de design instalado em `.claude/skills/ui-ux-pro-max/`.
+
+### Instalação (feita uma vez)
+```bash
+npm install -g uipro-cli
+uipro init --ai claude
+```
+
+### Gerar design system antes de criar telas novas
+```bash
+python3 .claude/skills/ui-ux-pro-max/scripts/search.py "dental implant selector dark mobile" --design-system -p "Implante Guide"
+```
+
+### Regra de uso
+**Antes de pedir qualquer tela ou componente novo**, rodar o comando acima e colar o output no chat do Claude Code com a instrução:
+
+> *"Use este design system e [descreva o que quer construir]"*
+
+### Restrições do Implante Guide — têm prioridade sobre a skill
+As regras visuais do projeto **sempre prevalecem** sobre as sugestões da skill:
+
+| Regra do projeto | Valor fixo |
+|-----------------|-----------|
+| Cor de fundo | `#020617` (nunca mudar) |
+| Max-width | `430px` |
+| Ícones de navegação | Emoticons — nunca lucide-react |
+| Deploy | Via `deploy.sh` → PR → Vercel |
+
+### Pesquisas úteis por domínio
+```bash
+# Estilos visuais
+python3 .claude/skills/ui-ux-pro-max/scripts/search.py "dark glassmorphism" --domain style
+
+# Tipografia
+python3 .claude/skills/ui-ux-pro-max/scripts/search.py "medical clean sans-serif" --domain typography
+
+# Componentes de dashboard
+python3 .claude/skills/ui-ux-pro-max/scripts/search.py "medical dashboard" --domain chart
+```
