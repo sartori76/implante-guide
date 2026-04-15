@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import {
   ChevronRight, CheckCircle,
   ExternalLink, Zap, Shield, Home, ArrowRight,
-  Info, Search, AlertTriangle, Layers
+  Info, AlertTriangle
 } from "lucide-react";
 
 // ─── Helper ──────────────────────────────────────────────────────────────────
@@ -864,13 +864,17 @@ const css = `
   *{box-sizing:border-box} body{background:#020617;font-family:'DM Sans',sans-serif;color:white}
   @keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
   @keyframes sh{0%{background-position:-200% 0}100%{background-position:200% 0}}
-  @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes fadeInBack{from{opacity:0;transform:translateY(-12px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes pulse-ring{0%,100%{opacity:.4;transform:scale(1)}50%{opacity:.1;transform:scale(1.22)}}
   input{box-sizing:border-box;outline:none} input::placeholder{color:#94a3b8}
   ::-webkit-scrollbar{width:3px} ::-webkit-scrollbar-track{background:#0f172a} ::-webkit-scrollbar-thumb{background:#334155;border-radius:2px}
   @media print{body{background:white!important;color:black!important} .no-print{display:none!important} .print-card{background:white!important;border:1px solid #ccc!important;color:black!important} .print-sku{color:#1d4ed8!important} .print-brand{color:#555!important}}
   button{font-family:'DM Sans',sans-serif;}
-  .hov:hover{transform:translateY(-1px);filter:brightness(1.12);box-shadow:0 6px 20px rgba(59,130,246,.22)}
-  .fadein{animation:fadeIn .22s ease both}
+  .hov{position:relative;cursor:pointer;transition:transform 200ms ease-out,box-shadow 200ms ease-out;}
+  .hov:hover{transform:scale(1.20);box-shadow:0 8px 28px rgba(59,130,246,.30);z-index:2;}
+  .fadein{animation:fadeIn .28s ease-out both}
+  .fadein-back{animation:fadeInBack .28s ease-out both}
 `;
 function Sty() { return <style>{css}</style>; }
 const G = {
@@ -883,12 +887,16 @@ const card = { width: "100%", borderRadius: 13, background: "rgba(30,41,59,0.95)
 // ─── Componentes UI ───────────────────────────────────────────────────────────
 function Logo() {
   return (
-    <div style={{ position: "relative", width: 64, height: 64, display: "flex", alignItems: "center", justifyContent: "center" }}>
-      <svg style={{ position: "absolute", animation: "spin 20s linear infinite" }} width="64" height="64" viewBox="0 0 64 64">
-        <circle cx="32" cy="32" r="28" fill="none" stroke="#1e40af" strokeWidth="1" strokeDasharray="4 3" opacity=".6" />
+    <div style={{ position: "relative", width: 84, height: 84, display: "flex", alignItems: "center", justifyContent: "center" }}>
+      {/* Anel de brilho pulsando */}
+      <div style={{ position: "absolute", width: 84, height: 84, borderRadius: "50%", border: "1.5px solid rgba(59,130,246,.55)", animation: "pulse-ring 2.8s ease-in-out infinite", pointerEvents: "none" }} />
+      {/* Anel giratório */}
+      <svg style={{ position: "absolute", animation: "spin 20s linear infinite" }} width="76" height="76" viewBox="0 0 76 76">
+        <circle cx="38" cy="38" r="34" fill="none" stroke="#1e40af" strokeWidth="1" strokeDasharray="4 3" opacity=".6" />
       </svg>
-      <div style={{ width: 44, height: 44, borderRadius: 12, background: "linear-gradient(135deg,#1e40af,#3b82f6)", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 0 22px rgba(59,130,246,.4)" }}>
-        <span style={{ fontSize: 13, fontWeight: 800, color: "white", letterSpacing: -1 }}>SG</span>
+      {/* Inner box glassmorphism */}
+      <div style={{ width: 50, height: 50, borderRadius: 15, background: "linear-gradient(135deg,rgba(30,64,175,0.55),rgba(59,130,246,0.38))", backdropFilter: "blur(14px)", WebkitBackdropFilter: "blur(14px)", border: "1px solid rgba(147,197,253,.38)", boxShadow: "0 0 24px rgba(59,130,246,.42), inset 0 1px 0 rgba(255,255,255,.18)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <span style={{ fontSize: 14, fontWeight: 800, color: "white", letterSpacing: -1 }}>SG</span>
       </div>
     </div>
   );
@@ -934,44 +942,53 @@ function Placeholder({ label }) {
 function HomeScreen({ go }) {
   return (
     <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "24px 16px" }}>
-      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 22, width: "100%" }}>
-        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 11 }}>
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 24, width: "100%" }}>
+        {/* Logo + título */}
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 13 }}>
           <Logo />
           <div style={{ textAlign: "center" }}>
             <h1 style={{ margin: 0, fontSize: 22, fontWeight: 800, letterSpacing: -.5, color: "white" }}>Sartori<span style={{ color: "#3b82f6" }}> Guide</span></h1>
-            <p style={{ margin: "3px 0 0", fontSize: 9, fontWeight: 600, letterSpacing: 2, textTransform: "uppercase", background: "linear-gradient(90deg,#94a3b8,#e2e8f0,#94a3b8)", backgroundSize: "200% 100%", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", animation: "sh 3s linear infinite" }}>Implant Protocol System</p>
+            <p style={{ margin: "4px 0 0", fontSize: 9, fontWeight: 600, letterSpacing: 4, textTransform: "uppercase", opacity: 0.6, background: "linear-gradient(90deg,#94a3b8,#e2e8f0,#94a3b8)", backgroundSize: "200% 100%", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", animation: "sh 3s linear infinite" }}>Implant Protocol System</p>
           </div>
         </div>
-        <div style={{ width: "100%", padding: "18px", borderRadius: 16, background: "rgba(15,23,42,.8)", border: "1px solid rgba(59,130,246,.3)", textAlign: "center" }}>
+
+        {/* Card pergunta — glassmorphism sutil */}
+        <div style={{ width: "100%", padding: "18px", borderRadius: 18, background: "rgba(15,23,42,.55)", backdropFilter: "blur(16px)", WebkitBackdropFilter: "blur(16px)", border: "1px solid rgba(59,130,246,.22)", boxShadow: "0 1px 0 rgba(147,197,253,.12) inset, 0 8px 32px rgba(0,0,0,.28)", textAlign: "center" }}>
           <div style={{ fontSize: 26, marginBottom: 7 }}>🔍</div>
           <h2 style={{ margin: "0 0 5px", fontSize: 16, fontWeight: 700, color: "white" }}>Você conhece o implante instalado?</h2>
           <p style={{ margin: 0, fontSize: 12, color: "#94a3b8" }}>Escolha o fluxo para encontrar o componente correto</p>
         </div>
-        <div style={{ width: "100%", display: "flex", flexDirection: "column", gap: 9 }}>
+
+        {/* Botões */}
+        <div style={{ width: "100%", display: "flex", flexDirection: "column", gap: 10 }}>
+          {/* Botão 1 — Conheço o implante */}
           <button className="hov" onClick={() => go("brandSelect", {})}
-            style={{ width: "100%", padding: "15px 18px", borderRadius: 13, border: "none", cursor: "pointer", background: "linear-gradient(135deg,#1d4ed8,#3b82f6)", display: "flex", alignItems: "center", justifyContent: "space-between", boxShadow: "0 7px 20px rgba(59,130,246,.28)" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-              <div style={{ width: 34, height: 34, borderRadius: 8, background: "rgba(255,255,255,.2)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16, flexShrink: 0 }}>🦷</div>
+            style={{ width: "100%", padding: "16px 18px", borderRadius: 14, border: "none", cursor: "pointer", background: "linear-gradient(135deg,#1d4ed8,#3b82f6)", display: "flex", alignItems: "center", justifyContent: "space-between", boxShadow: "0 6px 24px rgba(59,130,246,.32)" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+              <div style={{ width: 36, height: 36, borderRadius: 50, background: "rgba(255,255,255,.22)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18, flexShrink: 0 }}>🦷</div>
               <div style={{ textAlign: "left" }}>
-                <div style={{ fontSize: 10, fontWeight: 700, color: "white", letterSpacing: .5, textTransform: "uppercase", marginBottom: 1 }}>Sou o Reabilitador</div>
-                <div style={{ fontSize: 11, color: "rgba(255,255,255,.85)" }}>Já conheço o implante</div>
+                <div style={{ fontSize: 13, fontWeight: 700, color: "white", marginBottom: 2 }}>Conheço o implante</div>
+                <div style={{ fontSize: 11, color: "rgba(255,255,255,.75)" }}>Já conheço o implante</div>
               </div>
             </div>
-            <ArrowRight size={14} color="white" />
+            <span style={{ fontSize: 16, color: "rgba(255,255,255,.8)" }}>→</span>
           </button>
+
+          {/* Botão 2 — Quero identificar */}
           <button className="hov" onClick={() => go("detective", {})}
-            style={{ width: "100%", padding: "15px 18px", borderRadius: 13, cursor: "pointer", background: "rgba(30,41,59,0.95)", border: "1px solid rgba(59,130,246,.5)", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-              <div style={{ width: 34, height: 34, borderRadius: 8, background: "rgba(59,130,246,.2)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16, flexShrink: 0 }}>🔬</div>
+            style={{ width: "100%", padding: "16px 18px", borderRadius: 14, cursor: "pointer", background: "rgba(15,23,42,.6)", backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)", border: "1px solid #475569", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+              <div style={{ width: 36, height: 36, borderRadius: 50, background: "rgba(59,130,246,.18)", border: "1px solid rgba(59,130,246,.3)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18, flexShrink: 0 }}>🔬</div>
               <div style={{ textAlign: "left" }}>
-                <div style={{ fontSize: 10, fontWeight: 700, color: "#cbd5e1", letterSpacing: .5, textTransform: "uppercase", marginBottom: 1 }}>Sou o Investigador</div>
-                <div style={{ fontSize: 11, color: "#94a3b8" }}>Não conheço o implante</div>
+                <div style={{ fontSize: 13, fontWeight: 700, color: "#e2e8f0", marginBottom: 2 }}>Quero identificar o implante</div>
+                <div style={{ fontSize: 11, color: "#64748b" }}>Não conheço o implante</div>
               </div>
             </div>
-            <Search size={14} color="#94a3b8" />
+            <span style={{ fontSize: 16, color: "#475569" }}>→</span>
           </button>
         </div>
-        <p style={{ margin: 0, fontSize: 9, color: "#475569" }}>v5.0 · 11 marcas · SKUs oficiais</p>
+
+        <p style={{ margin: 0, fontSize: 9, color: "#334155" }}>v5.0 · 11 marcas · REFs oficiais</p>
       </div>
     </div>
   );
@@ -1671,7 +1688,9 @@ export default function App() {
     // Este div é o wrapper de 430px centralizado
     <div style={{ width: "100%", maxWidth: 430, minHeight: "100vh", position: "relative", color: "white" }}>
       <Sty />
-      {screens[screen] || screens.home}
+      <div key={screen} className="fadein" style={{ width: "100%" }}>
+        {screens[screen] || screens.home}
+      </div>
 
       {/* Botão flutuante Favoritos */}
       {favorites.length > 0 && (
