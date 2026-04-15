@@ -966,10 +966,7 @@ function HomeScreen({ go }) {
             style={{ width: "100%", padding: "16px 18px", borderRadius: 14, border: "none", cursor: "pointer", background: "linear-gradient(135deg,#1d4ed8,#3b82f6)", display: "flex", alignItems: "center", justifyContent: "space-between", boxShadow: "0 6px 24px rgba(59,130,246,.32)" }}>
             <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
               <div style={{ width: 36, height: 36, borderRadius: 50, background: "rgba(255,255,255,.22)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18, flexShrink: 0 }}>🦷</div>
-              <div style={{ textAlign: "left" }}>
-                <div style={{ fontSize: 13, fontWeight: 700, color: "white", marginBottom: 2 }}>Conheço o implante</div>
-                <div style={{ fontSize: 11, color: "rgba(255,255,255,.75)" }}>Já conheço o implante</div>
-              </div>
+              <div style={{ fontSize: 13, fontWeight: 700, color: "white" }}>Conheço o implante</div>
             </div>
             <span style={{ fontSize: 16, color: "rgba(255,255,255,.8)" }}>→</span>
           </button>
@@ -979,10 +976,7 @@ function HomeScreen({ go }) {
             style={{ width: "100%", padding: "16px 18px", borderRadius: 14, cursor: "pointer", background: "rgba(15,23,42,.6)", backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)", border: "1px solid #475569", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
             <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
               <div style={{ width: 36, height: 36, borderRadius: 50, background: "rgba(59,130,246,.18)", border: "1px solid rgba(59,130,246,.3)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18, flexShrink: 0 }}>🔬</div>
-              <div style={{ textAlign: "left" }}>
-                <div style={{ fontSize: 13, fontWeight: 700, color: "#e2e8f0", marginBottom: 2 }}>Quero identificar o implante</div>
-                <div style={{ fontSize: 11, color: "#64748b" }}>Não conheço o implante</div>
-              </div>
+              <div style={{ fontSize: 13, fontWeight: 700, color: "#e2e8f0" }}>Quero identificar o implante</div>
             </div>
             <span style={{ fontSize: 16, color: "#475569" }}>→</span>
           </button>
@@ -1218,7 +1212,7 @@ function BrandSelect({ go, favorites, toggleFavorite }) {
             {favorites.map(key => { const brand = DB[key]; if (!brand) return null; return (
               <button key={key} className="hov" onClick={() => go("familySelect", { brand: key })}
                 style={{ ...card, border: `1px solid ${brand.color}66`, background: `${brand.color}11` }}>
-                <div style={{ width: 38, height: 38, borderRadius: 10, background: `${brand.color}22`, border: `1px solid ${brand.color}66`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 10, fontWeight: 800, color: brand.color, fontFamily: "monospace", flexShrink: 0 }}>{brand.logo}</div>
+                <div style={{ width: 38, height: 38, borderRadius: 10, background: `${brand.color}22`, border: `1px solid ${brand.color}66`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 9, fontWeight: 800, color: brand.color, fontFamily: "monospace", flexShrink: 0 }}>{brand.logo}</div>
                 <div style={{ flex: 1 }}>
                   <div style={{ fontWeight: 700, color: "white", fontSize: 14 }}>{brand.label}</div>
                 </div>
@@ -1232,21 +1226,19 @@ function BrandSelect({ go, favorites, toggleFavorite }) {
       <div style={{ fontSize: 10, color: "#94a3b8", fontWeight: 700, marginBottom: 6, textTransform: "uppercase", letterSpacing: 1 }}>Todas as marcas</div>
       <div style={{ display: "flex", flexDirection: "column", gap: 9 }}>
         {Object.entries(DB).sort(([, a], [, b]) => a.label.localeCompare(b.label, "pt-BR")).map(([key, brand]) => (
-          <div key={key} style={{ display: "flex", alignItems: "center", gap: 8 }}>
-            <button className="hov" onClick={() => go("familySelect", { brand: key })}
-              style={{ ...card, border: `1px solid ${brand.color}44`, flex: 1 }}>
-              <div style={{ width: 38, height: 38, borderRadius: 10, background: `${brand.color}22`, border: `1px solid ${brand.color}66`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 10, fontWeight: 800, color: brand.color, fontFamily: "monospace", flexShrink: 0 }}>{brand.logo}</div>
-              <div style={{ flex: 1 }}>
-                <div style={{ fontWeight: 700, color: "white", fontSize: 14 }}>{brand.label}</div>
-                <div style={{ fontSize: 10, color: "#94a3b8", marginTop: 1 }}>{Object.keys(brand.families).length} linhas de conexão</div>
-              </div>
-              <ChevronRight size={14} color={brand.color} />
-            </button>
-            <button onClick={() => toggleFavorite(key)} aria-label={favorites.includes(key) ? "Remover favorito" : "Favoritar"}
-              style={{ width: 36, height: 36, borderRadius: 10, border: favorites.includes(key) ? "1px solid #f59e0b" : "1px solid #334155", background: favorites.includes(key) ? "rgba(245,158,11,.15)" : "rgba(30,41,59,0.8)", cursor: "pointer", fontSize: 16, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, transition: "all .2s" }}>
+          <button key={key} className="hov" onClick={() => go("familySelect", { brand: key })}
+            style={{ ...card, border: `1px solid ${brand.color}44` }}>
+            <div style={{ width: 38, height: 38, borderRadius: 10, background: `${brand.color}22`, border: `1px solid ${brand.color}66`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 9, fontWeight: 800, color: brand.color, fontFamily: "monospace", flexShrink: 0 }}>{brand.logo}</div>
+            <div style={{ flex: 1 }}>
+              <div style={{ fontWeight: 700, color: "white", fontSize: 14 }}>{brand.label}</div>
+              <div style={{ fontSize: 10, color: "#94a3b8", marginTop: 1 }}>{Object.keys(brand.families).length} linhas de conexão</div>
+            </div>
+            <button onClick={(e) => { e.stopPropagation(); toggleFavorite(key); }} aria-label={favorites.includes(key) ? "Remover favorito" : "Favoritar"}
+              style={{ width: 30, height: 30, borderRadius: 8, border: favorites.includes(key) ? "1px solid #f59e0b" : "1px solid #334155", background: favorites.includes(key) ? "rgba(245,158,11,.15)" : "transparent", cursor: "pointer", fontSize: 14, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, transition: "all .2s", marginRight: 4 }}>
               {favorites.includes(key) ? "⭐" : "☆"}
             </button>
-          </div>
+            <ChevronRight size={14} color={brand.color} />
+          </button>
         ))}
       </div>
     </div>
