@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import {
   ChevronRight, CheckCircle,
   ExternalLink, Zap, Shield, Home, ArrowRight,
-  Info, AlertTriangle
+  Info, AlertTriangle, Search
 } from "lucide-react";
 
 // ─── Helper ──────────────────────────────────────────────────────────────────
