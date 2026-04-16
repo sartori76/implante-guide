@@ -934,9 +934,6 @@ function ImplantShape({ shape, size = 90 }) {
   };
   return <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center" }}><div style={{ width: S, height: S, borderRadius: 12, background: "linear-gradient(135deg,#0f172a,#1e293b)", border: "1px solid rgba(59,130,246,.35)", display: "flex", alignItems: "center", justifyContent: "center" }}>{shapes[shape] || shapes.variobase}</div></div>;
 }
-function Placeholder({ label }) {
-  return <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center" }}><div style={{ width: 90, height: 90, borderRadius: 12, background: "linear-gradient(135deg,#0f172a,#1e293b)", border: "1px solid rgba(59,130,246,.3)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 3 }}><span style={{ fontSize: 22 }}>🦷</span><span style={{ fontSize: 8, color: "#94a3b8", textAlign: "center", padding: "0 5px", lineHeight: 1.3 }}>{label}</span></div></div>;
-}
 
 // ─── TELA HOME ────────────────────────────────────────────────────────────────
 function HomeScreen({ go }) {
@@ -1488,6 +1485,7 @@ function HeightSelect({ state, go }) {
 // ─── RESULTADO ────────────────────────────────────────────────────────────────
 function Result({ state, go, addToCart, reset }) {
   const [added, setAdded] = useState(false);
+  const [copied, setCopied] = useState(false);
   const brand = DB[state.brand];
   const fam = brand.families[state.family];
   const line = fam.lines[state.line];
@@ -1529,16 +1527,13 @@ function Result({ state, go, addToCart, reset }) {
           <span style={{ fontSize: 8, color: "#94a3b8" }}>REF.</span>
           <span style={{ ...G.mono, fontSize: 11, fontWeight: 600, color: "#60a5fa", background: "rgba(59,130,246,.15)", padding: "2px 6px", borderRadius: 5 }}>{comp.sku}</span>
         </div>
-        <div style={{ display: "flex", gap: 9, marginBottom: 14 }}>
+        <div style={{ display: "flex", justifyContent: "center", marginBottom: 14 }}>
           {st.imgRef
-            ? <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                <div style={{ width: 90, height: 90, borderRadius: 12, background: "linear-gradient(135deg,#0f172a,#1e293b)", border: "1px solid rgba(59,130,246,.35)", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }}>
-                  <img src={st.imgRef} alt={st.label} style={{ width: "100%", height: "100%", objectFit: "contain", padding: 4 }} onError={e => { e.target.style.display = "none"; }} />
-                </div>
+            ? <div style={{ width: 110, height: 110, borderRadius: 12, background: "linear-gradient(135deg,#0f172a,#1e293b)", border: "1px solid rgba(59,130,246,.35)", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }}>
+                <img src={st.imgRef} alt={st.label} style={{ width: "100%", height: "100%", objectFit: "contain", padding: 4 }} onError={e => { e.target.style.display = "none"; }} />
               </div>
-            : <ImplantShape shape={comp.shape || "variobase"} size={90} />
+            : <ImplantShape shape={comp.shape || "variobase"} size={110} />
           }
-          <Placeholder label="Scan Body / Transfer" />
         </div>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 6 }}>
           <div style={{ padding: "11px", borderRadius: 9, background: "rgba(245,158,11,.12)", border: "1px solid rgba(245,158,11,.4)" }}>
@@ -1567,6 +1562,31 @@ function Result({ state, go, addToCart, reset }) {
         style={{ padding: "14px", borderRadius: 12, border: "none", cursor: "pointer", background: added ? "linear-gradient(135deg,#059669,#10b981)" : "linear-gradient(135deg,#1d4ed8,#3b82f6)", color: "white", fontWeight: 700, fontSize: 13, display: "flex", alignItems: "center", justifyContent: "center", gap: 7, transition: "all .35s ease" }}
       >
         {added ? (<><CheckCircle size={14} />Adicionado!</>) : (<><span style={{ fontSize: 16 }}>🛒</span> Adicionar ao Pedido</>)}
+      </button>
+
+      <button
+        onClick={() => {
+          const texto = [
+            `${brand.label} — ${line.label}`,
+            comp.name,
+            `REF: ${comp.sku}`,
+            `Torque: ${comp.torque}`,
+            `Chave: ${comp.chave}`,
+            `Material: ${comp.material}`,
+            tlxPlat ? `Plataforma: ${tlxPlat.key} ${tlxPlat.diam}` : `Altura Gengival: ${state.gengivalHeight.replace(".", ",")}mm`,
+          ].join("\n");
+          navigator.clipboard.writeText(texto);
+          setCopied(true);
+          setTimeout(() => setCopied(false), 2500);
+        }}
+        style={{ padding: "12px", borderRadius: 11, border: "1px solid #475569", cursor: "pointer", background: copied ? "linear-gradient(135deg,#059669,#10b981)" : "rgba(30,41,59,0.9)", color: copied ? "white" : "#cbd5e1", fontSize: 11, fontWeight: copied ? 700 : 600, display: "flex", alignItems: "center", justifyContent: "center", gap: 6, transition: "all .35s ease" }}
+      >
+        {copied ? "✓ Copiado!" : (<>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <rect x="9" y="9" width="13" height="13" rx="2" /><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+          </svg>
+          Copiar resultado
+        </>)}
       </button>
 
       <a href={`https://${brand.site}`} target="_blank" rel="noopener noreferrer"
@@ -1648,6 +1668,7 @@ export default function App() {
   const [aiToast, setAiToast] = useState(false);
   const [favorites, setFavorites] = useState(() => { try { return JSON.parse(localStorage.getItem("fav_brands") || "[]"); } catch { return []; } });
   const [favOpen, setFavOpen] = useState(false);
+  const [cartCopied, setCartCopied] = useState(false);
 
   const go = (newScreen, newState = {}) => { setState(newState); setScreen(newScreen); setFavOpen(false); };
   const reset = () => { setState({}); setScreen("home"); };
@@ -1725,12 +1746,33 @@ export default function App() {
       {/* Carrinho fixo na base — centralizado com maxWidth 430px */}
       {cart.length > 0 && (
         <div style={{ position: "fixed", bottom: 0, left: 0, right: 0, background: "rgba(2,6,23,0.97)", borderTop: "1px solid #1e293b", padding: "12px 16px", maxWidth: 430, margin: "0 auto", zIndex: 100, maxHeight: "40vh", overflowY: "auto" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 8 }}>
-            <span style={{ fontSize: 14 }}>🛒</span>
-            <span style={{ fontSize: 11, fontWeight: 700, color: "white" }}>Pedido ({cart.length})</span>
-            <button onClick={() => go("cart", {})} style={{ marginLeft: "auto", padding: "4px 10px", borderRadius: 7, border: "1px solid #3b82f6", background: "rgba(59,130,246,.15)", color: "#60a5fa", fontSize: 10, fontWeight: 700, cursor: "pointer" }}>
-              Ver Pedido →
-            </button>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 8 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+              <span style={{ fontSize: 14 }}>🛒</span>
+              <span style={{ fontSize: 11, fontWeight: 700, color: "white" }}>Pedido ({cart.length})</span>
+            </div>
+            <div style={{ display: "flex", alignItems: "center", gap: 5 }}>
+              <button onClick={() => go("cart", {})} style={{ padding: "4px 10px", borderRadius: 7, border: "1px solid #3b82f6", background: "rgba(59,130,246,.15)", color: "#60a5fa", fontSize: 10, fontWeight: 700, cursor: "pointer" }}>
+                Ver →
+              </button>
+              <button
+                onClick={() => {
+                  const linhas = cart.map((item, i) => `${i + 1}. ${item.name} — REF: ${item.sku}`).join("\n");
+                  navigator.clipboard.writeText(`Pedido — Sartori Guide\n\n${linhas}`);
+                  setCartCopied(true);
+                  setTimeout(() => setCartCopied(false), 2000);
+                }}
+                style={{ padding: "4px 10px", borderRadius: 7, border: "1px solid #1d4ed8", background: "transparent", color: cartCopied ? "#10b981" : "#60a5fa", fontSize: 10, fontWeight: 700, cursor: "pointer", transition: "color .3s" }}
+              >
+                {cartCopied ? "✓ Copiado" : "Copiar lista"}
+              </button>
+              <button
+                onClick={() => setCart([])}
+                style={{ padding: "4px 10px", borderRadius: 7, border: "1px solid rgba(239,68,68,.4)", background: "transparent", color: "#ef4444", fontSize: 10, fontWeight: 700, cursor: "pointer" }}
+              >
+                Limpar tudo
+              </button>
+            </div>
           </div>
           {cart.map((item) => (
             <div key={item.id} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "7px 10px", borderRadius: 8, background: "rgba(30,41,59,0.9)", border: "1px solid #334155", marginBottom: 4 }}>
