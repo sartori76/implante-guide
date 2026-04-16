@@ -936,7 +936,7 @@ function ImplantShape({ shape, size = 90 }) {
 }
 
 // ─── TELA HOME ────────────────────────────────────────────────────────────────
-function HomeScreen({ go }) {
+function HomeScreen({ go, history, clearHistory }) {
   return (
     <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "24px 16px" }}>
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 24, width: "100%" }}>
@@ -955,6 +955,39 @@ function HomeScreen({ go }) {
           <h2 style={{ margin: "0 0 5px", fontSize: 16, fontWeight: 700, color: "white" }}>Você conhece o implante instalado?</h2>
           <p style={{ margin: 0, fontSize: 12, color: "#94a3b8" }}>Escolha o fluxo para encontrar o componente correto</p>
         </div>
+
+        {/* Consultas Recentes */}
+        {history.length > 0 && (
+          <div style={{ width: "100%" }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 8 }}>
+              <span style={{ fontSize: 10, fontWeight: 700, color: "#64748b", textTransform: "uppercase", letterSpacing: 1 }}>Consultas Recentes</span>
+              <button onClick={clearHistory}
+                style={{ background: "transparent", border: "none", cursor: "pointer", fontSize: 10, color: "#475569", padding: "2px 6px", borderRadius: 5 }}>
+                Limpar histórico
+              </button>
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+              {history.map((item, i) => {
+                const brand = DB[item.brand];
+                return (
+                  <button key={i} className="hov" onClick={() => go("result", { ...item })}
+                    style={{ width: "100%", padding: "9px 12px", borderRadius: 11, background: "rgba(30,41,59,0.95)", border: "1px solid #475569", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, textAlign: "left" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: 9, minWidth: 0 }}>
+                      <div style={{ width: 26, height: 26, borderRadius: 7, background: brand ? `${brand.color}22` : "rgba(59,130,246,.15)", border: `1px solid ${brand ? brand.color : "#3b82f6"}66`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 8, fontWeight: 800, color: brand ? brand.color : "#3b82f6", fontFamily: "monospace", flexShrink: 0 }}>
+                        {brand ? brand.logo : "?"}
+                      </div>
+                      <div style={{ minWidth: 0 }}>
+                        <div style={{ fontSize: 11, fontWeight: 600, color: "white", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{item.name}</div>
+                        <div style={{ fontSize: 9, color: "#60a5fa", fontFamily: "monospace", marginTop: 1 }}>{item.sku}</div>
+                      </div>
+                    </div>
+                    <span style={{ fontSize: 12, color: "#475569", flexShrink: 0 }}>→</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        )}
 
         {/* Botões */}
         <div style={{ width: "100%", display: "flex", flexDirection: "column", gap: 10 }}>
@@ -1483,7 +1516,7 @@ function HeightSelect({ state, go }) {
 }
 
 // ─── RESULTADO ────────────────────────────────────────────────────────────────
-function Result({ state, go, addToCart, reset }) {
+function Result({ state, go, addToCart, reset, addToHistory }) {
   const [added, setAdded] = useState(false);
   const [copied, setCopied] = useState(false);
   const brand = DB[state.brand];
@@ -1496,6 +1529,17 @@ function Result({ state, go, addToCart, reset }) {
   const tlxPlat = isTLX ? line.tlxPlatforms?.find(p => p.key === state.tlxPlatform) : null;
   const bodyOpt = line.hasBodySelect && state.body ? line.bodyOptions?.find(b => b.key === state.body) : null;
   const backScreen = isTLX ? "subtypeSelect" : "heightSelect";
+
+  useEffect(() => {
+    if (comp && addToHistory) {
+      addToHistory({
+        brand: state.brand, family: state.family, line: state.line,
+        body: state.body, tlxPlatform: state.tlxPlatform, objective: state.objective,
+        subtype: state.subtype, gengivalHeight: state.gengivalHeight,
+        name: comp.name, sku: comp.sku, label: brand.label,
+      });
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (!comp) return <div style={{ padding: 20, color: "white" }}><p>Componente não encontrado.</p><button onClick={reset} style={{ color: "#3b82f6", background: "none", border: "none", cursor: "pointer" }}>↩ Recomeçar</button></div>;
 
@@ -1669,10 +1713,18 @@ export default function App() {
   const [favorites, setFavorites] = useState(() => { try { return JSON.parse(localStorage.getItem("fav_brands") || "[]"); } catch { return []; } });
   const [favOpen, setFavOpen] = useState(false);
   const [cartCopied, setCartCopied] = useState(false);
+  const [history, setHistory] = useState(() => { try { return JSON.parse(localStorage.getItem("sartori_history") || "[]"); } catch { return []; } });
 
   const go = (newScreen, newState = {}) => { setState(newState); setScreen(newScreen); setFavOpen(false); };
   const reset = () => { setState({}); setScreen("home"); };
   const addToCart = (item) => setCart(prev => [...prev, item]);
+  const addToHistory = (item) => setHistory(prev => {
+    const dedup = prev.filter(h => h.sku !== item.sku);
+    const next = [item, ...dedup].slice(0, 5);
+    localStorage.setItem("sartori_history", JSON.stringify(next));
+    return next;
+  });
+  const clearHistory = () => { setHistory([]); localStorage.removeItem("sartori_history"); };
   const removeFromCart = (id) => setCart(prev => prev.filter(i => i.id !== id));
   const clearCart = () => setCart([]);
   const toggleFavorite = (key) => setFavorites(prev => {
@@ -1682,7 +1734,7 @@ export default function App() {
   });
 
   const screens = {
-    home: <HomeScreen go={go} />,
+    home: <HomeScreen go={go} history={history} clearHistory={clearHistory} />,
     detective: <Detective go={go} />,
     brandSelect: <BrandSelect go={go} favorites={favorites} toggleFavorite={toggleFavorite} />,
     familySelect: <FamilySelect state={state} go={go} />,
@@ -1692,7 +1744,7 @@ export default function App() {
     objectiveSelect: <ObjectiveSelect state={state} go={go} />,
     subtypeSelect: <SubtypeSelect state={state} go={go} />,
     heightSelect: <HeightSelect state={state} go={go} />,
-    result: <Result state={state} go={go} addToCart={addToCart} reset={reset} />,
+    result: <Result state={state} go={go} addToCart={addToCart} reset={reset} addToHistory={addToHistory} />,
     cart: <CartScreen cart={cart} removeFromCart={removeFromCart} clearCart={clearCart} go={go} />,
   };
 
