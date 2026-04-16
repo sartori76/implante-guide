@@ -1141,11 +1141,16 @@ function connLogo(label) {
 }
 
 // ─── SELEÇÃO DE MARCA ─────────────────────────────────────────────────────────
-function BrandSelect({ go }) {
+function BrandSelect({ go, favorites, toggleFavorite }) {
   const [search, setSearch] = useState("");
   const filtered = Object.entries(DB)
     .filter(([, brand]) => brand.label.toLowerCase().includes(search.toLowerCase()))
-    .sort(([, a], [, b]) => a.label.localeCompare(b.label, "pt-BR"));
+    .sort(([aKey, a], [bKey, b]) => {
+      const aFav = favorites.includes(aKey);
+      const bFav = favorites.includes(bKey);
+      if (aFav !== bFav) return aFav ? -1 : 1;
+      return a.label.localeCompare(b.label, "pt-BR");
+    });
 
   return (
     <div style={G.page} className="fadein">
@@ -1173,6 +1178,10 @@ function BrandSelect({ go }) {
                   {Object.values(brand.families).map(f => f.label).join(" · ")}
                 </div>
               </div>
+              <button onClick={(e) => { e.stopPropagation(); toggleFavorite(key); }} aria-label={favorites.includes(key) ? "Remover favorito" : "Favoritar"}
+                style={{ width: 30, height: 30, borderRadius: 8, border: favorites.includes(key) ? "1px solid #f59e0b" : "1px solid #334155", background: favorites.includes(key) ? "rgba(245,158,11,.15)" : "transparent", cursor: "pointer", fontSize: 14, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, transition: "all .2s", marginRight: 4 }}>
+                {favorites.includes(key) ? "⭐" : "☆"}
+              </button>
               <ChevronRight size={14} color={brand.color} />
             </button>
           ))
@@ -1617,7 +1626,7 @@ export default function App() {
   const [state, setState] = useState({});
   const [cart, setCart] = useState([]);
   const [aiToast, setAiToast] = useState(false);
-  const [favorites] = useState(() => { try { return JSON.parse(localStorage.getItem("fav_brands") || "[]"); } catch { return []; } });
+  const [favorites, setFavorites] = useState(() => { try { return JSON.parse(localStorage.getItem("fav_brands") || "[]"); } catch { return []; } });
   const [favOpen, setFavOpen] = useState(false);
   const [cartCopied, setCartCopied] = useState(false);
   const [history, setHistory] = useState(() => { try { return JSON.parse(localStorage.getItem("sartori_history") || "[]"); } catch { return []; } });
@@ -1634,11 +1643,16 @@ export default function App() {
   const clearHistory = () => { setHistory([]); localStorage.removeItem("sartori_history"); };
   const removeFromCart = (id) => setCart(prev => prev.filter(i => i.id !== id));
   const clearCart = () => setCart([]);
+  const toggleFavorite = (key) => setFavorites(prev => {
+    const next = prev.includes(key) ? prev.filter(k => k !== key) : [...prev, key];
+    localStorage.setItem("fav_brands", JSON.stringify(next));
+    return next;
+  });
 
   const screens = {
     home: <HomeScreen go={go} history={history} clearHistory={clearHistory} />,
     detective: <Detective go={go} />,
-    brandSelect: <BrandSelect go={go} />,
+    brandSelect: <BrandSelect go={go} favorites={favorites} toggleFavorite={toggleFavorite} />,
     familySelect: <FamilySelect state={state} go={go} />,
     lineSelect: <LineSelect state={state} go={go} />,
     bodySelect: <BodySelect state={state} go={go} />,
