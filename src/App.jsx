@@ -1704,7 +1704,7 @@ export default function App() {
   const [aiToast, setAiToast] = useState(false);
   const [favorites, setFavorites] = useState(() => { try { return JSON.parse(localStorage.getItem("fav_brands") || "[]"); } catch { return []; } });
   const [favOpen, setFavOpen] = useState(false);
-  const [cartCopied, setCartCopied] = useState(false);
+
   const [history, setHistory] = useState(() => { try { return JSON.parse(localStorage.getItem("sartori_history") || "[]"); } catch { return []; } });
 
   const go = (newScreen, newState = {}, dir = "forward") => { setSlideDir(dir); setState(newState); setScreen(newScreen); setFavOpen(false); };
@@ -1752,7 +1752,7 @@ export default function App() {
 
       {/* Botão flutuante Favoritos */}
       {favorites.length > 0 && (
-        <div style={{ position: "fixed", bottom: cart.length > 0 ? 80 : 16, left: 16, zIndex: 101, display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 8 }}>
+        <div style={{ position: "fixed", bottom: 16, left: 16, zIndex: 101, display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 8 }}>
           {favOpen && (
             <div style={{ background: "rgba(15,23,42,0.97)", border: "1px solid #f59e0b", borderRadius: 12, padding: "10px 12px", minWidth: 180, boxShadow: "0 4px 20px rgba(245,158,11,.2)" }}>
               <div style={{ fontSize: 10, color: "#f59e0b", fontWeight: 700, marginBottom: 8, textTransform: "uppercase", letterSpacing: 1 }}>Acesso rápido</div>
@@ -1772,11 +1772,25 @@ export default function App() {
         </div>
       )}
 
-      {/* Botão flutuante IA */}
-      <div style={{ position: "fixed", bottom: cart.length > 0 ? 80 : 16, right: 16, zIndex: 101, display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 8 }}>
+      {/* Botões flutuantes direita: IA (baixo) + Carrinho (acima da IA quando visível) */}
+      <div style={{ position: "fixed", bottom: 16, right: 16, zIndex: 101, display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 8 }}>
         {aiToast && (
           <div style={{ background: "rgba(15,23,42,0.97)", border: "1px solid #3b82f6", borderRadius: 10, padding: "10px 14px", fontSize: 12, color: "#93c5fd", fontWeight: 600, maxWidth: 220, textAlign: "center", boxShadow: "0 4px 20px rgba(59,130,246,.25)" }}>
             Em breve: Assistente IA para dúvidas clínicas
+          </div>
+        )}
+        {cart.length > 0 && (
+          <div style={{ position: "relative" }}>
+            <button
+              onClick={() => go("cart", {})}
+              style={{ width: 48, height: 48, borderRadius: "50%", background: "linear-gradient(135deg,#1d4ed8,#3b82f6)", border: "2px solid #3b82f6", fontSize: 22, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 0 16px rgba(59,130,246,.45)" }}
+              aria-label="Carrinho"
+            >
+              🛒
+            </button>
+            <div style={{ position: "absolute", top: -4, right: -4, width: 18, height: 18, borderRadius: "50%", background: "#ef4444", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 9, fontWeight: 700, color: "white", pointerEvents: "none" }}>
+              {cart.length}
+            </div>
           </div>
         )}
         <button
@@ -1787,52 +1801,6 @@ export default function App() {
           🤖
         </button>
       </div>
-
-      {/* Carrinho fixo na base — centralizado com maxWidth 430px */}
-      {cart.length > 0 && (
-        <div style={{ position: "fixed", bottom: 0, left: 0, right: 0, background: "rgba(2,6,23,0.97)", borderTop: "1px solid #1e293b", padding: "12px 16px", maxWidth: 430, margin: "0 auto", zIndex: 100, maxHeight: "40vh", overflowY: "auto" }}>
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 8 }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-              <span style={{ fontSize: 14 }}>🛒</span>
-              <span style={{ fontSize: 11, fontWeight: 700, color: "white" }}>Pedido ({cart.length})</span>
-            </div>
-            <div style={{ display: "flex", alignItems: "center", gap: 5 }}>
-              <button onClick={() => go("cart", {})} style={{ padding: "4px 10px", borderRadius: 7, border: "1px solid #3b82f6", background: "rgba(59,130,246,.15)", color: "#60a5fa", fontSize: 10, fontWeight: 700, cursor: "pointer" }}>
-                Ver →
-              </button>
-              <button
-                onClick={() => {
-                  const linhas = cart.map((item, i) => `${i + 1}. ${item.name} — REF: ${item.sku}`).join("\n");
-                  navigator.clipboard.writeText(`Pedido — Sartori Guide\n\n${linhas}`);
-                  setCartCopied(true);
-                  setTimeout(() => setCartCopied(false), 2000);
-                }}
-                style={{ padding: "4px 10px", borderRadius: 7, border: "1px solid #1d4ed8", background: "transparent", color: cartCopied ? "#10b981" : "#60a5fa", fontSize: 10, fontWeight: 700, cursor: "pointer", transition: "color .3s" }}
-              >
-                {cartCopied ? "✓ Copiado" : "Copiar lista"}
-              </button>
-              <button
-                onClick={() => setCart([])}
-                style={{ padding: "4px 10px", borderRadius: 7, border: "1px solid rgba(239,68,68,.4)", background: "transparent", color: "#ef4444", fontSize: 10, fontWeight: 700, cursor: "pointer" }}
-              >
-                Limpar tudo
-              </button>
-            </div>
-          </div>
-          {cart.map((item) => (
-            <div key={item.id} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "7px 10px", borderRadius: 8, background: "rgba(30,41,59,0.9)", border: "1px solid #334155", marginBottom: 4 }}>
-              <div>
-                <div style={{ fontSize: 11, color: "white", fontWeight: 600 }}>{item.name}</div>
-                <div style={{ fontSize: 9, color: "#60a5fa", fontFamily: "monospace" }}>{item.sku}</div>
-              </div>
-              <button onClick={() => removeFromCart(item.id)} aria-label={`Remover ${item.name}`}
-                style={{ width: 26, height: 26, borderRadius: 6, background: "rgba(239,68,68,.2)", border: "1px solid rgba(239,68,68,.4)", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
-                <span style={{ color: "white", fontSize: 16, lineHeight: 1 }}>✕</span>
-              </button>
-            </div>
-          ))}
-        </div>
-      )}
     </div>
   );
 }
