@@ -774,8 +774,8 @@ const css = `
   *{box-sizing:border-box} body{background:#020617;font-family:'DM Sans',sans-serif;color:white}
   @keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
   @keyframes sh{0%{background-position:-200% 0}100%{background-position:200% 0}}
-  @keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
-  @keyframes fadeInBack{from{opacity:0;transform:translateY(-12px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes fadeIn{from{opacity:0;transform:translateX(100%)}to{opacity:1;transform:translateX(0)}}
+  @keyframes fadeInBack{from{opacity:0;transform:translateX(-100%)}to{opacity:1;transform:translateX(0)}}
   @keyframes pulse-ring{0%,100%{opacity:.4;transform:scale(1)}50%{opacity:.1;transform:scale(1.22)}}
   input{box-sizing:border-box;outline:none} input::placeholder{color:#94a3b8}
   ::-webkit-scrollbar{width:3px} ::-webkit-scrollbar-track{background:#0f172a} ::-webkit-scrollbar-thumb{background:#334155;border-radius:2px}
@@ -783,8 +783,8 @@ const css = `
   button{font-family:'DM Sans',sans-serif;}
   .hov{position:relative;cursor:pointer;transition:transform 200ms ease-out,box-shadow 200ms ease-out;}
   .hov:hover{transform:scale(1.20);box-shadow:0 8px 28px rgba(59,130,246,.30);z-index:2;}
-  .fadein{animation:fadeIn .28s ease-out both}
-  .fadein-back{animation:fadeInBack .28s ease-out both}
+  .fadein{animation:fadeIn .22s ease-out both}
+  .fadein-back{animation:fadeInBack .22s ease-out both}
 `;
 function Sty() { return <style>{css}</style>; }
 const G = {
@@ -828,9 +828,10 @@ function Hdr({ title, sub, color = "#94a3b8", onBack }) {
 function InfoBox({ color = "#3b82f6", icon, children }) {
   return <div style={{ padding: "10px 12px", borderRadius: 10, background: `${color}18`, border: `1px solid ${color}44`, display: "flex", gap: 7 }}>{icon}<p style={{ margin: 0, fontSize: 11, color, lineHeight: 1.5 }}>{children}</p></div>;
 }
-function Breadcrumb({ steps }) {
+function Breadcrumb({ steps, brandColor }) {
   const s = steps.filter(Boolean);
-  return <div style={{ display: "flex", alignItems: "center", gap: 4, flexWrap: "wrap" }}>{s.map((t, i) => <span key={i} style={{ display: "flex", alignItems: "center", gap: 4 }}>{i > 0 && <ChevronRight size={9} color="#475569" />}<span style={{ fontSize: 9, color: i === s.length - 1 ? "#60a5fa" : "#64748b", fontWeight: i === s.length - 1 ? 700 : 400 }}>{t}</span></span>)}</div>;
+  const activeColor = brandColor || "#60a5fa";
+  return <div style={{ display: "flex", alignItems: "center", gap: 4, flexWrap: "wrap" }}>{s.map((t, i) => <span key={i} style={{ display: "flex", alignItems: "center", gap: 4 }}>{i > 0 && <ChevronRight size={9} color="#475569" />}<span style={{ fontSize: 9, color: i === s.length - 1 ? activeColor : "#64748b", fontWeight: i === s.length - 1 ? 700 : 400 }}>{t}</span></span>)}</div>;
 }
 function ImplantShape({ shape, size = 90 }) {
   const S = size, b = "#3b82f6", bd = "#1d4ed8", bl = "#60a5fa", bg = "#1e293b";
@@ -922,7 +923,39 @@ function HomeScreen({ go, history, clearHistory }) {
           </button>
         </div>
 
-        <p style={{ margin: 0, fontSize: 9, color: "#334155" }}>v5.0 · 11 marcas · REFs oficiais</p>
+        <button onClick={() => go("about", {})} style={{ background: "none", border: "none", cursor: "pointer", display: "flex", alignItems: "center", gap: 4, padding: "4px 8px", borderRadius: 6 }}>
+          <span style={{ fontSize: 11 }}>ℹ️</span>
+          <span style={{ fontSize: 9, color: "#334155" }}>v5.0 · 11 marcas · Sobre</span>
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// ─── ABOUT ────────────────────────────────────────────────────────────────────
+function About({ go }) {
+  return (
+    <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column", padding: "20px 16px 40px", gap: 20, maxWidth: 430, margin: "0 auto" }} className="fadein">
+      <Hdr title="Sobre" onBack={() => go("home", {}, "back")} />
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6, paddingTop: 12 }}>
+        <Logo />
+        <h1 style={{ margin: 0, fontSize: 20, fontWeight: 800, color: "white", letterSpacing: -0.5 }}>Implante<span style={{ color: "#3b82f6" }}> Guide</span></h1>
+      </div>
+      <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+        <div style={{ padding: "14px 16px", borderRadius: 12, background: "rgba(30,41,59,0.95)", border: "1px solid #334155", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <span style={{ fontSize: 12, color: "#94a3b8" }}>Versão</span>
+          <span style={{ fontSize: 12, fontWeight: 700, color: "white", fontFamily: "monospace" }}>1.0.0</span>
+        </div>
+        <div style={{ padding: "14px 16px", borderRadius: 12, background: "rgba(30,41,59,0.95)", border: "1px solid #334155", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <span style={{ fontSize: 12, color: "#94a3b8" }}>Base de dados atualizada em</span>
+          <span style={{ fontSize: 12, fontWeight: 700, color: "white" }}>Abril 2026</span>
+        </div>
+      </div>
+      <div style={{ padding: "16px", borderRadius: 12, background: "rgba(245,158,11,.08)", border: "1px solid rgba(245,158,11,.25)" }}>
+        <p style={{ margin: "0 0 6px", fontSize: 10, fontWeight: 700, color: "#f59e0b", textTransform: "uppercase", letterSpacing: 1 }}>Aviso Legal</p>
+        <p style={{ margin: 0, fontSize: 11, color: "#94a3b8", lineHeight: 1.6 }}>
+          As informações apresentadas neste aplicativo têm caráter exclusivamente informativo e de apoio à decisão clínica. A confirmação dos componentes, torques e protocolos é de responsabilidade exclusiva do profissional habilitado. Consulte sempre a bula, o catálogo oficial do fabricante e a documentação técnica antes de qualquer procedimento.
+        </p>
       </div>
     </div>
   );
@@ -1047,7 +1080,7 @@ function Detective({ go }) {
     <div style={G.page} className="fadein">
       {/* Header */}
       <div style={G.row}>
-        <Back onClick={() => go("home", {})} />
+        <Back onClick={() => go("home", {}, "back")} />
         <div style={{ flex: 1 }}>
           <div style={{ fontSize: 14, fontWeight: 700, color: "white" }}>Identificar Implante</div>
           <div style={{ fontSize: 10, color: "#64748b" }}>Descubra a marca pelo RX ou perguntas</div>
@@ -1087,7 +1120,7 @@ function Detective({ go }) {
             ))}
           </div>
           <InfoBox color="#f59e0b" icon={<AlertTriangle size={12} color="#f59e0b" style={{ flexShrink: 0, marginTop: 1 }} />}>Confirme a compatibilidade com a documentação do paciente antes do procedimento.</InfoBox>
-          <button onClick={() => go("brandSelect", {})} style={{ padding: "14px", borderRadius: 12, border: "none", cursor: "pointer", background: "linear-gradient(135deg,#1d4ed8,#3b82f6)", color: "white", fontWeight: 700, fontSize: 13, display: "flex", alignItems: "center", justifyContent: "center", gap: 6 }}>Prosseguir para seleção <ArrowRight size={14} /></button>
+          <button onClick={() => go("brandSelect", { detectedConnection: ans[5] })} style={{ padding: "14px", borderRadius: 12, border: "none", cursor: "pointer", background: "linear-gradient(135deg,#1d4ed8,#3b82f6)", color: "white", fontWeight: 700, fontSize: 13, display: "flex", alignItems: "center", justifyContent: "center", gap: 6 }}>Prosseguir para seleção <ArrowRight size={14} /></button>
           <button onClick={() => go("home", {})} style={{ padding: "11px", borderRadius: 11, border: "1px solid #475569", cursor: "pointer", background: "rgba(30,41,59,0.9)", color: "#cbd5e1", fontSize: 11, display: "flex", alignItems: "center", justifyContent: "center", gap: 5 }}><Home size={11} />Início</button>
         </div>
       ) : (
@@ -1141,20 +1174,47 @@ function connLogo(label) {
 }
 
 // ─── SELEÇÃO DE MARCA ─────────────────────────────────────────────────────────
-function BrandSelect({ go, favorites, toggleFavorite }) {
+function isCompatible(brand, ct) {
+  if (!ct) return true;
+  return Object.values(brand.families).some(fam =>
+    Object.values(fam.lines).some(line => {
+      const c = (line.connection || "").toLowerCase();
+      if (ct === "HE") return c.includes("he") || c.includes("externo");
+      if (ct === "HI") return c.includes("hi") || c.includes("interno");
+      if (ct === "CM") return c.includes("morse") || c.includes("torcfit") || c.includes("crossfit");
+      return false;
+    })
+  );
+}
+
+function BrandSelect({ go, state = {}, favorites, toggleFavorite }) {
   const [search, setSearch] = useState("");
+  const { detectedConnection: ct } = state;
+
   const filtered = Object.entries(DB)
     .filter(([, brand]) => brand.label.toLowerCase().includes(search.toLowerCase()))
     .sort(([aKey, a], [bKey, b]) => {
+      if (ct) {
+        const aComp = isCompatible(a, ct);
+        const bComp = isCompatible(b, ct);
+        if (aComp !== bComp) return aComp ? -1 : 1;
+      }
       const aFav = favorites.includes(aKey);
       const bFav = favorites.includes(bKey);
       if (aFav !== bFav) return aFav ? -1 : 1;
       return a.label.localeCompare(b.label, "pt-BR");
     });
 
+  const ctLabel = ct === "HE" ? "Hexágono Externo" : ct === "HI" ? "Hexágono Interno" : ct === "CM" ? "Cone Morse" : null;
+
   return (
     <div style={G.page} className="fadein">
-      <Hdr title="Selecionar Marca" sub={`${Object.keys(DB).length} marcas disponíveis`} onBack={() => go("home", {})} />
+      <Hdr title="Selecionar Marca" sub={`${Object.keys(DB).length} marcas disponíveis`} onBack={() => go("home", {}, "back")} />
+      {ct && (
+        <InfoBox color="#f59e0b" icon={<Info size={11} color="#f59e0b" style={{ flexShrink: 0, marginTop: 1 }} />}>
+          Conexão identificada: <strong>{ctLabel}</strong> — marcas compatíveis destacadas abaixo.
+        </InfoBox>
+      )}
       <div style={{ position: "relative" }}>
         <Search size={13} color="#64748b" style={{ position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)", pointerEvents: "none" }} />
         <input
@@ -1168,23 +1228,26 @@ function BrandSelect({ go, favorites, toggleFavorite }) {
       <div style={{ display: "flex", flexDirection: "column", gap: 9 }}>
         {filtered.length === 0
           ? <p style={{ color: "#64748b", fontSize: 12, textAlign: "center" }}>Nenhuma marca encontrada.</p>
-          : filtered.map(([key, brand]) => (
-            <button key={key} className="hov" onClick={() => go("familySelect", { brand: key })}
-              style={{ ...card, border: `1px solid ${brand.color}44` }}>
-              <div style={{ width: 38, height: 38, borderRadius: 10, background: `${brand.color}22`, border: `1px solid ${brand.color}66`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 10, fontWeight: 800, color: brand.color, fontFamily: "monospace", flexShrink: 0 }}>{brand.logo}</div>
-              <div style={{ flex: 1 }}>
-                <div style={{ fontWeight: 700, color: "white", fontSize: 14 }}>{brand.label}</div>
-                <div style={{ fontSize: 10, color: "#94a3b8", marginTop: 1 }}>
-                  {Object.values(brand.families).map(f => f.label).join(" · ")}
+          : filtered.map(([key, brand]) => {
+            const compat = isCompatible(brand, ct);
+            return (
+              <button key={key} className="hov" onClick={() => go("familySelect", { brand: key })}
+                style={{ ...card, border: `1px solid ${compat ? brand.color : brand.color + "44"}`, opacity: ct && !compat ? 0.45 : 1 }}>
+                <div style={{ width: 38, height: 38, borderRadius: 10, background: `${brand.color}22`, border: `1px solid ${brand.color}66`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 10, fontWeight: 800, color: brand.color, fontFamily: "monospace", flexShrink: 0 }}>{brand.logo}</div>
+                <div style={{ flex: 1 }}>
+                  <div style={{ fontWeight: 700, color: "white", fontSize: 14 }}>{brand.label}</div>
+                  <div style={{ fontSize: 10, color: "#94a3b8", marginTop: 1 }}>
+                    {Object.values(brand.families).map(f => f.label).join(" · ")}
+                  </div>
                 </div>
-              </div>
-              <button onClick={(e) => { e.stopPropagation(); toggleFavorite(key); }} aria-label={favorites.includes(key) ? "Remover favorito" : "Favoritar"}
-                style={{ width: 30, height: 30, borderRadius: 8, border: favorites.includes(key) ? "1px solid #f59e0b" : "1px solid #334155", background: favorites.includes(key) ? "rgba(245,158,11,.15)" : "transparent", cursor: "pointer", fontSize: 14, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, transition: "all .2s", marginRight: 4 }}>
-                {favorites.includes(key) ? "⭐" : "☆"}
+                <button onClick={(e) => { e.stopPropagation(); toggleFavorite(key); }} aria-label={favorites.includes(key) ? "Remover favorito" : "Favoritar"}
+                  style={{ width: 30, height: 30, borderRadius: 8, border: favorites.includes(key) ? "1px solid #f59e0b" : "1px solid #334155", background: favorites.includes(key) ? "rgba(245,158,11,.15)" : "transparent", cursor: "pointer", fontSize: 14, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, transition: "all .2s", marginRight: 4 }}>
+                  {favorites.includes(key) ? "⭐" : "☆"}
+                </button>
+                <ChevronRight size={14} color={brand.color} />
               </button>
-              <ChevronRight size={14} color={brand.color} />
-            </button>
-          ))
+            );
+          })
         }
       </div>
     </div>
@@ -1197,8 +1260,8 @@ function FamilySelect({ state, go }) {
   const isStr = state.brand === "straumann";
   return (
     <div style={G.page} className="fadein">
-      <Hdr title={isStr ? "Tipo de Implante" : "Conexão Protética"} sub={brand.label} color={brand.color} onBack={() => go("brandSelect", {})} />
-      <Breadcrumb steps={[brand.label]} />
+      <Hdr title={isStr ? "Tipo de Implante" : "Conexão Protética"} sub={brand.label} color={brand.color} onBack={() => go("brandSelect", {}, "back")} />
+      <Breadcrumb steps={[brand.label]} brandColor={brand.color} />
       {isStr && <InfoBox color="#3b82f6" icon={<Info size={11} color="#3b82f6" style={{ flexShrink: 0, marginTop: 1 }} />}>
         <strong style={{ color: "white" }}>Bone Level:</strong> plataforma ao nível da crista óssea. <strong style={{ color: "white" }}>Tissue Level:</strong> colar transmucoso integrado ao implante.
       </InfoBox>}
@@ -1242,8 +1305,8 @@ function LineSelect({ state, go }) {
 
   return (
     <div style={G.page} className="fadein">
-      <Hdr title="Linha do Implante" sub={`${brand.label} — ${fam.label}`} color={brand.color} onBack={() => go("familySelect", state)} />
-      <Breadcrumb steps={[brand.label, fam.label]} />
+      <Hdr title="Linha do Implante" sub={`${brand.label} — ${fam.label}`} color={brand.color} onBack={() => go("familySelect", state, "back")} />
+      <Breadcrumb steps={[brand.label, fam.label]} brandColor={brand.color} />
       <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
         {lines.map(([key, line]) => (
           <button key={key} className="hov" onClick={() => go(lineNext(line), { ...state, line: key })}
@@ -1270,8 +1333,8 @@ function BodySelect({ state, go }) {
   const line = fam.lines[state.line];
   return (
     <div style={G.page} className="fadein">
-      <Hdr title="Corpo do Implante" sub="Regular Body (RB) ou Wide Body (WB)?" color={brand.color} onBack={() => go("lineSelect", state)} />
-      <Breadcrumb steps={[brand.label, fam.label, line.label]} />
+      <Hdr title="Corpo do Implante" sub="Regular Body (RB) ou Wide Body (WB)?" color={brand.color} onBack={() => go("lineSelect", state, "back")} />
+      <Breadcrumb steps={[brand.label, fam.label, line.label]} brandColor={brand.color} />
       <InfoBox color="#3b82f6" icon={<Info size={11} color="#3b82f6" style={{ flexShrink: 0, marginTop: 1 }} />}>
         Verifique o <strong style={{ color: "white" }}>diâmetro do implante</strong> na documentação clínica ou na embalagem para identificar o corpo correto.
       </InfoBox>
@@ -1302,8 +1365,8 @@ function TLXPlatform({ state, go }) {
   const line = fam.lines[state.line];
   return (
     <div style={G.page} className="fadein">
-      <Hdr title="Plataforma TLX" sub="Selecione o pescoço do implante" color="#3b82f6" onBack={() => go("lineSelect", state)} />
-      <Breadcrumb steps={[brand.label, fam.label, line.label]} />
+      <Hdr title="Plataforma TLX" sub="Selecione o pescoço do implante" color="#3b82f6" onBack={() => go("lineSelect", state, "back")} />
+      <Breadcrumb steps={[brand.label, fam.label, line.label]} brandColor={brand.color} />
       <InfoBox color="#3b82f6" icon={<Info size={11} color="#3b82f6" style={{ flexShrink: 0, marginTop: 1 }} />}>
         Marcação a laser no implante: <strong style={{ color: "white" }}>NT (1 ponto) · RT (2 pontos) · WT (3 pontos)</strong>. Nunca misture pilares de plataformas diferentes.
       </InfoBox>
@@ -1339,8 +1402,8 @@ function ObjectiveSelect({ state, go }) {
   const bodyOpt = line.hasBodySelect && state.body ? line.bodyOptions?.find(b => b.key === state.body) : null;
   return (
     <div style={G.page} className="fadein">
-      <Hdr title="Objetivo Protético" sub="Unitária ou Prótese Unida?" onBack={() => go(backScreen, state)} />
-      <Breadcrumb steps={[brand.label, fam.label, line.label, tlxPlat ? `${tlxPlat.key} ${tlxPlat.diam}` : bodyOpt ? bodyOpt.key : null, null].filter(Boolean)} />
+      <Hdr title="Objetivo Protético" sub="Unitária ou Prótese Unida?" onBack={() => go(backScreen, state, "back")} />
+      <Breadcrumb steps={[brand.label, fam.label, line.label, tlxPlat ? `${tlxPlat.key} ${tlxPlat.diam}` : bodyOpt ? bodyOpt.key : null, null].filter(Boolean)} brandColor={brand.color} />
       <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
         {Object.entries(line.objectives).map(([key, obj]) => (
           <button key={key} className="hov" onClick={() => go("subtypeSelect", { ...state, objective: key })}
@@ -1376,8 +1439,8 @@ function SubtypeSelect({ state, go }) {
   const bodyOpt = line.hasBodySelect && state.body ? line.bodyOptions?.find(b => b.key === state.body) : null;
   return (
     <div style={G.page} className="fadein">
-      <Hdr title="Componente Protético" sub={obj.label} onBack={() => go("objectiveSelect", state)} />
-      <Breadcrumb steps={[brand.label, fam.label, line.label, tlxPlat ? tlxPlat.key : bodyOpt ? bodyOpt.key : null, obj.label].filter(Boolean)} />
+      <Hdr title="Componente Protético" sub={obj.label} onBack={() => go("objectiveSelect", state, "back")} />
+      <Breadcrumb steps={[brand.label, fam.label, line.label, tlxPlat ? tlxPlat.key : bodyOpt ? bodyOpt.key : null, obj.label].filter(Boolean)} brandColor={brand.color} />
       <div style={{ display: "flex", flexDirection: "column", gap: 9 }}>
         {subs.map((st) => (
           <button key={st.key} className="hov" onClick={() => go(isTLX ? "result" : "heightSelect", { ...state, subtype: st.key, gengivalHeight: isTLX ? "unico" : null })}
@@ -1404,8 +1467,8 @@ function HeightSelect({ state, go }) {
   const st = obj.subtypes.find(s => s.key === state.subtype);
   return (
     <div style={G.page} className="fadein">
-      <Hdr title="Altura Gengival" sub={st?.label} color="#10b981" onBack={() => go("subtypeSelect", state)} />
-      <Breadcrumb steps={[brand.label, fam.label, line.label, obj.label, st?.label]} />
+      <Hdr title="Altura Gengival" sub={st?.label} color="#10b981" onBack={() => go("subtypeSelect", state, "back")} />
+      <Breadcrumb steps={[brand.label, fam.label, line.label, obj.label, st?.label]} brandColor={brand.color} />
       <InfoBox color="#10b981" icon={<Info size={11} color="#10b981" style={{ flexShrink: 0, marginTop: 1 }} />}>
         Meça a espessura do tecido mole com sonda periodontal para escolher a altura gengival correta.
       </InfoBox>
@@ -1462,7 +1525,7 @@ function Result({ state, go, addToCart, reset, addToHistory }) {
   return (
     <div style={G.page} className="fadein">
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-        <Back onClick={() => go(backScreen, state)} />
+        <Back onClick={() => go(backScreen, state, "back")} />
         <span style={{ fontSize: 9, color: "#10b981", fontWeight: 700, textTransform: "uppercase", letterSpacing: .8 }}>✓ Componente Encontrado</span>
         {/* Botão Reiniciar — emoticon Unicode ↺ */}
         <button onClick={reset} aria-label="Reiniciar consulta"
@@ -1470,7 +1533,7 @@ function Result({ state, go, addToCart, reset, addToHistory }) {
           <span style={{ color: "#e2e8f0", fontSize: 20 }}>↺</span>
         </button>
       </div>
-      <Breadcrumb steps={[brand.label, fam.label, line.label, tlxPlat ? tlxPlat.key : bodyOpt ? bodyOpt.key : null, obj.label].filter(Boolean)} />
+      <Breadcrumb steps={[brand.label, fam.label, line.label, tlxPlat ? tlxPlat.key : bodyOpt ? bodyOpt.key : null, obj.label].filter(Boolean)} brandColor={brand.color} />
       <div style={{ borderRadius: 16, padding: "18px", background: "rgba(30,41,59,0.95)", border: "1px solid rgba(59,130,246,.4)", boxShadow: "0 16px 44px rgba(0,0,0,.5)" }}>
         <div style={{ display: "flex", flexWrap: "wrap", gap: 5, marginBottom: 13 }}>
           <div style={{ padding: "3px 8px", borderRadius: 6, background: `${brand.color}33`, border: `1px solid ${brand.color}77` }}><span style={{ fontSize: 9, fontWeight: 700, color: "white" }}>{brand.label}</span></div>
@@ -1567,7 +1630,7 @@ function CartScreen({ cart, removeFromCart, clearCart, go }) {
   return (
     <div style={G.page} className="fadein">
       <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 16 }}>
-        <Back onClick={() => go("home", {})} />
+        <Back onClick={() => go("home", {}, "back")} />
         <h2 style={{ margin: 0, fontSize: 16, fontWeight: 700, color: "white" }}>🛒 Revisão do Pedido</h2>
         <span style={{ marginLeft: "auto", fontSize: 11, color: "#94a3b8" }}>{cart.length} item(s)</span>
       </div>
@@ -1623,6 +1686,7 @@ function CartScreen({ cart, removeFromCart, clearCart, go }) {
 // ─── APP ──────────────────────────────────────────────────────────────────────
 export default function App() {
   const [screen, setScreen] = useState("home");
+  const [slideDir, setSlideDir] = useState("forward");
   const [state, setState] = useState({});
   const [cart, setCart] = useState([]);
   const [aiToast, setAiToast] = useState(false);
@@ -1631,7 +1695,7 @@ export default function App() {
   const [cartCopied, setCartCopied] = useState(false);
   const [history, setHistory] = useState(() => { try { return JSON.parse(localStorage.getItem("sartori_history") || "[]"); } catch { return []; } });
 
-  const go = (newScreen, newState = {}) => { setState(newState); setScreen(newScreen); setFavOpen(false); };
+  const go = (newScreen, newState = {}, dir = "forward") => { setSlideDir(dir); setState(newState); setScreen(newScreen); setFavOpen(false); };
   const reset = () => { setState({}); setScreen("home"); };
   const addToCart = (item) => setCart(prev => [...prev, item]);
   const addToHistory = (item) => setHistory(prev => {
@@ -1651,8 +1715,9 @@ export default function App() {
 
   const screens = {
     home: <HomeScreen go={go} history={history} clearHistory={clearHistory} />,
+    about: <About go={go} />,
     detective: <Detective go={go} />,
-    brandSelect: <BrandSelect go={go} favorites={favorites} toggleFavorite={toggleFavorite} />,
+    brandSelect: <BrandSelect go={go} state={state} favorites={favorites} toggleFavorite={toggleFavorite} />,
     familySelect: <FamilySelect state={state} go={go} />,
     lineSelect: <LineSelect state={state} go={go} />,
     bodySelect: <BodySelect state={state} go={go} />,
@@ -1669,7 +1734,7 @@ export default function App() {
     // Este div é o wrapper de 430px centralizado
     <div style={{ width: "100%", maxWidth: 430, minHeight: "100vh", position: "relative", color: "white" }}>
       <Sty />
-      <div key={screen} className="fadein" style={{ width: "100%" }}>
+      <div key={screen} className={slideDir === "back" ? "fadein-back" : "fadein"} style={{ width: "100%" }}>
         {screens[screen] || screens.home}
       </div>
 
