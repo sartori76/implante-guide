@@ -1141,8 +1141,12 @@ function connLogo(label) {
 }
 
 // ─── SELEÇÃO DE MARCA ─────────────────────────────────────────────────────────
-function BrandSelect({ go, favorites, toggleFavorite }) {
+function BrandSelect({ go }) {
   const [search, setSearch] = useState("");
+  const filtered = Object.entries(DB)
+    .filter(([, brand]) => brand.label.toLowerCase().includes(search.toLowerCase()))
+    .sort(([, a], [, b]) => a.label.localeCompare(b.label, "pt-BR"));
+
   return (
     <div style={G.page} className="fadein">
       <Hdr title="Selecionar Marca" sub={`${Object.keys(DB).length} marcas disponíveis`} onBack={() => go("home", {})} />
@@ -1153,50 +1157,26 @@ function BrandSelect({ go, favorites, toggleFavorite }) {
           placeholder="Buscar marca..."
           value={search}
           onChange={e => setSearch(e.target.value)}
-          style={{ width: "100%", padding: "10px 12px 10px 34px", borderRadius: 10, background: "rgba(30,41,59,0.95)", border: "1px solid #475569", color: "white", fontSize: 13, boxSizing: "border-box", outline: "none" }}
+          style={{ width: "100%", padding: "10px 12px 10px 34px", borderRadius: 10, background: "rgba(30,41,59,0.95)", border: "1px solid #475569", color: "white", fontSize: 13 }}
         />
       </div>
-      {favorites.length > 0 && (
-        <div style={{ marginBottom: 8 }}>
-          <div style={{ fontSize: 10, color: "#94a3b8", fontWeight: 700, marginBottom: 6, textTransform: "uppercase", letterSpacing: 1 }}>⭐ Favoritas</div>
-          <div style={{ display: "flex", flexDirection: "column", gap: 7 }}>
-            {favorites.map(key => { const brand = DB[key]; if (!brand) return null; return (
-              <button key={key} className="hov" onClick={() => go("familySelect", { brand: key })}
-                style={{ ...card, border: `1px solid ${brand.color}66`, background: `${brand.color}11` }}>
-                <div style={{ width: 38, height: 38, borderRadius: 10, background: `${brand.color}22`, border: `1px solid ${brand.color}66`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 9, fontWeight: 800, color: brand.color, fontFamily: "monospace", flexShrink: 0 }}>{brand.logo}</div>
-                <div style={{ flex: 1 }}>
-                  <div style={{ fontWeight: 700, color: "white", fontSize: 14 }}>{brand.label}</div>
-                </div>
-                <ChevronRight size={14} color={brand.color} />
-              </button>
-            ); })}
-          </div>
-          <div style={{ height: 1, background: "#1e293b", margin: "12px 0" }} />
-        </div>
-      )}
-      <div style={{ fontSize: 10, color: "#94a3b8", fontWeight: 700, marginBottom: 6, textTransform: "uppercase", letterSpacing: 1 }}>Todas as marcas</div>
       <div style={{ display: "flex", flexDirection: "column", gap: 9 }}>
-        {(() => {
-          const filtered = Object.entries(DB)
-            .filter(([, brand]) => brand.label.toLowerCase().includes(search.toLowerCase()))
-            .sort(([, a], [, b]) => a.label.localeCompare(b.label, "pt-BR"));
-          if (filtered.length === 0) return <p style={{ color: "#64748b", fontSize: 12, textAlign: "center" }}>Nenhuma marca encontrada.</p>;
-          return filtered.map(([key, brand]) => (
-          <button key={key} className="hov" onClick={() => go("familySelect", { brand: key })}
-            style={{ ...card, border: `1px solid ${brand.color}44` }}>
-            <div style={{ width: 38, height: 38, borderRadius: 10, background: `${brand.color}22`, border: `1px solid ${brand.color}66`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 9, fontWeight: 800, color: brand.color, fontFamily: "monospace", flexShrink: 0 }}>{brand.logo}</div>
-            <div style={{ flex: 1 }}>
-              <div style={{ fontWeight: 700, color: "white", fontSize: 14 }}>{brand.label}</div>
-              <div style={{ fontSize: 10, color: "#94a3b8", marginTop: 1 }}>{Object.values(brand.families).map(f => f.label).join(" · ")}</div>
-            </div>
-            <button onClick={(e) => { e.stopPropagation(); toggleFavorite(key); }} aria-label={favorites.includes(key) ? "Remover favorito" : "Favoritar"}
-              style={{ width: 30, height: 30, borderRadius: 8, border: favorites.includes(key) ? "1px solid #f59e0b" : "1px solid #334155", background: favorites.includes(key) ? "rgba(245,158,11,.15)" : "transparent", cursor: "pointer", fontSize: 14, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, transition: "all .2s", marginRight: 4 }}>
-              {favorites.includes(key) ? "⭐" : "☆"}
+        {filtered.length === 0
+          ? <p style={{ color: "#64748b", fontSize: 12, textAlign: "center" }}>Nenhuma marca encontrada.</p>
+          : filtered.map(([key, brand]) => (
+            <button key={key} className="hov" onClick={() => go("familySelect", { brand: key })}
+              style={{ ...card, border: `1px solid ${brand.color}44` }}>
+              <div style={{ width: 38, height: 38, borderRadius: 10, background: `${brand.color}22`, border: `1px solid ${brand.color}66`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 10, fontWeight: 800, color: brand.color, fontFamily: "monospace", flexShrink: 0 }}>{brand.logo}</div>
+              <div style={{ flex: 1 }}>
+                <div style={{ fontWeight: 700, color: "white", fontSize: 14 }}>{brand.label}</div>
+                <div style={{ fontSize: 10, color: "#94a3b8", marginTop: 1 }}>
+                  {Object.values(brand.families).map(f => f.label).join(" · ")}
+                </div>
+              </div>
+              <ChevronRight size={14} color={brand.color} />
             </button>
-            <ChevronRight size={14} color={brand.color} />
-          </button>
-        ));
-        })()}
+          ))
+        }
       </div>
     </div>
   );
@@ -1637,7 +1617,7 @@ export default function App() {
   const [state, setState] = useState({});
   const [cart, setCart] = useState([]);
   const [aiToast, setAiToast] = useState(false);
-  const [favorites, setFavorites] = useState(() => { try { return JSON.parse(localStorage.getItem("fav_brands") || "[]"); } catch { return []; } });
+  const [favorites] = useState(() => { try { return JSON.parse(localStorage.getItem("fav_brands") || "[]"); } catch { return []; } });
   const [favOpen, setFavOpen] = useState(false);
   const [cartCopied, setCartCopied] = useState(false);
   const [history, setHistory] = useState(() => { try { return JSON.parse(localStorage.getItem("sartori_history") || "[]"); } catch { return []; } });
@@ -1654,16 +1634,11 @@ export default function App() {
   const clearHistory = () => { setHistory([]); localStorage.removeItem("sartori_history"); };
   const removeFromCart = (id) => setCart(prev => prev.filter(i => i.id !== id));
   const clearCart = () => setCart([]);
-  const toggleFavorite = (key) => setFavorites(prev => {
-    const next = prev.includes(key) ? prev.filter(k => k !== key) : [...prev, key];
-    localStorage.setItem("fav_brands", JSON.stringify(next));
-    return next;
-  });
 
   const screens = {
     home: <HomeScreen go={go} history={history} clearHistory={clearHistory} />,
     detective: <Detective go={go} />,
-    brandSelect: <BrandSelect go={go} favorites={favorites} toggleFavorite={toggleFavorite} />,
+    brandSelect: <BrandSelect go={go} />,
     familySelect: <FamilySelect state={state} go={go} />,
     lineSelect: <LineSelect state={state} go={go} />,
     bodySelect: <BodySelect state={state} go={go} />,
