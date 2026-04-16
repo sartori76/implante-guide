@@ -750,11 +750,22 @@ const DETECTIVE_STEPS = [
   { id: 4, title: "Ápice / Ponta", subtitle: "Qual é a morfologia da ponta?", icon: "🔍", options: [{ value: "arredondado", label: "Arredondado", desc: "Ponta arredondada, perfil suave", icon: "○" }, { value: "plano", label: "Plano", desc: "Base plana, perfil reto", icon: "□" }, { value: "fenda", label: "Com Fenda/Furo", desc: "Orifício apical ou fenda visível na RX", icon: "◎" }] },
   { id: 5, title: "Plataforma Protética", subtitle: "Qual é o tipo de conexão?", icon: "⚙️", options: [{ value: "HE", label: "Hex. Externo (HE)", desc: "Hexágono projetado acima da plataforma", icon: "⬡" }, { value: "HI", label: "Hex. Interno (HI)", desc: "Hexágono encaixado internamente", icon: "⬢" }, { value: "CM", label: "Cone Morse (CM)", desc: "Conexão cônica sem hexágono visível", icon: "◆" }] },
 ];
-const COMPATIBLE_BRANDS = {
-  HE: ["Neodent HE", "S.I.N. HE", "Titanium Fix HE", "Conexão Easy HE", "Implacil HE", "Osstem SS", "Intraoss HE", "Arcsys HE"],
-  HI: ["Neodent HI", "S.I.N. HI", "Titanium Fix HI", "Arcsys HI", "Implacil HI", "Osstem TS III", "Dentsply Xive", "Intraoss HI"],
-  CM: ["Neodent GM", "Neodent CM", "Straumann BLX/TLX", "S.I.N. CM", "Titanium Fix Drive", "Conexão Flash", "Arcsys CM", "Implacil Maestro", "Intraoss CM", "Nobel Active", "Dentsply Ankylos"]
-};
+function getCompatibleBrands(ct) {
+  const results = [];
+  Object.values(DB).forEach(brand => {
+    Object.values(brand.families).forEach(fam => {
+      Object.values(fam.lines).forEach(line => {
+        const c = (line.connection || "").toLowerCase();
+        const match =
+          (ct === "HE" && (c.includes("he") || c.includes("externo"))) ||
+          (ct === "HI" && (c.includes("hi") || c.includes("interno"))) ||
+          (ct === "CM" && (c.includes("morse") || c.includes("torcfit") || c.includes("crossfit")));
+        if (match) results.push(`${brand.label} — ${line.connection}`);
+      });
+    });
+  });
+  return results;
+}
 
 // ─── Estilos ──────────────────────────────────────────────────────────────────
 const HEIGHT_DESCS = {
@@ -765,7 +776,8 @@ const HEIGHT_DESCS = {
   "2.5": "Tecido médio — GH 2,5mm (padrão clínico mais frequente)",
   "3.0": "Tecido médio-espesso — GH 3mm (posterior / padrão)",
   "3.5": "Tecido espesso — GH 3,5mm (posterior / biótipo grosso)",
-  "4.5": "Tecido muito espesso — GH 4,5mm (ganho ósseo / regeneração)"
+  "4.5": "Tecido muito espesso — GH 4,5mm (ganho ósseo / regeneração)",
+  "unico": "Componente único — sem variação de altura gengival (sistema TLX)"
 };
 const css = `
   @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700;800&display=swap');
@@ -1112,7 +1124,7 @@ function Detective({ go }) {
             <p style={{ margin: "0 0 3px", fontSize: 10, color: "#94a3b8" }}>Conexão identificada:</p>
             <p style={{ margin: "0 0 12px", fontSize: 18, fontWeight: 800, color: "white" }}>{ans[5] === "HE" ? "Hexágono Externo" : ans[5] === "HI" ? "Hexágono Interno" : "Cone Morse"}</p>
             <p style={{ margin: "0 0 7px", fontSize: 10, color: "#94a3b8" }}>Marcas possivelmente compatíveis:</p>
-            {(COMPATIBLE_BRANDS[ans[5]] || []).map((b, i) => (
+            {getCompatibleBrands(ans[5]).map((b, i) => (
               <div key={i} style={{ padding: "8px 12px", borderRadius: 8, background: "rgba(30,41,59,0.9)", border: "1px solid #475569", display: "flex", alignItems: "center", gap: 7, marginBottom: 5 }}>
                 <div style={{ width: 6, height: 6, borderRadius: "50%", background: "#10b981", flexShrink: 0 }} />
                 <span style={{ color: "#e2e8f0", fontSize: 12 }}>{b}</span>
@@ -1688,7 +1700,7 @@ export default function App() {
   const [screen, setScreen] = useState("home");
   const [slideDir, setSlideDir] = useState("forward");
   const [state, setState] = useState({});
-  const [cart, setCart] = useState([]);
+  const [cart, setCart] = useState(() => { try { return JSON.parse(localStorage.getItem("sartori_cart") || "[]"); } catch { return []; } });
   const [aiToast, setAiToast] = useState(false);
   const [favorites, setFavorites] = useState(() => { try { return JSON.parse(localStorage.getItem("fav_brands") || "[]"); } catch { return []; } });
   const [favOpen, setFavOpen] = useState(false);
@@ -1697,7 +1709,7 @@ export default function App() {
 
   const go = (newScreen, newState = {}, dir = "forward") => { setSlideDir(dir); setState(newState); setScreen(newScreen); setFavOpen(false); };
   const reset = () => { setState({}); setScreen("home"); };
-  const addToCart = (item) => setCart(prev => [...prev, item]);
+  const addToCart = (item) => setCart(prev => { const next = [...prev, item]; localStorage.setItem("sartori_cart", JSON.stringify(next)); return next; });
   const addToHistory = (item) => setHistory(prev => {
     const dedup = prev.filter(h => h.sku !== item.sku);
     const next = [item, ...dedup].slice(0, 5);
@@ -1705,8 +1717,8 @@ export default function App() {
     return next;
   });
   const clearHistory = () => { setHistory([]); localStorage.removeItem("sartori_history"); };
-  const removeFromCart = (id) => setCart(prev => prev.filter(i => i.id !== id));
-  const clearCart = () => setCart([]);
+  const removeFromCart = (id) => setCart(prev => { const next = prev.filter(i => i.id !== id); localStorage.setItem("sartori_cart", JSON.stringify(next)); return next; });
+  const clearCart = () => { setCart([]); localStorage.removeItem("sartori_cart"); };
   const toggleFavorite = (key) => setFavorites(prev => {
     const next = prev.includes(key) ? prev.filter(k => k !== key) : [...prev, key];
     localStorage.setItem("fav_brands", JSON.stringify(next));
