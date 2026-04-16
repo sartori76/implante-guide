@@ -1507,13 +1507,13 @@ function Result({ state, go, addToCart, reset, addToHistory }) {
           }
         </div>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 6 }}>
-          <div style={{ padding: "11px", borderRadius: 9, background: "rgba(245,158,11,.12)", border: "1px solid rgba(245,158,11,.4)" }}>
+          <div style={{ padding: "14px", borderRadius: 9, background: "rgba(245,158,11,.12)", border: "1px solid rgba(245,158,11,.4)" }}>
             <div style={{ display: "flex", alignItems: "center", gap: 4, marginBottom: 4 }}><Zap size={9} color="#f59e0b" /><span style={{ fontSize: 8, color: "#fcd34d", fontWeight: 700, textTransform: "uppercase" }}>Torque</span></div>
-            <span style={{ ...G.mono, fontSize: 16, fontWeight: 800, color: "#f59e0b" }}>{comp.torque}</span>
+            <span style={{ ...G.mono, fontSize: 28, fontWeight: 800, color: "#f59e0b", letterSpacing: -0.5 }}>{comp.torque}</span>
           </div>
-          <div style={{ padding: "11px", borderRadius: 9, background: "rgba(59,130,246,.12)", border: "1px solid rgba(59,130,246,.4)" }}>
+          <div style={{ padding: "14px", borderRadius: 9, background: "rgba(59,130,246,.12)", border: "1px solid rgba(59,130,246,.4)" }}>
             <div style={{ display: "flex", alignItems: "center", gap: 4, marginBottom: 4 }}><Shield size={9} color="#60a5fa" /><span style={{ fontSize: 8, color: "#93c5fd", fontWeight: 700, textTransform: "uppercase" }}>Chave</span></div>
-            <span style={{ ...G.mono, fontSize: 12, fontWeight: 800, color: "#60a5fa" }}>{comp.chave}</span>
+            <span style={{ ...G.mono, fontSize: 18, fontWeight: 800, color: "#60a5fa" }}>{comp.chave}</span>
           </div>
           <div style={{ padding: "11px", borderRadius: 9, background: "rgba(51,65,85,0.8)", border: "1px solid #64748b", gridColumn: "span 2", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
             <div><div style={{ fontSize: 8, color: "#94a3b8", fontWeight: 700, textTransform: "uppercase", marginBottom: 2 }}>Material</div><span style={{ fontSize: 10, color: "#cbd5e1" }}>{comp.material}</span></div>
