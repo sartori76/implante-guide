@@ -750,22 +750,7 @@ const DETECTIVE_STEPS = [
   { id: 4, title: "Ápice / Ponta", subtitle: "Qual é a morfologia da ponta?", icon: "🔍", options: [{ value: "arredondado", label: "Arredondado", desc: "Ponta arredondada, perfil suave", icon: "○" }, { value: "plano", label: "Plano", desc: "Base plana, perfil reto", icon: "□" }, { value: "fenda", label: "Com Fenda/Furo", desc: "Orifício apical ou fenda visível na RX", icon: "◎" }] },
   { id: 5, title: "Plataforma Protética", subtitle: "Qual é o tipo de conexão?", icon: "⚙️", options: [{ value: "HE", label: "Hex. Externo (HE)", desc: "Hexágono projetado acima da plataforma", icon: "⬡" }, { value: "HI", label: "Hex. Interno (HI)", desc: "Hexágono encaixado internamente", icon: "⬢" }, { value: "CM", label: "Cone Morse (CM)", desc: "Conexão cônica sem hexágono visível", icon: "◆" }] },
 ];
-function getCompatibleBrands(ct) {
-  const results = [];
-  Object.values(DB).forEach(brand => {
-    Object.values(brand.families).forEach(fam => {
-      Object.values(fam.lines).forEach(line => {
-        const c = (line.connection || "").toLowerCase();
-        const match =
-          (ct === "HE" && (c.includes("he") || c.includes("externo"))) ||
-          (ct === "HI" && (c.includes("hi") || c.includes("interno"))) ||
-          (ct === "CM" && (c.includes("morse") || c.includes("torcfit") || c.includes("crossfit")));
-        if (match) results.push(`${brand.label} — ${line.connection}`);
-      });
-    });
-  });
-  return results;
-}
+
 
 // ─── Estilos ──────────────────────────────────────────────────────────────────
 const HEIGHT_DESCS = {
@@ -981,10 +966,36 @@ const RX_REFS = [
   { key: "cmi", label: "Cone Morse Indexado", desc: "Cone morse com indexação rotacional", color: "#a78bfa" },
 ];
 
-const AI_RX_PROMPT = "Você é um especialista em implantodontia. Analise esta radiografia periapical e identifique: 1) O tipo de conexão protética (Hexágono Externo, Hexágono Interno ou Cone Morse); 2) Características morfológicas visíveis (formato do corpo, tipo de rosca, ápice); 3) Possíveis marcas e sistemas compatíveis com base no DB: Straumann BLX/BL/TLX, Neodent GM/CM, Nobel Biocare, S.I.N., Osstem, Implacil, Dentsply. Seja objetivo e clínico. Responda em português.";
+const RX_CHECKLIST = [
+  { key: "nivel", label: "Nível do implante", opts: ["Ósseo", "Tecidual", "Não sei"] },
+  { key: "conexao", label: "Conexão protética", opts: ["Hexágono Externo (HE)", "Hexágono Interno (HI)", "Cone Morse (CM)", "Não sei"] },
+  { key: "corpo", label: "Corpo", opts: ["Cilíndrico", "Cônico", "Não sei"] },
+  { key: "roscas", label: "Roscas", opts: ["Simples", "Duplas", "Agressivas", "Não sei"] },
+  { key: "apice", label: "Ápice", opts: ["Arredondado", "Cortante", "Com fenda/furo", "Não sei"] },
+  { key: "comprimento", label: "Comprimento estimado", opts: ["Menor que 10mm", "Entre 10-13mm", "Maior que 13mm", "Não sei"] },
+  { key: "protese", label: "Componente protético instalado", opts: ["Sim, há pilar/coroa acoplado", "Não, implante exposto", "Não sei"] },
+];
+
+function buildRxPrompt(checks) {
+  const lines = RX_CHECKLIST.map(c => `- ${c.label}: ${checks[c.key] || "Não informado"}`).join("\n");
+  return `Você é um especialista em implantodontia. Analise esta radiografia periapical.
+
+Informações fornecidas pelo clínico:
+${lines}
+
+ATENÇÃO: Se houver componente protético instalado, analise separadamente o corpo do implante das estruturas protéticas sobrepostas. Não confunda pilar, coroa ou cicatrizador com o corpo do implante.
+
+Com base na RX e nas informações acima, identifique:
+1) Tipo de conexão protética confirmada
+2) Características morfológicas do implante
+3) Marcas e sistemas mais prováveis
+
+Responda em português, de forma objetiva e clínica. Formate a resposta em texto corrido sem markdown.`;
+}
 
 function DetectiveRX() {
   const [img, setImg] = useState(null);
+  const [checks, setChecks] = useState({});
   const [aiReply, setAiReply] = useState(null);
   const [aiLoading, setAiLoading] = useState(false);
   const [drag, setDrag] = useState(false);
@@ -1006,7 +1017,7 @@ function DetectiveRX() {
       const res = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: AI_RX_PROMPT, image: base64, mediaType }),
+        body: JSON.stringify({ message: buildRxPrompt(checks), image: base64, mediaType }),
       });
       const data = await res.json();
       setAiReply(data.reply || data.error || "Sem resposta.");
@@ -1017,16 +1028,14 @@ function DetectiveRX() {
     }
   };
 
+  const toggle = (key, val) => setChecks(prev => ({ ...prev, [key]: prev[key] === val ? undefined : val }));
+
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
       {/* Instrução */}
       <div style={{ padding: "12px 14px", borderRadius: 11, background: "rgba(30,41,59,0.8)", border: "1px solid #334155" }}>
-        <div style={{ fontSize: 12, color: "#cbd5e1", lineHeight: 1.6 }}>
-          📋 Faça o upload da RX do implante desconhecido e compare com as referências abaixo.
-        </div>
-        <div style={{ fontSize: 10, color: "#64748b", marginTop: 6 }}>
-          💡 Para melhor resultado, use RX periapical com boa definição.
-        </div>
+        <div style={{ fontSize: 12, color: "#cbd5e1", lineHeight: 1.6 }}>📋 Faça o upload da RX do implante desconhecido.</div>
+        <div style={{ fontSize: 10, color: "#64748b", marginTop: 4 }}>💡 Para melhor resultado, use RX periapical com boa definição.</div>
       </div>
 
       {/* Drop Zone */}
@@ -1049,7 +1058,30 @@ function DetectiveRX() {
         )}
       </div>
 
-      {/* Botões de ação */}
+      {/* Checklist — aparece após upload */}
+      {img && (
+        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+          <div style={{ fontSize: 11, color: "#94a3b8", fontWeight: 700, textTransform: "uppercase", letterSpacing: 1 }}>Checklist clínico (opcional)</div>
+          {RX_CHECKLIST.map(item => (
+            <div key={item.key} style={{ background: "rgba(30,41,59,0.8)", borderRadius: 10, padding: "10px 12px", border: "1px solid #1e293b" }}>
+              <div style={{ fontSize: 11, color: "#cbd5e1", fontWeight: 600, marginBottom: 8 }}>{item.label}</div>
+              <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                {item.opts.map(opt => {
+                  const active = checks[item.key] === opt;
+                  return (
+                    <button key={opt} onClick={() => toggle(item.key, opt)}
+                      style={{ padding: "8px 12px", borderRadius: 8, border: `1px solid ${active ? "#3b82f6" : "#334155"}`, background: active ? "rgba(59,130,246,.25)" : "rgba(30,41,59,0.9)", color: active ? "#93c5fd" : "#94a3b8", fontSize: 12, fontWeight: active ? 700 : 400, cursor: "pointer", textAlign: "left", transition: "all .15s" }}>
+                      {opt}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Ações */}
       <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
         <button
           onClick={handleAnalyze}
@@ -1064,8 +1096,13 @@ function DetectiveRX() {
             {aiReply}
           </div>
         )}
+        {aiReply && (
+          <InfoBox color="#f59e0b" icon={<AlertTriangle size={12} color="#f59e0b" style={{ flexShrink: 0, marginTop: 1 }} />}>
+            Análise sugestiva gerada por IA. Confirme a identificação com a documentação do paciente, catálogo oficial do fabricante e avaliação clínica antes de qualquer procedimento.
+          </InfoBox>
+        )}
         {img && (
-          <button onClick={() => setImg(null)}
+          <button onClick={() => { setImg(null); setChecks({}); setAiReply(null); }}
             style={{ padding: "10px", borderRadius: 10, border: "1px solid #334155", cursor: "pointer", background: "rgba(30,41,59,0.8)", color: "#94a3b8", fontSize: 12, display: "flex", alignItems: "center", justifyContent: "center", gap: 6 }}>
             ✕ Remover imagem
           </button>
@@ -1095,25 +1132,6 @@ function DetectiveRX() {
 }
 
 function Detective({ go }) {
-  const [tab, setTab] = useState("rx");
-  const [step, setStep] = useState(1);
-  const [ans, setAns] = useState({});
-  const [sel, setSel] = useState(null);
-  const [done, setDone] = useState(false);
-  const cur = DETECTIVE_STEPS[step - 1];
-
-  const pick = v => {
-    setSel(v);
-    setTimeout(() => {
-      const a = { ...ans, [step]: v };
-      setAns(a);
-      if (step < 5) { setStep(step + 1); setSel(null); }
-      else setDone(true);
-    }, 250);
-  };
-
-  const TABS = [{ key: "rx", label: "📸 Por RX" }, { key: "quiz", label: "🔬 Por Perguntas" }];
-
   return (
     <div style={G.page} className="fadein">
       {/* Header */}
@@ -1121,82 +1139,11 @@ function Detective({ go }) {
         <Back onClick={() => go("home", {}, "back")} />
         <div style={{ flex: 1 }}>
           <div style={{ fontSize: 14, fontWeight: 700, color: "white" }}>Identificar Implante</div>
-          <div style={{ fontSize: 10, color: "#64748b" }}>Descubra a marca pelo RX ou perguntas</div>
+          <div style={{ fontSize: 10, color: "#64748b" }}>Análise radiográfica com IA</div>
         </div>
       </div>
 
-      {/* Abas */}
-      <div style={{ display: "flex", gap: 6, padding: "2px", background: "rgba(30,41,59,0.8)", borderRadius: 11, border: "1px solid #1e293b" }}>
-        {TABS.map(t => (
-          <button key={t.key} onClick={() => setTab(t.key)}
-            style={{ flex: 1, padding: "9px 0", borderRadius: 9, border: "none", cursor: "pointer", fontWeight: 700, fontSize: 12, transition: "all .2s", background: tab === t.key ? "rgba(59,130,246,.25)" : "transparent", color: tab === t.key ? "#60a5fa" : "#64748b" }}>
-            {t.label}
-          </button>
-        ))}
-      </div>
-
-      {/* Conteúdo da aba RX */}
-      {tab === "rx" && <DetectiveRX />}
-
-      {/* Conteúdo da aba Quiz */}
-      {tab === "quiz" && (done ? (
-        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-          <button onClick={() => { setDone(false); setStep(5); setSel(null); }}
-            style={{ display: "flex", alignItems: "center", gap: 5, background: "none", border: "none", color: "#94a3b8", cursor: "pointer", padding: 0, fontSize: 11 }}>
-            <span style={{ fontSize: 14 }}>←</span> Rever
-          </button>
-          <div style={{ padding: 18, borderRadius: 14, background: "rgba(16,185,129,.12)", border: "1px solid rgba(16,185,129,.4)" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 10 }}><CheckCircle size={15} color="#10b981" /><span style={{ fontWeight: 700, color: "#10b981", fontSize: 13 }}>Análise Concluída</span></div>
-            <p style={{ margin: "0 0 3px", fontSize: 10, color: "#94a3b8" }}>Conexão identificada:</p>
-            <p style={{ margin: "0 0 12px", fontSize: 18, fontWeight: 800, color: "white" }}>{ans[5] === "HE" ? "Hexágono Externo" : ans[5] === "HI" ? "Hexágono Interno" : "Cone Morse"}</p>
-            <p style={{ margin: "0 0 7px", fontSize: 10, color: "#94a3b8" }}>Marcas possivelmente compatíveis:</p>
-            {getCompatibleBrands(ans[5]).map((b, i) => (
-              <div key={i} style={{ padding: "8px 12px", borderRadius: 8, background: "rgba(30,41,59,0.9)", border: "1px solid #475569", display: "flex", alignItems: "center", gap: 7, marginBottom: 5 }}>
-                <div style={{ width: 6, height: 6, borderRadius: "50%", background: "#10b981", flexShrink: 0 }} />
-                <span style={{ color: "#e2e8f0", fontSize: 12 }}>{b}</span>
-              </div>
-            ))}
-          </div>
-          <InfoBox color="#f59e0b" icon={<AlertTriangle size={12} color="#f59e0b" style={{ flexShrink: 0, marginTop: 1 }} />}>Confirme a compatibilidade com a documentação do paciente antes do procedimento.</InfoBox>
-          <button onClick={() => go("brandSelect", { detectedConnection: ans[5] })} style={{ padding: "14px", borderRadius: 12, border: "none", cursor: "pointer", background: "linear-gradient(135deg,#1d4ed8,#3b82f6)", color: "white", fontWeight: 700, fontSize: 13, display: "flex", alignItems: "center", justifyContent: "center", gap: 6 }}>Prosseguir para seleção <ArrowRight size={14} /></button>
-          <button onClick={() => go("home", {})} style={{ padding: "11px", borderRadius: 11, border: "1px solid #475569", cursor: "pointer", background: "rgba(30,41,59,0.9)", color: "#cbd5e1", fontSize: 11, display: "flex", alignItems: "center", justifyContent: "center", gap: 5 }}><Home size={11} />Início</button>
-        </div>
-      ) : (
-        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-            <span style={{ fontSize: 9, color: "#94a3b8", fontWeight: 600, letterSpacing: .5 }}>ANÁLISE RADIOGRÁFICA</span>
-            <span style={{ ...G.mono, fontSize: 9, color: "#3b82f6", fontWeight: 700 }}>{step}/5</span>
-          </div>
-          <div style={{ height: 3, borderRadius: 2, background: "#1e293b", overflow: "hidden" }}>
-            <div style={{ height: "100%", width: `${step / 5 * 100}%`, background: "linear-gradient(90deg,#3b82f6,#60a5fa)", transition: "width .45s ease" }} />
-          </div>
-          <div style={{ textAlign: "center", padding: "8px 0" }}>
-            <div style={{ fontSize: 36, marginBottom: 7 }}>{cur.icon}</div>
-            <h2 style={{ margin: "0 0 4px", fontSize: 18, fontWeight: 700, color: "white" }}>{cur.title}</h2>
-            <p style={{ margin: 0, fontSize: 12, color: "#94a3b8" }}>{cur.subtitle}</p>
-          </div>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {cur.options.map(o => (
-              <button key={o.value} onClick={() => pick(o.value)} className="hov"
-                style={{ ...card, background: sel === o.value ? "rgba(59,130,246,.25)" : "rgba(30,41,59,0.95)", border: `1px solid ${sel === o.value ? "#3b82f6" : "#475569"}` }}>
-                <div style={{ width: 36, height: 36, borderRadius: 9, flexShrink: 0, background: sel === o.value ? "rgba(59,130,246,.3)" : "rgba(51,65,85,0.8)", border: `1px solid ${sel === o.value ? "#3b82f6" : "#64748b"}`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16, color: "white" }}>{o.icon}</div>
-                <div style={{ flex: 1 }}>
-                  <div style={{ fontWeight: 700, color: "white", fontSize: 13, marginBottom: 2 }}>{o.label}</div>
-                  <div style={{ fontSize: 10, color: "#94a3b8", lineHeight: 1.4 }}>{o.desc}</div>
-                </div>
-                {sel === o.value && <CheckCircle size={14} color="#3b82f6" />}
-              </button>
-            ))}
-          </div>
-          {step > 1 && (
-            <button onClick={() => { setStep(step - 1); setSel(null); }}
-              style={{ display: "flex", alignItems: "center", gap: 5, background: "none", border: "none", color: "#94a3b8", cursor: "pointer", padding: 0, fontSize: 11, alignSelf: "flex-start" }}>
-              <span style={{ fontSize: 14 }}>←</span> Voltar
-            </button>
-          )}
-          {step === 5 && <InfoBox color="#3b82f6" icon={<Info size={11} color="#3b82f6" style={{ flexShrink: 0, marginTop: 1 }} />}><strong>Passo decisivo:</strong> A plataforma protética define a compatibilidade mecânica final.</InfoBox>}
-        </div>
-      ))}
+      <DetectiveRX />
     </div>
   );
 }
