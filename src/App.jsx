@@ -785,7 +785,7 @@ const css = `
 `;
 function Sty() { return <style>{css}</style>; }
 const G = {
-  page: { minHeight: "100vh", display: "flex", flexDirection: "column", padding: "20px 16px 120px", gap: 14, maxWidth: 430, margin: "0 auto" },
+  page: { minHeight: "100vh", display: "flex", flexDirection: "column", padding: "20px 16px 160px", gap: 14, maxWidth: 430, margin: "0 auto" },
   row: { display: "flex", alignItems: "center", gap: 10 },
   mono: { fontFamily: "monospace" },
 };
@@ -1682,6 +1682,12 @@ export default function App() {
   const [favOpen, setFavOpen] = useState(false);
 
   const [history, setHistory] = useState(() => { try { return JSON.parse(localStorage.getItem("sartori_history") || "[]"); } catch { return []; } });
+  const [fbOpen, setFbOpen] = useState(false);
+  const [fbType, setFbType] = useState("Bug");
+  const [fbMsg, setFbMsg] = useState("");
+  const [fbSending, setFbSending] = useState(false);
+  const [fbDone, setFbDone] = useState(false);
+  const [fbError, setFbError] = useState(false);
 
   const go = (newScreen, newState = {}, dir = "forward") => { setSlideDir(dir); setState(newState); setScreen(newScreen); setFavOpen(false); };
   const reset = () => { setState({}); setScreen("home"); };
@@ -1700,6 +1706,13 @@ export default function App() {
     localStorage.setItem("fav_brands", JSON.stringify(next));
     return next;
   });
+
+  useEffect(() => {
+    document.body.style.overflow = fbOpen ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
+  }, [fbOpen]);
+
+  const FEEDBACK_BAR_HEIGHT = 56;
 
   const handleAiSend = async () => {
     if (!aiInput.trim() || aiLoading) return;
@@ -1748,7 +1761,7 @@ export default function App() {
 
       {/* Botão flutuante Favoritos */}
       {favorites.length > 0 && (
-        <div style={{ position: "fixed", bottom: 16, left: 16, zIndex: 101, display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 8 }}>
+        <div style={{ position: "fixed", bottom: FEEDBACK_BAR_HEIGHT + 16, left: 16, zIndex: 101, display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 8 }}>
           {favOpen && (
             <div style={{ background: "rgba(15,23,42,0.97)", border: "1px solid #f59e0b", borderRadius: 12, padding: "10px 12px", minWidth: 180, boxShadow: "0 4px 20px rgba(245,158,11,.2)" }}>
               <div style={{ fontSize: 10, color: "#f59e0b", fontWeight: 700, marginBottom: 8, textTransform: "uppercase", letterSpacing: 1 }}>Acesso rápido</div>
@@ -1769,7 +1782,7 @@ export default function App() {
       )}
 
       {/* Botões flutuantes direita: IA (baixo) + Carrinho (acima da IA quando visível) */}
-      <div style={{ position: "fixed", bottom: 16, right: 16, zIndex: 101, display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 8 }}>
+      <div style={{ position: "fixed", bottom: FEEDBACK_BAR_HEIGHT + 16, right: 16, zIndex: 101, display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 8 }}>
         {aiOpen && (
           <div style={{ background: "rgba(15,23,42,0.97)", border: "1px solid #3b82f6", borderRadius: 14, padding: "14px", width: 280, boxShadow: "0 4px 24px rgba(59,130,246,.3)" }}>
             <div style={{ fontSize: 11, fontWeight: 700, color: "#60a5fa", marginBottom: 10 }}>🤖 Assistente Clínico</div>
@@ -1817,6 +1830,105 @@ export default function App() {
           🤖
         </button>
       </div>
+
+      {/* ── Barra de feedback fixa no fundo ───────────────────────────── */}
+      <div style={{ position: "fixed", bottom: 0, left: 0, right: 0, zIndex: 90, display: "flex", justifyContent: "center", pointerEvents: "none" }}>
+        <div style={{ width: "100%", maxWidth: 430, height: FEEDBACK_BAR_HEIGHT, padding: "10px 16px 14px", background: "rgba(15,23,42,0.92)", backdropFilter: "blur(10px)", WebkitBackdropFilter: "blur(10px)", borderTop: "1px solid rgba(71,85,105,0.5)", pointerEvents: "auto", boxSizing: "border-box" }}>
+          <button
+            onClick={() => { setFbOpen(true); setFbDone(false); setFbError(false); setFbMsg(""); setFbType("Bug"); }}
+            style={{ width: "100%", padding: "9px 0", borderRadius: 10, border: "1px solid rgba(251,191,36,.35)", background: "rgba(251,191,36,.08)", color: "#fbbf24", fontSize: 12, fontWeight: 600, cursor: "pointer", letterSpacing: 0.2 }}
+          >
+            ⚠️ Relatar problema / sugestão
+          </button>
+        </div>
+      </div>
+
+      {/* ── Modal de feedback ─────────────────────────────────────────── */}
+      {fbOpen && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="fb-modal-title"
+          onClick={() => setFbOpen(false)}
+          onKeyDown={e => { if (e.key === "Escape") setFbOpen(false); }}
+          style={{ position: "fixed", inset: 0, zIndex: 100, background: "rgba(0,0,0,0.7)", display: "flex", alignItems: "flex-end", justifyContent: "center" }}
+        >
+          <div
+            onClick={e => e.stopPropagation()}
+            style={{ width: "100%", maxWidth: 430, background: "#0f172a", borderRadius: "16px 16px 0 0", border: "1px solid rgba(71,85,105,0.6)", padding: "20px 16px 32px" }}
+          >
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
+              <span id="fb-modal-title" style={{ color: "white", fontWeight: 700, fontSize: 14 }}>⚠️ Relatar problema / sugestão</span>
+              <button onClick={() => setFbOpen(false)} aria-label="Fechar" style={{ background: "none", border: "none", color: "#94a3b8", fontSize: 20, cursor: "pointer", lineHeight: 1 }}>×</button>
+            </div>
+
+            {fbDone ? (
+              <div style={{ textAlign: "center", padding: "24px 0", color: "#4ade80", fontSize: 14, fontWeight: 600 }}>
+                ✅ Enviado! Obrigado pelo feedback.
+              </div>
+            ) : (
+              <>
+                <div style={{ display: "flex", gap: 8, marginBottom: 12 }}>
+                  {["Bug", "Sugestão", "Dado incorreto"].map(t => (
+                    <button
+                      key={t}
+                      onClick={() => setFbType(t)}
+                      style={{ flex: 1, padding: "7px 4px", borderRadius: 8, border: `1px solid ${fbType === t ? "#3b82f6" : "rgba(71,85,105,0.6)"}`, background: fbType === t ? "rgba(59,130,246,.2)" : "transparent", color: fbType === t ? "#93c5fd" : "#94a3b8", fontSize: 11, fontWeight: 600, cursor: "pointer" }}
+                    >
+                      {t}
+                    </button>
+                  ))}
+                </div>
+
+                <textarea
+                  value={fbMsg}
+                  onChange={e => setFbMsg(e.target.value)}
+                  placeholder="Descreva o problema ou sugestão..."
+                  rows={4}
+                  style={{ width: "100%", background: "rgba(30,41,59,0.95)", border: "1px solid #475569", borderRadius: 8, color: "white", fontSize: 12, padding: "10px", resize: "none", fontFamily: "inherit", boxSizing: "border-box" }}
+                />
+
+                <div style={{ fontSize: 10, color: "#64748b", margin: "6px 0 14px", fontFamily: "monospace" }}>
+                  Tela: {screen} · {new Date().toLocaleString("pt-BR")}
+                </div>
+
+                {fbError && (
+                  <div style={{ fontSize: 11, color: "#f87171", marginBottom: 10 }}>
+                    ⚠️ Falha ao enviar. Verifique a conexão e tente novamente.
+                  </div>
+                )}
+
+                <button
+                  disabled={fbSending || !fbMsg.trim()}
+                  onClick={async () => {
+                    setFbSending(true);
+                    setFbError(false);
+                    try {
+                      const res = await fetch("/api/feedback", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ type: fbType, message: fbMsg.trim(), screen, timestamp: new Date().toISOString() }),
+                      });
+                      if (res.ok) {
+                        setFbDone(true);
+                      } else {
+                        setFbError(true);
+                      }
+                    } catch {
+                      setFbError(true);
+                    } finally {
+                      setFbSending(false);
+                    }
+                  }}
+                  style={{ width: "100%", padding: "10px", borderRadius: 10, border: "none", background: fbSending || !fbMsg.trim() ? "rgba(59,130,246,.3)" : "linear-gradient(135deg,#1d4ed8,#3b82f6)", color: "white", fontSize: 13, fontWeight: 700, cursor: fbSending || !fbMsg.trim() ? "not-allowed" : "pointer" }}
+                >
+                  {fbSending ? "Enviando..." : "Enviar"}
+                </button>
+              </>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
