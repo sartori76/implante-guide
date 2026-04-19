@@ -113,8 +113,18 @@ export default async function handler(req) {
 
     if (!response.ok) {
       const err = await response.text();
-      status = 502;
-      console.log(JSON.stringify({ type, screen: safeScreen, status, latency: Date.now() - t0, resendError: err }));
+      status = response.status;
+      // [TEMP DEBUG] log detalhado para diagnóstico
+      console.log(JSON.stringify({
+        debug: true, type, screen: safeScreen, latency: Date.now() - t0,
+        resend_status: response.status,
+        resend_headers: Object.fromEntries(response.headers.entries()),
+        resend_body: err,
+        env_key_set: !!apiKey,
+        env_email_set: !!toEmail,
+        from: "Sartori Guide <noreply@sartoriguide.com.br>",
+        to: toEmail,
+      }));
       return new Response(JSON.stringify({ error: "Erro ao enviar email" }), {
         status: 502,
         headers: { "Content-Type": "application/json" },
@@ -122,7 +132,14 @@ export default async function handler(req) {
     }
   } catch (err) {
     status = 502;
-    console.log(JSON.stringify({ type, screen: safeScreen, status, latency: Date.now() - t0, fetchError: String(err) }));
+    // [TEMP DEBUG] log detalhado para diagnóstico
+    console.log(JSON.stringify({
+      debug: true, type, screen: safeScreen, latency: Date.now() - t0,
+      fetchError: String(err),
+      fetchErrorStack: err?.stack ?? null,
+      env_key_set: !!apiKey,
+      env_email_set: !!toEmail,
+    }));
     return new Response(JSON.stringify({ error: "Falha na conexão com o serviço de email" }), {
       status: 502,
       headers: { "Content-Type": "application/json" },
