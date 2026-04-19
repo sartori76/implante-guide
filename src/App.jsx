@@ -1064,6 +1064,11 @@ function DetectiveRX() {
             {aiReply}
           </div>
         )}
+        {aiReply && (
+          <InfoBox color="#f59e0b" icon={<AlertTriangle size={12} color="#f59e0b" style={{ flexShrink: 0, marginTop: 1 }} />}>
+            Análise sugestiva gerada por IA. Confirme a identificação com a documentação do paciente, catálogo oficial do fabricante e avaliação clínica antes de qualquer procedimento.
+          </InfoBox>
+        )}
         {img && (
           <button onClick={() => setImg(null)}
             style={{ padding: "10px", borderRadius: 10, border: "1px solid #334155", cursor: "pointer", background: "rgba(30,41,59,0.8)", color: "#94a3b8", fontSize: 12, display: "flex", alignItems: "center", justifyContent: "center", gap: 6 }}>
