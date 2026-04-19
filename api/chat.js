@@ -29,13 +29,26 @@ export default async function handler(req) {
     });
   }
 
-  const { message } = body;
+  const { message, image, mediaType } = body;
   if (!message || typeof message !== "string" || message.trim().length === 0) {
     return new Response(JSON.stringify({ error: "Mensagem inválida" }), {
       status: 400,
       headers: { "Content-Type": "application/json" },
     });
   }
+
+  const content = [];
+  if (image && typeof image === "string") {
+    content.push({
+      type: "image",
+      source: {
+        type: "base64",
+        media_type: mediaType || "image/jpeg",
+        data: image,
+      },
+    });
+  }
+  content.push({ type: "text", text: message.trim() });
 
   const response = await fetch("https://api.anthropic.com/v1/messages", {
     method: "POST",
@@ -48,7 +61,7 @@ export default async function handler(req) {
       model: "claude-sonnet-4-6",
       max_tokens: 512,
       system: SYSTEM_PROMPT,
-      messages: [{ role: "user", content: message.trim() }],
+      messages: [{ role: "user", content }],
     }),
   });
 
