@@ -785,7 +785,7 @@ const css = `
 `;
 function Sty() { return <style>{css}</style>; }
 const G = {
-  page: { minHeight: "100vh", display: "flex", flexDirection: "column", padding: "20px 16px 120px", gap: 14, maxWidth: 430, margin: "0 auto" },
+  page: { minHeight: "100vh", display: "flex", flexDirection: "column", padding: "20px 16px 160px", gap: 14, maxWidth: 430, margin: "0 auto" },
   row: { display: "flex", alignItems: "center", gap: 10 },
   mono: { fontFamily: "monospace" },
 };
@@ -1682,6 +1682,11 @@ export default function App() {
   const [favOpen, setFavOpen] = useState(false);
 
   const [history, setHistory] = useState(() => { try { return JSON.parse(localStorage.getItem("sartori_history") || "[]"); } catch { return []; } });
+  const [fbOpen, setFbOpen] = useState(false);
+  const [fbType, setFbType] = useState("Bug");
+  const [fbMsg, setFbMsg] = useState("");
+  const [fbSending, setFbSending] = useState(false);
+  const [fbDone, setFbDone] = useState(false);
 
   const go = (newScreen, newState = {}, dir = "forward") => { setSlideDir(dir); setState(newState); setScreen(newScreen); setFavOpen(false); };
   const reset = () => { setState({}); setScreen("home"); };
@@ -1817,6 +1822,88 @@ export default function App() {
           🤖
         </button>
       </div>
+
+      {/* ── Barra de feedback fixa no fundo ───────────────────────────── */}
+      <div style={{ position: "fixed", bottom: 0, left: 0, right: 0, zIndex: 90, display: "flex", justifyContent: "center", pointerEvents: "none" }}>
+        <div style={{ width: "100%", maxWidth: 430, padding: "10px 16px 14px", background: "rgba(15,23,42,0.92)", backdropFilter: "blur(10px)", WebkitBackdropFilter: "blur(10px)", borderTop: "1px solid rgba(71,85,105,0.5)", pointerEvents: "auto" }}>
+          <button
+            onClick={() => { setFbOpen(true); setFbDone(false); setFbMsg(""); setFbType("Bug"); }}
+            style={{ width: "100%", padding: "9px 0", borderRadius: 10, border: "1px solid rgba(251,191,36,.35)", background: "rgba(251,191,36,.08)", color: "#fbbf24", fontSize: 12, fontWeight: 600, cursor: "pointer", letterSpacing: 0.2 }}
+          >
+            ⚠️ Relatar problema / sugestão
+          </button>
+        </div>
+      </div>
+
+      {/* ── Modal de feedback ─────────────────────────────────────────── */}
+      {fbOpen && (
+        <div
+          onClick={() => setFbOpen(false)}
+          style={{ position: "fixed", inset: 0, zIndex: 100, background: "rgba(0,0,0,0.7)", display: "flex", alignItems: "flex-end", justifyContent: "center" }}
+        >
+          <div
+            onClick={e => e.stopPropagation()}
+            style={{ width: "100%", maxWidth: 430, background: "#0f172a", borderRadius: "18px 18px 0 0", border: "1px solid rgba(71,85,105,0.6)", padding: "20px 16px 32px" }}
+          >
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
+              <span style={{ color: "white", fontWeight: 700, fontSize: 14 }}>⚠️ Relatar problema / sugestão</span>
+              <button onClick={() => setFbOpen(false)} style={{ background: "none", border: "none", color: "#94a3b8", fontSize: 20, cursor: "pointer", lineHeight: 1 }}>×</button>
+            </div>
+
+            {fbDone ? (
+              <div style={{ textAlign: "center", padding: "24px 0", color: "#4ade80", fontSize: 14, fontWeight: 600 }}>
+                ✅ Enviado! Obrigado pelo feedback.
+              </div>
+            ) : (
+              <>
+                <div style={{ display: "flex", gap: 8, marginBottom: 12 }}>
+                  {["Bug", "Sugestão", "Dado incorreto"].map(t => (
+                    <button
+                      key={t}
+                      onClick={() => setFbType(t)}
+                      style={{ flex: 1, padding: "7px 4px", borderRadius: 8, border: `1px solid ${fbType === t ? "#3b82f6" : "rgba(71,85,105,0.6)"}`, background: fbType === t ? "rgba(59,130,246,.2)" : "transparent", color: fbType === t ? "#93c5fd" : "#94a3b8", fontSize: 11, fontWeight: 600, cursor: "pointer" }}
+                    >
+                      {t}
+                    </button>
+                  ))}
+                </div>
+
+                <textarea
+                  value={fbMsg}
+                  onChange={e => setFbMsg(e.target.value)}
+                  placeholder="Descreva o problema ou sugestão..."
+                  rows={4}
+                  style={{ width: "100%", background: "rgba(30,41,59,0.95)", border: "1px solid #475569", borderRadius: 8, color: "white", fontSize: 12, padding: "10px", resize: "none", fontFamily: "inherit", boxSizing: "border-box" }}
+                />
+
+                <div style={{ fontSize: 10, color: "#64748b", margin: "6px 0 14px", fontFamily: "monospace" }}>
+                  Tela: {screen} · {new Date().toLocaleString("pt-BR")}
+                </div>
+
+                <button
+                  disabled={fbSending || !fbMsg.trim()}
+                  onClick={async () => {
+                    setFbSending(true);
+                    try {
+                      await fetch("/api/feedback", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ type: fbType, message: fbMsg.trim(), screen, timestamp: new Date().toISOString() }),
+                      });
+                    } finally {
+                      setFbSending(false);
+                      setFbDone(true);
+                    }
+                  }}
+                  style={{ width: "100%", padding: "10px", borderRadius: 10, border: "none", background: fbSending || !fbMsg.trim() ? "rgba(59,130,246,.3)" : "linear-gradient(135deg,#1d4ed8,#3b82f6)", color: "white", fontSize: 13, fontWeight: 700, cursor: fbSending || !fbMsg.trim() ? "not-allowed" : "pointer" }}
+                >
+                  {fbSending ? "Enviando..." : "Enviar"}
+                </button>
+              </>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
