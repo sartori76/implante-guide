@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import {
   ChevronRight, CheckCircle,
   ExternalLink, Zap, Shield, Home, ArrowRight,
@@ -1701,7 +1701,10 @@ export default function App() {
   const [slideDir, setSlideDir] = useState("forward");
   const [state, setState] = useState({});
   const [cart, setCart] = useState(() => { try { return JSON.parse(localStorage.getItem("sartori_cart") || "[]"); } catch { return []; } });
-  const [aiToast, setAiToast] = useState(false);
+  const [aiOpen, setAiOpen] = useState(false);
+  const [aiInput, setAiInput] = useState("");
+  const [aiReply, setAiReply] = useState("");
+  const [aiLoading, setAiLoading] = useState(false);
   const [favorites, setFavorites] = useState(() => { try { return JSON.parse(localStorage.getItem("fav_brands") || "[]"); } catch { return []; } });
   const [favOpen, setFavOpen] = useState(false);
 
@@ -1724,6 +1727,26 @@ export default function App() {
     localStorage.setItem("fav_brands", JSON.stringify(next));
     return next;
   });
+
+  const handleAiSend = async () => {
+    if (!aiInput.trim() || aiLoading) return;
+    setAiLoading(true);
+    setAiReply("");
+    try {
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: aiInput.trim() }),
+      });
+      const data = await res.json();
+      setAiReply(data.reply || data.error || "Sem resposta.");
+    } catch {
+      setAiReply("Erro ao conectar com o assistente.");
+    } finally {
+      setAiLoading(false);
+      setAiInput("");
+    }
+  };
 
   const screens = {
     home: <HomeScreen go={go} history={history} clearHistory={clearHistory} />,
@@ -1774,9 +1797,29 @@ export default function App() {
 
       {/* Botões flutuantes direita: IA (baixo) + Carrinho (acima da IA quando visível) */}
       <div style={{ position: "fixed", bottom: 16, right: 16, zIndex: 101, display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 8 }}>
-        {aiToast && (
-          <div style={{ background: "rgba(15,23,42,0.97)", border: "1px solid #3b82f6", borderRadius: 10, padding: "10px 14px", fontSize: 12, color: "#93c5fd", fontWeight: 600, maxWidth: 220, textAlign: "center", boxShadow: "0 4px 20px rgba(59,130,246,.25)" }}>
-            Em breve: Assistente IA para dúvidas clínicas
+        {aiOpen && (
+          <div style={{ background: "rgba(15,23,42,0.97)", border: "1px solid #3b82f6", borderRadius: 14, padding: "14px", width: 280, boxShadow: "0 4px 24px rgba(59,130,246,.3)" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#60a5fa", marginBottom: 10 }}>🤖 Assistente Clínico</div>
+            {aiReply && (
+              <div style={{ fontSize: 11, color: "#e2e8f0", lineHeight: 1.6, marginBottom: 10, padding: "10px", borderRadius: 8, background: "rgba(59,130,246,.1)", border: "1px solid rgba(59,130,246,.2)" }}>
+                {aiReply}
+              </div>
+            )}
+            <textarea
+              value={aiInput}
+              onChange={e => setAiInput(e.target.value)}
+              onKeyDown={e => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); handleAiSend(); } }}
+              placeholder="Digite sua dúvida clínica..."
+              rows={3}
+              style={{ width: "100%", background: "rgba(30,41,59,0.95)", border: "1px solid #475569", borderRadius: 8, color: "white", fontSize: 11, padding: "8px 10px", resize: "none", fontFamily: "inherit" }}
+            />
+            <button
+              onClick={handleAiSend}
+              disabled={aiLoading || !aiInput.trim()}
+              style={{ marginTop: 8, width: "100%", padding: "8px", borderRadius: 8, border: "none", background: aiLoading ? "rgba(59,130,246,.4)" : "linear-gradient(135deg,#1d4ed8,#3b82f6)", color: "white", fontSize: 11, fontWeight: 700, cursor: aiLoading ? "not-allowed" : "pointer" }}
+            >
+              {aiLoading ? "Consultando..." : "Enviar"}
+            </button>
           </div>
         )}
         {cart.length > 0 && (
@@ -1794,7 +1837,7 @@ export default function App() {
           </div>
         )}
         <button
-          onClick={() => { setAiToast(v => !v); }}
+          onClick={() => setAiOpen(v => !v)}
           style={{ width: 48, height: 48, borderRadius: "50%", background: "linear-gradient(135deg,#1e3a8a,#1d4ed8)", border: "2px solid #3b82f6", fontSize: 22, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 0 16px rgba(59,130,246,.45)" }}
           aria-label="Assistente IA"
         >
