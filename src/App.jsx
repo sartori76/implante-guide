@@ -981,16 +981,40 @@ const RX_REFS = [
   { key: "cmi", label: "Cone Morse Indexado", desc: "Cone morse com indexação rotacional", color: "#a78bfa" },
 ];
 
+const AI_RX_PROMPT = "Você é um especialista em implantodontia. Analise esta radiografia periapical e identifique: 1) O tipo de conexão protética (Hexágono Externo, Hexágono Interno ou Cone Morse); 2) Características morfológicas visíveis (formato do corpo, tipo de rosca, ápice); 3) Possíveis marcas e sistemas compatíveis com base no DB: Straumann BLX/BL/TLX, Neodent GM/CM, Nobel Biocare, S.I.N., Osstem, Implacil, Dentsply. Seja objetivo e clínico. Responda em português.";
+
 function DetectiveRX() {
   const [img, setImg] = useState(null);
-  const [aiMsg, setAiMsg] = useState(false);
+  const [aiReply, setAiReply] = useState(null);
+  const [aiLoading, setAiLoading] = useState(false);
   const [drag, setDrag] = useState(false);
 
   const handleFile = (file) => {
     if (!file || !file.type.startsWith("image/")) return;
     const reader = new FileReader();
-    reader.onload = (e) => setImg(e.target.result);
+    reader.onload = (e) => { setImg(e.target.result); setAiReply(null); };
     reader.readAsDataURL(file);
+  };
+
+  const handleAnalyze = async () => {
+    if (!img || aiLoading) return;
+    setAiLoading(true);
+    setAiReply(null);
+    try {
+      const [header, base64] = img.split(",");
+      const mediaType = header.match(/data:(image\/\w+);/)?.[1] || "image/jpeg";
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: AI_RX_PROMPT, image: base64, mediaType }),
+      });
+      const data = await res.json();
+      setAiReply(data.reply || data.error || "Sem resposta.");
+    } catch {
+      setAiReply("Erro ao conectar com o assistente.");
+    } finally {
+      setAiLoading(false);
+    }
   };
 
   return (
@@ -1028,14 +1052,16 @@ function DetectiveRX() {
       {/* Botões de ação */}
       <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
         <button
-          onClick={() => setAiMsg(v => !v)}
-          style={{ padding: "14px", borderRadius: 12, border: "none", cursor: "pointer", background: "linear-gradient(135deg,#1d4ed8,#3b82f6)", color: "white", fontWeight: 700, fontSize: 13, display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}
+          onClick={handleAnalyze}
+          disabled={!img || aiLoading}
+          style={{ padding: "14px", borderRadius: 12, border: "none", cursor: !img || aiLoading ? "not-allowed" : "pointer", background: !img || aiLoading ? "rgba(59,130,246,.4)" : "linear-gradient(135deg,#1d4ed8,#3b82f6)", color: "white", fontWeight: 700, fontSize: 13, display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}
         >
-          🤖 Analisar com IA
+          {aiLoading ? "⏳ Analisando..." : "🤖 Analisar com IA"}
         </button>
-        {aiMsg && (
-          <div style={{ padding: "12px 14px", borderRadius: 10, background: "rgba(30,41,59,0.95)", border: "1px solid #3b82f6", fontSize: 12, color: "#93c5fd", textAlign: "center", lineHeight: 1.6 }}>
-            Em breve: Análise automática por IA. Por enquanto, compare manualmente com as referências abaixo.
+        {aiReply && (
+          <div style={{ padding: "14px", borderRadius: 10, background: "rgba(15,23,42,0.95)", border: "1px solid #3b82f6", fontSize: 12, color: "#e2e8f0", lineHeight: 1.7, whiteSpace: "pre-wrap" }}>
+            <div style={{ fontSize: 10, color: "#60a5fa", fontWeight: 700, marginBottom: 6 }}>🤖 ANÁLISE DA IA</div>
+            {aiReply}
           </div>
         )}
         {img && (
