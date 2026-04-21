@@ -1111,10 +1111,11 @@ function DetectiveRX() {
 
       {/* Banco de referências */}
       <div>
-        <div style={{ fontSize: 11, color: "#94a3b8", fontWeight: 700, textTransform: "uppercase", letterSpacing: 1, marginBottom: 10 }}>Referências por Conexão</div>
+        <div style={{ fontSize: 11, color: "#94a3b8", fontWeight: 700, textTransform: "uppercase", letterSpacing: 1, marginBottom: 4 }}>Referências por Conexão</div>
+        <div style={{ fontSize: 10, color: "#64748b", marginBottom: 10 }}>📖 Use como referência para responder o checklist abaixo</div>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
           {RX_REFS.map(ref => (
-            <div key={ref.key} style={{ borderRadius: 12, background: "rgba(30,41,59,0.9)", border: `1px solid ${ref.color}44`, overflow: "hidden" }}>
+            <div key={ref.key} style={{ borderRadius: 12, background: "rgba(30,41,59,0.9)", border: `1px solid ${ref.color}44`, overflow: "hidden", cursor: "default" }}>
               <div style={{ padding: "10px 12px", borderBottom: `1px solid ${ref.color}22` }}>
                 <div style={{ fontSize: 11, fontWeight: 700, color: "white", marginBottom: 2 }}>{ref.label}</div>
                 <div style={{ fontSize: 9, color: "#64748b", lineHeight: 1.4 }}>{ref.desc}</div>
