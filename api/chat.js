@@ -1,10 +1,25 @@
 export const config = { runtime: "edge" };
 
-const SYSTEM_PROMPT = `Você é um assistente clínico especializado em implantodontia, integrado ao Sartori Guide.
-Responda dúvidas sobre implantes dentários, componentes protéticos, torques, conexões e protocolos clínicos.
-Seja direto, técnico e conciso. Use terminologia odontológica em português.
-Não substitua a avaliação clínica do profissional — reforce sempre que o protocolo oficial do fabricante deve ser consultado.
-Limite respostas a no máximo 3 parágrafos curtos.`;
+import { generateDBSummary } from "../src/db.js";
+
+const dbSummary = generateDBSummary();
+
+const SYSTEM_PROMPT = `Você é um assistente clínico especializado em implantodontia, integrado ao Implante Guide.
+Responda SEMPRE em português, em texto corrido sem markdown (sem ##, **, -- ou similares).
+Use APENAS os dados abaixo sobre conexões e componentes. Nunca invente componentes ou conexões não listados aqui.
+Quando atualizar o banco de dados do app, sua resposta será automaticamente atualizada.
+
+REGRAS CRÍTICAS DE CONEXÃO:
+- BLX e BLC usam EXCLUSIVAMENTE TorcFit — NUNCA CrossFit
+- TLX e TLC usam EXCLUSIVAMENTE TorcFit — NUNCA CrossFit
+- BL e BLT usam EXCLUSIVAMENTE CrossFit RC — NUNCA TorcFit
+- SC usa EXCLUSIVAMENTE Small CrossFit SC
+- Nunca misture sistemas de conexão entre linhas diferentes
+
+BASE DE DADOS ATUAL DO APP:
+${dbSummary}
+
+Sempre recomendar confirmação com catálogo oficial do fabricante antes de qualquer procedimento clínico.`;
 
 export default async function handler(req) {
   if (req.method !== "POST") {
