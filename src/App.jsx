@@ -84,8 +84,8 @@ function Back({ onClick }) {
   );
 }
 
-function Hdr({ title, sub, color = "#94a3b8", onBack }) {
-  return <div style={G.row}><Back onClick={onBack} /><div><h2 style={{ margin: 0, fontSize: 16, fontWeight: 700, color: "white" }}>{title}</h2>{sub && <p style={{ margin: 0, fontSize: 11, color }}>{sub}</p>}</div></div>;
+function Hdr({ title, sub, color = "#94a3b8", onBack, onHome }) {
+  return <div style={G.row}><Back onClick={onBack} /><div><h2 style={{ margin: 0, fontSize: 16, fontWeight: 700, color: "white" }}>{title}</h2>{sub && <p style={{ margin: 0, fontSize: 11, color }}>{sub}</p>}</div>{onHome && <button onClick={onHome} style={{ background: "transparent", border: "none", fontSize: 18, cursor: "pointer", color: "#475569", marginLeft: "auto", padding: "0 4px" }}>🏠</button>}</div>;
 }
 function InfoBox({ color = "#3b82f6", icon, children }) {
   return <div style={{ padding: "10px 12px", borderRadius: 10, background: `${color}18`, border: `1px solid ${color}44`, display: "flex", gap: 7 }}>{icon}<p style={{ margin: 0, fontSize: 11, color, lineHeight: 1.5 }}>{children}</p></div>;
@@ -511,7 +511,7 @@ function FamilySelect({ state, go }) {
   const isStr = state.brand === "straumann";
   return (
     <div style={G.page} className="fadein">
-      <Hdr title={isStr ? "Tipo de Implante" : "Conexão Protética"} sub={brand.label} color={brand.color} onBack={() => go("brandSelect", {}, "back")} />
+      <Hdr title={isStr ? "Tipo de Implante" : "Conexão Protética"} sub={brand.label} color={brand.color} onBack={() => go("brandSelect", {}, "back")} onHome={() => go("home", {})} />
       <Breadcrumb steps={[brand.label]} brandColor={brand.color} />
       {isStr && <InfoBox color="#3b82f6" icon={<Info size={11} color="#3b82f6" style={{ flexShrink: 0, marginTop: 1 }} />}>
         <strong style={{ color: "white" }}>Bone Level:</strong> plataforma ao nível da crista óssea. <strong style={{ color: "white" }}>Tissue Level:</strong> colar transmucoso integrado ao implante.
@@ -556,7 +556,7 @@ function LineSelect({ state, go }) {
 
   return (
     <div style={G.page} className="fadein">
-      <Hdr title="Linha do Implante" sub={`${brand.label} — ${fam.label}`} color={brand.color} onBack={() => go("familySelect", state, "back")} />
+      <Hdr title="Linha do Implante" sub={`${brand.label} — ${fam.label}`} color={brand.color} onBack={() => go("familySelect", state, "back")} onHome={() => go("home", {})} />
       <Breadcrumb steps={[brand.label, fam.label]} brandColor={brand.color} />
       <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
         {lines.map(([key, line]) => (
@@ -584,7 +584,7 @@ function BodySelect({ state, go }) {
   const line = fam.lines[state.line];
   return (
     <div style={G.page} className="fadein">
-      <Hdr title="Corpo do Implante" sub="Regular Body (RB) ou Wide Body (WB)?" color={brand.color} onBack={() => go("lineSelect", state, "back")} />
+      <Hdr title="Corpo do Implante" sub="Regular Body (RB) ou Wide Body (WB)?" color={brand.color} onBack={() => go("lineSelect", state, "back")} onHome={() => go("home", {})} />
       <Breadcrumb steps={[brand.label, fam.label, line.label]} brandColor={brand.color} />
       <InfoBox color="#3b82f6" icon={<Info size={11} color="#3b82f6" style={{ flexShrink: 0, marginTop: 1 }} />}>
         Verifique o <strong style={{ color: "white" }}>diâmetro do implante</strong> na documentação clínica ou na embalagem para identificar o corpo correto.
@@ -616,7 +616,7 @@ function TLXPlatform({ state, go }) {
   const line = fam.lines[state.line];
   return (
     <div style={G.page} className="fadein">
-      <Hdr title="Plataforma TLX" sub="Selecione o pescoço do implante" color="#3b82f6" onBack={() => go("lineSelect", state, "back")} />
+      <Hdr title="Plataforma TLX" sub="Selecione o pescoço do implante" color="#3b82f6" onBack={() => go("lineSelect", state, "back")} onHome={() => go("home", {})} />
       <Breadcrumb steps={[brand.label, fam.label, line.label]} brandColor={brand.color} />
       <InfoBox color="#3b82f6" icon={<Info size={11} color="#3b82f6" style={{ flexShrink: 0, marginTop: 1 }} />}>
         Marcação a laser no implante: <strong style={{ color: "white" }}>NT (1 ponto) · RT (2 pontos) · WT (3 pontos)</strong>. Nunca misture pilares de plataformas diferentes.
@@ -653,7 +653,7 @@ function ObjectiveSelect({ state, go }) {
   const bodyOpt = line.hasBodySelect && state.body ? line.bodyOptions?.find(b => b.key === state.body) : null;
   return (
     <div style={G.page} className="fadein">
-      <Hdr title="Objetivo Protético" sub="Unitária ou Prótese Unida?" onBack={() => go(backScreen, state, "back")} />
+      <Hdr title="Objetivo Protético" sub="Unitária ou Prótese Unida?" onBack={() => go(backScreen, state, "back")} onHome={() => go("home", {})} />
       <Breadcrumb steps={[brand.label, fam.label, line.label, tlxPlat ? `${tlxPlat.key} ${tlxPlat.diam}` : bodyOpt ? bodyOpt.key : null, null].filter(Boolean)} brandColor={brand.color} />
       <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
         {Object.entries(line.objectives).map(([key, obj]) => (
@@ -690,7 +690,7 @@ function SubtypeSelect({ state, go }) {
   const bodyOpt = line.hasBodySelect && state.body ? line.bodyOptions?.find(b => b.key === state.body) : null;
   return (
     <div style={G.page} className="fadein">
-      <Hdr title="Componente Protético" sub={obj.label} onBack={() => go("objectiveSelect", state, "back")} />
+      <Hdr title="Componente Protético" sub={obj.label} onBack={() => go("objectiveSelect", state, "back")} onHome={() => go("home", {})} />
       <Breadcrumb steps={[brand.label, fam.label, line.label, tlxPlat ? tlxPlat.key : bodyOpt ? bodyOpt.key : null, obj.label].filter(Boolean)} brandColor={brand.color} />
       <div style={{ display: "flex", flexDirection: "column", gap: 9 }}>
         {subs.map((st) => (
@@ -718,7 +718,7 @@ function HeightSelect({ state, go }) {
   const st = obj.subtypes.find(s => s.key === state.subtype);
   return (
     <div style={G.page} className="fadein">
-      <Hdr title="Altura Gengival" sub={st?.label} color="#10b981" onBack={() => go("subtypeSelect", state, "back")} />
+      <Hdr title="Altura Gengival" sub={st?.label} color="#10b981" onBack={() => go("subtypeSelect", state, "back")} onHome={() => go("home", {})} />
       <Breadcrumb steps={[brand.label, fam.label, line.label, obj.label, st?.label]} brandColor={brand.color} />
       <InfoBox color="#10b981" icon={<Info size={11} color="#10b981" style={{ flexShrink: 0, marginTop: 1 }} />}>
         Meça a espessura do tecido mole com sonda periodontal para escolher a altura gengival correta.
@@ -1116,8 +1116,8 @@ export default function App() {
           role="dialog"
           aria-modal="true"
           aria-labelledby="fb-modal-title"
-          onClick={() => setFbOpen(false)}
-          onKeyDown={e => { if (e.key === "Escape") setFbOpen(false); }}
+          onClick={() => { setFbOpen(false); setFbTimestamp(null); }}
+          onKeyDown={e => { if (e.key === "Escape") { setFbOpen(false); setFbTimestamp(null); } }}
           style={{ position: "fixed", inset: 0, zIndex: 100, background: "rgba(0,0,0,0.7)", display: "flex", alignItems: "flex-end", justifyContent: "center" }}
         >
           <div
@@ -1126,7 +1126,7 @@ export default function App() {
           >
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
               <span id="fb-modal-title" style={{ color: "white", fontWeight: 700, fontSize: 14 }}>⚠️ Relatar problema / sugestão</span>
-              <button onClick={() => setFbOpen(false)} aria-label="Fechar" style={{ background: "none", border: "none", color: "#94a3b8", fontSize: 20, cursor: "pointer", lineHeight: 1 }}>×</button>
+              <button onClick={() => { setFbOpen(false); setFbTimestamp(null); }} aria-label="Fechar" style={{ background: "none", border: "none", color: "#94a3b8", fontSize: 20, cursor: "pointer", lineHeight: 1 }}>×</button>
             </div>
 
             {fbDone ? (
@@ -1156,7 +1156,7 @@ export default function App() {
                 />
 
                 <div style={{ fontSize: 10, color: "#64748b", margin: "6px 0 14px", fontFamily: "monospace" }}>
-                  Tela: {screen} · {new Date().toLocaleString("pt-BR")}
+                  Tela: {screen} · {fbTimestamp?.toLocaleString("pt-BR") ?? ""}
                 </div>
 
                 {fbError && (
@@ -1179,7 +1179,7 @@ export default function App() {
                           message: fbMsg.trim(),
                           screen,
                           timestamp: (fbTimestamp ?? new Date()).toISOString(),
-                          brand: state?.brand || "não selecionada",
+                          brand: state?.brand ? DB[state.brand]?.label : "não selecionada",
                           url: window.location.href,
                           userAgent: navigator.userAgent,
                           appVersion: "1.0.0",
@@ -1187,6 +1187,7 @@ export default function App() {
                       });
                       if (res.ok) {
                         setFbDone(true);
+                        setFbTimestamp(null);
                       } else {
                         setFbError(true);
                       }
