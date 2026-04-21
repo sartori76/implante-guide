@@ -104,7 +104,7 @@ export default async function handler(req) {
       },
       signal: AbortSignal.timeout(5000),
       body: JSON.stringify({
-        from: "Sartori Guide <noreply@sartoriguide.com.br>",
+        from: "Implante Guide <onboarding@resend.dev>",
         to: [toEmail],
         subject: `[Feedback] ${escapeHtml(type)} — Sartori Guide`,
         text,
@@ -122,7 +122,7 @@ export default async function handler(req) {
         resend_body: err,
         env_key_set: !!apiKey,
         env_email_set: !!toEmail,
-        from: "Sartori Guide <noreply@sartoriguide.com.br>",
+        from: "Implante Guide <onboarding@resend.dev>",
         to: toEmail,
       }));
       return new Response(JSON.stringify({ error: "Erro ao enviar email" }), {
