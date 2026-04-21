@@ -1907,7 +1907,16 @@ export default function App() {
                       const res = await fetch("/api/feedback", {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ type: fbType, message: fbMsg.trim(), screen, timestamp: new Date().toISOString() }),
+                        body: JSON.stringify({
+                          type: fbType,
+                          message: fbMsg.trim(),
+                          screen,
+                          timestamp: new Date().toISOString(),
+                          brand: state?.brand || "não selecionada",
+                          url: window.location.href,
+                          userAgent: navigator.userAgent,
+                          appVersion: "1.0.0",
+                        }),
                       });
                       if (res.ok) {
                         setFbDone(true);
