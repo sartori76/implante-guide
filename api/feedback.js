@@ -60,7 +60,7 @@ export default async function handler(req) {
     });
   }
 
-  const { type, message, screen, timestamp } = body;
+  const { type, message, screen, timestamp, brand, url, userAgent, appVersion } = body;
 
   if (!VALID_TYPES.includes(type)) {
     return new Response(JSON.stringify({ error: "Tipo inválido" }), {
@@ -81,12 +81,20 @@ export default async function handler(req) {
     });
   }
 
-  const safeScreen = typeof screen === "string" ? screen.slice(0, MAX_SCREEN) : "—";
+  const safeScreen     = typeof screen     === "string" ? screen.slice(0, MAX_SCREEN) : "—";
+  const safeBrand      = typeof brand      === "string" ? brand.slice(0, 100)         : "não selecionada";
+  const safeUrl        = typeof url        === "string" ? url.slice(0, 200)           : "—";
+  const safeUserAgent  = typeof userAgent  === "string" ? userAgent.slice(0, 200)     : "—";
+  const safeAppVersion = typeof appVersion === "string" ? appVersion.slice(0, 20)     : "—";
   const date = timestamp ? new Date(timestamp).toLocaleString("pt-BR") : new Date().toLocaleString("pt-BR");
 
   const text = [
-    `Tipo: ${type}`,
-    `Tela: ${safeScreen}`,
+    `Tipo: ${escapeHtml(type)}`,
+    `Tela: ${escapeHtml(safeScreen)}`,
+    `Marca selecionada: ${escapeHtml(safeBrand)}`,
+    `Versão do app: ${escapeHtml(safeAppVersion)}`,
+    `URL: ${escapeHtml(safeUrl)}`,
+    `Navegador: ${escapeHtml(safeUserAgent)}`,
     `Data: ${date}`,
     ``,
     `Mensagem:`,
@@ -146,7 +154,7 @@ export default async function handler(req) {
     });
   }
 
-  console.log(JSON.stringify({ type, screen: safeScreen, status, latency: Date.now() - t0 }));
+  console.log(JSON.stringify({ type, screen: safeScreen, brand: safeBrand, appVersion: safeAppVersion, status, latency: Date.now() - t0 }));
   return new Response(JSON.stringify({ ok: true }), {
     status: 200,
     headers: { "Content-Type": "application/json" },
