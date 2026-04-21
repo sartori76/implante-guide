@@ -954,6 +954,7 @@ export default function App() {
   const [fbSending, setFbSending] = useState(false);
   const [fbDone, setFbDone] = useState(false);
   const [fbError, setFbError] = useState(false);
+  const [fbTimestamp, setFbTimestamp] = useState(null);
 
   const go = (newScreen, newState = {}, dir = "forward") => { setSlideDir(dir); setState(newState); setScreen(newScreen); setFavOpen(false); };
   const reset = () => { setState({}); setScreen("home"); };
@@ -1101,7 +1102,7 @@ export default function App() {
       <div style={{ position: "fixed", bottom: 0, left: 0, right: 0, zIndex: 90, display: "flex", justifyContent: "center", pointerEvents: "none" }}>
         <div style={{ width: "100%", maxWidth: 430, height: FEEDBACK_BAR_HEIGHT, padding: "10px 16px 14px", background: "rgba(15,23,42,0.92)", backdropFilter: "blur(10px)", WebkitBackdropFilter: "blur(10px)", borderTop: "1px solid rgba(71,85,105,0.5)", pointerEvents: "auto", boxSizing: "border-box" }}>
           <button
-            onClick={() => { setFbOpen(true); setFbDone(false); setFbError(false); setFbMsg(""); setFbType("Bug"); }}
+            onClick={() => { setFbOpen(true); setFbDone(false); setFbError(false); setFbMsg(""); setFbType("Bug"); setFbTimestamp(new Date()); }}
             style={{ width: "100%", padding: "9px 0", borderRadius: 10, border: "1px solid rgba(251,191,36,.35)", background: "rgba(251,191,36,.08)", color: "#fbbf24", fontSize: 12, fontWeight: 600, cursor: "pointer", letterSpacing: 0.2 }}
           >
             ⚠️ Relatar problema / sugestão
@@ -1177,7 +1178,7 @@ export default function App() {
                           type: fbType,
                           message: fbMsg.trim(),
                           screen,
-                          timestamp: new Date().toISOString(),
+                          timestamp: (fbTimestamp ?? new Date()).toISOString(),
                           brand: state?.brand || "não selecionada",
                           url: window.location.href,
                           userAgent: navigator.userAgent,
