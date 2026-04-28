@@ -616,8 +616,16 @@ export function generateRXDBSummary() {
     const specs = [];
     if (c.internalThread != null) specs.push(`rosca ${c.internalThread}mm`);
     if (c.internalAngle != null)  specs.push(`angulo ${c.internalAngle}°`);
-    if (typeof c.platformDiameter === 'number')
-      specs.push(`plataforma ${c.platformDiameter}mm`);
+    if (c.platformDiameter != null) {
+      if (typeof c.platformDiameter === 'number') {
+        specs.push(`plataforma ${c.platformDiameter}mm`);
+      } else if (typeof c.platformDiameter === 'object') {
+        const variants = Object.entries(c.platformDiameter)
+          .map(([corpo, diam]) => `${corpo}=${diam}mm`)
+          .join(', ');
+        specs.push(`plataforma variavel (${variants})`);
+      }
+    }
     if (c.hasInternalThread === false) specs.push('SEM rosca interna');
     const signs = e.rxSigns.length ? ` | sinais: ${e.rxSigns.join('; ')}` : '';
     lines.push(
