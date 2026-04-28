@@ -283,7 +283,7 @@ function DetectiveRX() {
       const res = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: buildRxPrompt(checks), image: base64, mediaType }),
+        body: JSON.stringify({ message: buildRxPrompt(checks), image: base64, mediaType, mode: "detective_rx" }),
       });
       const data = await res.json();
       setAiReply(data.reply || data.error || "Sem resposta.");
