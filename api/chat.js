@@ -1,10 +1,12 @@
 export const config = { runtime: "edge" };
 
 import { generateDBSummary } from "../src/db.js";
+import { generateRXDBSummary } from "../src/rxdb.js";
+import { DETECTIVE_RX_PROMPT } from "../src/prompts/detectiveRxPrompt.js";
 
 const dbSummary = generateDBSummary();
 
-const SYSTEM_PROMPT = `Você é um assistente clínico especializado em implantodontia, integrado ao Implante Guide.
+const SYSTEM_PROMPT_CLINICAL = `Você é um assistente clínico especializado em implantodontia, integrado ao Implante Guide.
 Responda SEMPRE em português, em texto corrido sem markdown (sem ##, **, -- ou similares).
 Use APENAS os dados abaixo sobre conexões e componentes. Nunca invente componentes ou conexões não listados aqui.
 Quando atualizar o banco de dados do app, sua resposta será automaticamente atualizada.
@@ -44,7 +46,7 @@ export default async function handler(req) {
     });
   }
 
-  const { message, image, mediaType } = body;
+  const { message, image, mediaType, mode } = body;
   if (!message || typeof message !== "string" || message.trim().length === 0) {
     return new Response(JSON.stringify({ error: "Mensagem inválida" }), {
       status: 400,
@@ -74,8 +76,10 @@ export default async function handler(req) {
     },
     body: JSON.stringify({
       model: "claude-sonnet-4-6",
-      max_tokens: 512,
-      system: SYSTEM_PROMPT,
+      max_tokens: mode === "detective_rx" ? 1024 : 512,
+      system: mode === "detective_rx"
+        ? DETECTIVE_RX_PROMPT + "\n\n" + generateRXDBSummary()
+        : SYSTEM_PROMPT_CLINICAL,
       messages: [{ role: "user", content }],
     }),
   });
