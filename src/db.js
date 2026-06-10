@@ -217,14 +217,14 @@ export const DB = {
               unitaria: {
                 label: "Prótese Unitária", desc: "Pilar CM parafusado ou Abutment cimentado", icon: "🦷",
                 subtypes: [
-                  { key: "pilar", label: "Pilar CM S.I.N.", icon: "🔩", desc: "Pilar cônico 16° para coroa unitária parafusada", heights: gh("Pilar CM S.I.N.", { torque: "20 Ncm", chave: "Hex 1.20mm", type: "Pilar Protético", material: "Ti Grau 4", shape: "variobase" }, [["1.5", "AUMP-4501C"], ["2.5", "AUMP-4502C"], ["3.5", "AUMP-4503C"], ["4.5", "AUMP-4504C"]]) },
-                  { key: "munhao", label: "Abutment CM Cimentado S.I.N.", icon: "🪝", desc: "Abutment cônico cimentado com perfil emergência anatômico", heights: gh("Abutment CM Cim. S.I.N.", { torque: "20 Ncm", chave: "Hex 1.20mm", type: "Munhão Cimentado", material: "Ti Grau 4", shape: "pilar_cim" }, [["1.5", "AIMP-4501C"], ["2.5", "AIMP-4502C"], ["3.5", "AIMP-4503C"], ["4.5", "AIMP-4504C"]]) },
+                  { key: "pilar", label: "Abutment Cônico CM S.I.N.", icon: "🔩", desc: "Pilar cônico 16° para coroa unitária parafusada", heights: gh("Abutment Cônico CM S.I.N.", { torque: "20 Ncm", chave: "Hex 1.20mm", type: "Pilar Protético", material: "Ti Grau 4", shape: "variobase" }, [["1.0", "ACM 4801C"], ["2.0", "ACM 4802C"], ["3.0", "ACM 4803C"], ["4.0", "ACM 4804C"]]) },
+                  { key: "munhao", label: "Abutment CM Cimentado S.I.N.", icon: "🪝", desc: "Abutment cônico cimentado com perfil emergência anatômico (Ref. placeholder — confirmar com representante S.I.N.)", heights: gh("Abutment CM Cim. S.I.N.", { torque: "20 Ncm", chave: "Hex 1.20mm", type: "Munhão Cimentado", material: "Ti Grau 4", shape: "pilar_cim" }, [["1.5", "ver-catalogo-SIN"], ["2.5", "ver-catalogo-SIN"], ["3.5", "ver-catalogo-SIN"], ["4.5", "ver-catalogo-SIN"]]) },
                 ]
               },
               multipla: {
                 label: "Prótese Unida / Múltipla", desc: "Mini-Pilar CM para próteses fixas múltiplas", icon: "🦷🦷",
                 subtypes: [
-                  { key: "mua", label: "Mini-Pilar CM S.I.N.", icon: "⚙️", desc: "Para próteses fixas múltiplas — sistema CM S.I.N.", heights: gh("Mini-Pilar CM S.I.N.", { torque: "15 Ncm", chave: "Hex 1.20mm", type: "Mini-Pilar Multi-Unit", material: "Ti Grau 4", shape: "sra" }, [["1.5", "MAMU-4501C"], ["2.5", "MAMU-4502C"], ["3.5", "MAMU-4503C"]]) },
+                  { key: "mua", label: "Mini-Abutment Reto CM S.I.N.", icon: "⚙️", desc: "Para próteses fixas múltiplas — sistema CM S.I.N.", heights: gh("Mini-Abutment Reto CM S.I.N.", { torque: "15 Ncm", chave: "Hex 1.20mm", type: "Mini-Pilar Multi-Unit", material: "Ti Grau 4", shape: "sra" }, [["1.0", "MAM 4801C"], ["2.0", "MAM 4802C"], ["3.0", "MAM 4803C"], ["4.0", "MAM 4804C"]]) },
                 ]
               },
             }
@@ -240,14 +240,14 @@ export const DB = {
               unitaria: {
                 label: "Prótese Unitária", desc: "Pilar HI parafusado ou Abutment cimentado", icon: "🦷",
                 subtypes: [
-                  { key: "pilar", label: "Pilar HI S.I.N.", icon: "🔩", desc: "Pilar HI para coroa unitária parafusada", heights: gh("Pilar HI S.I.N.", { torque: "25 Ncm", chave: "Hex 1.27mm", type: "Pilar Protético", material: "Ti Grau 4", shape: "variobase" }, [["1.5", "PHI-RP-15"], ["2.5", "PHI-RP-25"], ["3.5", "PHI-RP-35"], ["4.5", "PHI-RP-45"]]) },
-                  { key: "munhao", label: "Abutment HI Cimentado S.I.N.", icon: "🪝", desc: "Abutment HI para coroa cimentada", heights: gh("Abutment HI Cim. S.I.N.", { torque: "25 Ncm", chave: "Hex 1.27mm", type: "Munhão Cimentado", material: "Ti Grau 4", shape: "pilar_cim" }, [["1.5", "PHI-CIM-15"], ["2.5", "PHI-CIM-25"], ["3.5", "PHI-CIM-35"], ["4.5", "PHI-CIM-45"]]) },
+                  { key: "pilar", label: "Pilar HI S.I.N.", icon: "🔩", desc: "Pilar HI para coroa unitária parafusada (Ref. placeholder — confirmar com representante S.I.N.)", heights: gh("Pilar HI S.I.N.", { torque: "25 Ncm", chave: "Hex 1.27mm", type: "Pilar Protético", material: "Ti Grau 4", shape: "variobase" }, [["1.5", "ver-catalogo-SIN-HI"], ["2.5", "ver-catalogo-SIN-HI"], ["3.5", "ver-catalogo-SIN-HI"], ["4.5", "ver-catalogo-SIN-HI"]]) },
+                  { key: "munhao", label: "Abutment HI Cimentado S.I.N.", icon: "🪝", desc: "Abutment HI para coroa cimentada (Ref. placeholder — confirmar com representante S.I.N.)", heights: gh("Abutment HI Cim. S.I.N.", { torque: "25 Ncm", chave: "Hex 1.27mm", type: "Munhão Cimentado", material: "Ti Grau 4", shape: "pilar_cim" }, [["1.5", "ver-catalogo-SIN-HI"], ["2.5", "ver-catalogo-SIN-HI"], ["3.5", "ver-catalogo-SIN-HI"], ["4.5", "ver-catalogo-SIN-HI"]]) },
                 ]
               },
               multipla: {
                 label: "Prótese Unida / Múltipla", desc: "Mini-Pilar HI para próteses fixas múltiplas", icon: "🦷🦷",
                 subtypes: [
-                  { key: "mua", label: "Mini-Pilar HI S.I.N.", icon: "⚙️", desc: "Para próteses fixas múltiplas — HI S.I.N.", heights: gh("Mini-Pilar HI S.I.N.", { torque: "15 Ncm", chave: "Hex 1.27mm", type: "Mini-Pilar Multi-Unit", material: "Ti Grau 4", shape: "sra" }, [["1.5", "MUA-HI-15"], ["2.5", "MUA-HI-25"], ["3.5", "MUA-HI-35"]]) },
+                  { key: "mua", label: "Mini-Pilar HI S.I.N.", icon: "⚙️", desc: "Para próteses fixas múltiplas — HI S.I.N. (Ref. placeholder — confirmar com representante S.I.N.)", heights: gh("Mini-Pilar HI S.I.N.", { torque: "15 Ncm", chave: "Hex 1.27mm", type: "Mini-Pilar Multi-Unit", material: "Ti Grau 4", shape: "sra" }, [["1.5", "ver-catalogo-SIN-HI"], ["2.5", "ver-catalogo-SIN-HI"], ["3.5", "ver-catalogo-SIN-HI"]]) },
                 ]
               },
             }
@@ -263,14 +263,14 @@ export const DB = {
               unitaria: {
                 label: "Prótese Unitária", desc: "Pilar HE parafusado ou Abutment cimentado", icon: "🦷",
                 subtypes: [
-                  { key: "pilar", label: "Pilar HE S.I.N.", icon: "🔩", desc: "Pilar HE para coroa unitária parafusada", heights: gh("Pilar HE S.I.N.", { torque: "20 Ncm", chave: "Hex 0.9mm", type: "Pilar Protético", material: "Ti Grau 4", shape: "variobase" }, [["1.5", "PHE-RP-15"], ["2.5", "PHE-RP-25"], ["3.5", "PHE-RP-35"], ["4.5", "PHE-RP-45"]]) },
-                  { key: "munhao", label: "Abutment HE Cimentado S.I.N.", icon: "🪝", desc: "Abutment HE para coroa cimentada", heights: gh("Abutment HE Cim. S.I.N.", { torque: "20 Ncm", chave: "Hex 0.9mm", type: "Munhão Cimentado", material: "Ti Grau 4", shape: "pilar_cim" }, [["1.5", "PHE-CIM-15"], ["2.5", "PHE-CIM-25"], ["3.5", "PHE-CIM-35"], ["4.5", "PHE-CIM-45"]]) },
+                  { key: "pilar", label: "Pilar HE S.I.N.", icon: "🔩", desc: "Pilar HE para coroa unitária parafusada (Ref. placeholder — confirmar com representante S.I.N.)", heights: gh("Pilar HE S.I.N.", { torque: "20 Ncm", chave: "Hex 0.9mm", type: "Pilar Protético", material: "Ti Grau 4", shape: "variobase" }, [["1.5", "ver-catalogo-SIN-HE"], ["2.5", "ver-catalogo-SIN-HE"], ["3.5", "ver-catalogo-SIN-HE"], ["4.5", "ver-catalogo-SIN-HE"]]) },
+                  { key: "munhao", label: "Abutment HE Cimentado S.I.N.", icon: "🪝", desc: "Abutment HE para coroa cimentada (Ref. placeholder — confirmar com representante S.I.N.)", heights: gh("Abutment HE Cim. S.I.N.", { torque: "20 Ncm", chave: "Hex 0.9mm", type: "Munhão Cimentado", material: "Ti Grau 4", shape: "pilar_cim" }, [["1.5", "ver-catalogo-SIN-HE"], ["2.5", "ver-catalogo-SIN-HE"], ["3.5", "ver-catalogo-SIN-HE"], ["4.5", "ver-catalogo-SIN-HE"]]) },
                 ]
               },
               multipla: {
                 label: "Prótese Unida / Múltipla", desc: "Mini-Pilar HE para próteses fixas múltiplas", icon: "🦷🦷",
                 subtypes: [
-                  { key: "mua", label: "Mini-Pilar HE S.I.N.", icon: "⚙️", desc: "Para próteses fixas múltiplas — HE S.I.N.", heights: gh("Mini-Pilar HE S.I.N.", { torque: "15 Ncm", chave: "Hex 0.9mm", type: "Mini-Pilar Multi-Unit", material: "Ti Grau 4", shape: "sra" }, [["1.5", "MUA-HE-15"], ["2.5", "MUA-HE-25"], ["3.5", "MUA-HE-35"]]) },
+                  { key: "mua", label: "Mini-Pilar HE S.I.N.", icon: "⚙️", desc: "Para próteses fixas múltiplas — HE S.I.N. (Ref. placeholder — confirmar com representante S.I.N.)", heights: gh("Mini-Pilar HE S.I.N.", { torque: "15 Ncm", chave: "Hex 0.9mm", type: "Mini-Pilar Multi-Unit", material: "Ti Grau 4", shape: "sra" }, [["1.5", "ver-catalogo-SIN-HE"], ["2.5", "ver-catalogo-SIN-HE"], ["3.5", "ver-catalogo-SIN-HE"]]) },
                 ]
               },
             }
@@ -291,14 +291,14 @@ export const DB = {
               unitaria: {
                 label: "Prótese Unitária", desc: "Pilar CM parafusado ou Munhão cimentado", icon: "🦷",
                 subtypes: [
-                  { key: "pilar", label: "Pilar CM Parafusado", icon: "🔩", desc: "Pilar CM para coroa unitária parafusada Intraoss", heights: gh("Pilar CM Intraoss", { torque: "30 Ncm", chave: "Hex 1.20mm", type: "Pilar Protético", material: "Ti Grau 4", shape: "variobase" }, [["1.5", "IOS-CM-PAR-15"], ["2.5", "IOS-CM-PAR-25"], ["3.5", "IOS-CM-PAR-35"], ["4.5", "IOS-CM-PAR-45"]]) },
-                  { key: "munhao", label: "Munhão CM Cimentado", icon: "🪝", desc: "Munhão CM para coroa unitária cimentada", heights: gh("Munhão CM Intraoss", { torque: "30 Ncm", chave: "Hex 1.20mm", type: "Munhão Cimentado", material: "Ti Grau 4", shape: "pilar_cim" }, [["1.5", "IOS-CM-CIM-15"], ["2.5", "IOS-CM-CIM-25"], ["3.5", "IOS-CM-CIM-35"], ["4.5", "IOS-CM-CIM-45"]]) },
+                  { key: "pilar", label: "Pilar CM Parafusado", icon: "🔩", desc: "Pilar CM para coroa unitária parafusada Intraoss (Ref. placeholder — confirmar código com fabricante antes do pedido)", heights: gh("Pilar CM Intraoss", { torque: "30 Ncm", chave: "Hex 1.20mm", type: "Pilar Protético", material: "Ti Grau 4", shape: "variobase" }, [["1.5", "IOS-CM-PAR-15"], ["2.5", "IOS-CM-PAR-25"], ["3.5", "IOS-CM-PAR-35"], ["4.5", "IOS-CM-PAR-45"]]) },
+                  { key: "munhao", label: "Munhão CM Cimentado", icon: "🪝", desc: "Munhão CM para coroa unitária cimentada (Ref. placeholder — confirmar código com fabricante antes do pedido)", heights: gh("Munhão CM Intraoss", { torque: "30 Ncm", chave: "Hex 1.20mm", type: "Munhão Cimentado", material: "Ti Grau 4", shape: "pilar_cim" }, [["1.5", "IOS-CM-CIM-15"], ["2.5", "IOS-CM-CIM-25"], ["3.5", "IOS-CM-CIM-35"], ["4.5", "IOS-CM-CIM-45"]]) },
                 ]
               },
               multipla: {
                 label: "Prótese Unida / Múltipla", desc: "Mini-Pilar CM para próteses fixas múltiplas", icon: "🦷🦷",
                 subtypes: [
-                  { key: "mua", label: "Mini-Pilar CM Intraoss", icon: "⚙️", desc: "Para próteses fixas múltiplas Intraoss CM", heights: gh("Mini-Pilar CM Intraoss", { torque: "15 Ncm", chave: "Hex 1.20mm", type: "Mini-Pilar Multi-Unit", material: "Ti Grau 4", shape: "sra" }, [["1.5", "IOS-CM-MU-15"], ["2.5", "IOS-CM-MU-25"], ["3.5", "IOS-CM-MU-35"]]) },
+                  { key: "mua", label: "Mini-Pilar CM Intraoss", icon: "⚙️", desc: "Para próteses fixas múltiplas Intraoss CM (Ref. placeholder — confirmar código com fabricante antes do pedido)", heights: gh("Mini-Pilar CM Intraoss", { torque: "15 Ncm", chave: "Hex 1.20mm", type: "Mini-Pilar Multi-Unit", material: "Ti Grau 4", shape: "sra" }, [["1.5", "IOS-CM-MU-15"], ["2.5", "IOS-CM-MU-25"], ["3.5", "IOS-CM-MU-35"]]) },
                 ]
               },
             }
@@ -314,14 +314,14 @@ export const DB = {
               unitaria: {
                 label: "Prótese Unitária", desc: "Pilar HE parafusado ou Munhão cimentado", icon: "🦷",
                 subtypes: [
-                  { key: "pilar", label: "Pilar HE Parafusado", icon: "🔩", desc: "Pilar HE para coroa unitária parafusada Intraoss", heights: gh("Pilar HE Intraoss", { torque: "20 Ncm", chave: "Hex 0.9mm", type: "Pilar Protético", material: "Ti Grau 4", shape: "variobase" }, [["1.5", "IOS-HE-PAR-15"], ["2.5", "IOS-HE-PAR-25"], ["3.5", "IOS-HE-PAR-35"], ["4.5", "IOS-HE-PAR-45"]]) },
-                  { key: "munhao", label: "Munhão HE Cimentado", icon: "🪝", desc: "Munhão HE para coroa cimentada Intraoss", heights: gh("Munhão HE Intraoss", { torque: "20 Ncm", chave: "Hex 0.9mm", type: "Munhão Cimentado", material: "Ti Grau 4", shape: "pilar_cim" }, [["1.5", "IOS-HE-CIM-15"], ["2.5", "IOS-HE-CIM-25"], ["3.5", "IOS-HE-CIM-35"], ["4.5", "IOS-HE-CIM-45"]]) },
+                  { key: "pilar", label: "Pilar HE Parafusado", icon: "🔩", desc: "Pilar HE para coroa unitária parafusada Intraoss (Ref. placeholder — confirmar código com fabricante antes do pedido)", heights: gh("Pilar HE Intraoss", { torque: "20 Ncm", chave: "Hex 0.9mm", type: "Pilar Protético", material: "Ti Grau 4", shape: "variobase" }, [["1.5", "IOS-HE-PAR-15"], ["2.5", "IOS-HE-PAR-25"], ["3.5", "IOS-HE-PAR-35"], ["4.5", "IOS-HE-PAR-45"]]) },
+                  { key: "munhao", label: "Munhão HE Cimentado", icon: "🪝", desc: "Munhão HE para coroa cimentada Intraoss (Ref. placeholder — confirmar código com fabricante antes do pedido)", heights: gh("Munhão HE Intraoss", { torque: "20 Ncm", chave: "Hex 0.9mm", type: "Munhão Cimentado", material: "Ti Grau 4", shape: "pilar_cim" }, [["1.5", "IOS-HE-CIM-15"], ["2.5", "IOS-HE-CIM-25"], ["3.5", "IOS-HE-CIM-35"], ["4.5", "IOS-HE-CIM-45"]]) },
                 ]
               },
               multipla: {
                 label: "Prótese Unida / Múltipla", desc: "Mini-Pilar HE para próteses fixas múltiplas", icon: "🦷🦷",
                 subtypes: [
-                  { key: "mua", label: "Mini-Pilar HE Intraoss", icon: "⚙️", desc: "Para próteses fixas múltiplas Intraoss HE", heights: gh("Mini-Pilar HE Intraoss", { torque: "15 Ncm", chave: "Hex 0.9mm", type: "Mini-Pilar Multi-Unit", material: "Ti Grau 4", shape: "sra" }, [["1.5", "IOS-HE-MU-15"], ["2.5", "IOS-HE-MU-25"], ["3.5", "IOS-HE-MU-35"]]) },
+                  { key: "mua", label: "Mini-Pilar HE Intraoss", icon: "⚙️", desc: "Para próteses fixas múltiplas Intraoss HE (Ref. placeholder — confirmar código com fabricante antes do pedido)", heights: gh("Mini-Pilar HE Intraoss", { torque: "15 Ncm", chave: "Hex 0.9mm", type: "Mini-Pilar Multi-Unit", material: "Ti Grau 4", shape: "sra" }, [["1.5", "IOS-HE-MU-15"], ["2.5", "IOS-HE-MU-25"], ["3.5", "IOS-HE-MU-35"]]) },
                 ]
               },
             }
@@ -342,14 +342,14 @@ export const DB = {
               unitaria: {
                 label: "Prótese Unitária", desc: "Pilar Drive parafusado ou Munhão cimentado", icon: "🦷",
                 subtypes: [
-                  { key: "pilar", label: "Pilar Drive Parafusado", icon: "🔩", desc: "Pilar CM Drive para coroa unitária parafusada", heights: gh("Pilar Drive TFX", { torque: "32 Ncm", chave: "Hex 1.20mm", type: "Pilar Protético", material: "Ti Grau 4", shape: "variobase" }, [["1.5", "TF-DRV-PAR-15"], ["2.5", "TF-DRV-PAR-25"], ["3.5", "TF-DRV-PAR-35"], ["4.5", "TF-DRV-PAR-45"]]) },
-                  { key: "munhao", label: "Munhão Drive Cimentado", icon: "🪝", desc: "Munhão CM Drive para coroa cimentada", heights: gh("Munhão Drive TFX", { torque: "32 Ncm", chave: "Hex 1.20mm", type: "Munhão Cimentado", material: "Ti Grau 4", shape: "pilar_cim" }, [["1.5", "TF-DRV-CIM-15"], ["2.5", "TF-DRV-CIM-25"], ["3.5", "TF-DRV-CIM-35"], ["4.5", "TF-DRV-CIM-45"]]) },
+                  { key: "pilar", label: "Pilar Drive Parafusado", icon: "🔩", desc: "Pilar CM Drive para coroa unitária parafusada (Ref. placeholder — confirmar código com fabricante antes do pedido)", heights: gh("Pilar Drive TFX", { torque: "32 Ncm", chave: "Hex 1.20mm", type: "Pilar Protético", material: "Ti Grau 4", shape: "variobase" }, [["1.5", "TF-DRV-PAR-15"], ["2.5", "TF-DRV-PAR-25"], ["3.5", "TF-DRV-PAR-35"], ["4.5", "TF-DRV-PAR-45"]]) },
+                  { key: "munhao", label: "Munhão Drive Cimentado", icon: "🪝", desc: "Munhão CM Drive para coroa cimentada (Ref. placeholder — confirmar código com fabricante antes do pedido)", heights: gh("Munhão Drive TFX", { torque: "32 Ncm", chave: "Hex 1.20mm", type: "Munhão Cimentado", material: "Ti Grau 4", shape: "pilar_cim" }, [["1.5", "TF-DRV-CIM-15"], ["2.5", "TF-DRV-CIM-25"], ["3.5", "TF-DRV-CIM-35"], ["4.5", "TF-DRV-CIM-45"]]) },
                 ]
               },
               multipla: {
                 label: "Prótese Unida / Múltipla", desc: "Mini-Pilar Drive para próteses fixas múltiplas", icon: "🦷🦷",
                 subtypes: [
-                  { key: "mua", label: "Mini-Pilar Drive TFX", icon: "⚙️", desc: "Para próteses fixas múltiplas Titanium Fix CM", heights: gh("Mini-Pilar Drive TFX", { torque: "15 Ncm", chave: "Hex 1.20mm", type: "Mini-Pilar Multi-Unit", material: "Ti Grau 4", shape: "sra" }, [["1.5", "TF-DRV-MU-15"], ["2.5", "TF-DRV-MU-25"], ["3.5", "TF-DRV-MU-35"]]) },
+                  { key: "mua", label: "Mini-Pilar Drive TFX", icon: "⚙️", desc: "Para próteses fixas múltiplas Titanium Fix CM (Ref. placeholder — confirmar código com fabricante antes do pedido)", heights: gh("Mini-Pilar Drive TFX", { torque: "15 Ncm", chave: "Hex 1.20mm", type: "Mini-Pilar Multi-Unit", material: "Ti Grau 4", shape: "sra" }, [["1.5", "TF-DRV-MU-15"], ["2.5", "TF-DRV-MU-25"], ["3.5", "TF-DRV-MU-35"]]) },
                 ]
               },
             }
@@ -365,14 +365,14 @@ export const DB = {
               unitaria: {
                 label: "Prótese Unitária", desc: "Pilar HI parafusado ou Munhão cimentado", icon: "🦷",
                 subtypes: [
-                  { key: "pilar", label: "Pilar HI Parafusado", icon: "🔩", desc: "Pilar HI para coroa unitária parafusada Titanium Fix", heights: gh("Pilar HI TFX", { torque: "25 Ncm", chave: "Hex 1.27mm", type: "Pilar Protético", material: "Ti Grau 4", shape: "variobase" }, [["1.5", "TF-HI-PAR-15"], ["2.5", "TF-HI-PAR-25"], ["3.5", "TF-HI-PAR-35"], ["4.5", "TF-HI-PAR-45"]]) },
-                  { key: "munhao", label: "Munhão HI Cimentado", icon: "🪝", desc: "Munhão HI para coroa cimentada Titanium Fix", heights: gh("Munhão HI TFX", { torque: "25 Ncm", chave: "Hex 1.27mm", type: "Munhão Cimentado", material: "Ti Grau 4", shape: "pilar_cim" }, [["1.5", "TF-HI-CIM-15"], ["2.5", "TF-HI-CIM-25"], ["3.5", "TF-HI-CIM-35"], ["4.5", "TF-HI-CIM-45"]]) },
+                  { key: "pilar", label: "Pilar HI Parafusado", icon: "🔩", desc: "Pilar HI para coroa unitária parafusada Titanium Fix (Ref. placeholder — confirmar código com fabricante antes do pedido)", heights: gh("Pilar HI TFX", { torque: "25 Ncm", chave: "Hex 1.27mm", type: "Pilar Protético", material: "Ti Grau 4", shape: "variobase" }, [["1.5", "TF-HI-PAR-15"], ["2.5", "TF-HI-PAR-25"], ["3.5", "TF-HI-PAR-35"], ["4.5", "TF-HI-PAR-45"]]) },
+                  { key: "munhao", label: "Munhão HI Cimentado", icon: "🪝", desc: "Munhão HI para coroa cimentada Titanium Fix (Ref. placeholder — confirmar código com fabricante antes do pedido)", heights: gh("Munhão HI TFX", { torque: "25 Ncm", chave: "Hex 1.27mm", type: "Munhão Cimentado", material: "Ti Grau 4", shape: "pilar_cim" }, [["1.5", "TF-HI-CIM-15"], ["2.5", "TF-HI-CIM-25"], ["3.5", "TF-HI-CIM-35"], ["4.5", "TF-HI-CIM-45"]]) },
                 ]
               },
               multipla: {
                 label: "Prótese Unida / Múltipla", desc: "Mini-Pilar HI para próteses fixas múltiplas", icon: "🦷🦷",
                 subtypes: [
-                  { key: "mua", label: "Mini-Pilar HI TFX", icon: "⚙️", desc: "Para próteses fixas múltiplas Titanium Fix HI", heights: gh("Mini-Pilar HI TFX", { torque: "15 Ncm", chave: "Hex 1.27mm", type: "Mini-Pilar Multi-Unit", material: "Ti Grau 4", shape: "sra" }, [["1.5", "TF-HI-MU-15"], ["2.5", "TF-HI-MU-25"], ["3.5", "TF-HI-MU-35"]]) },
+                  { key: "mua", label: "Mini-Pilar HI TFX", icon: "⚙️", desc: "Para próteses fixas múltiplas Titanium Fix HI (Ref. placeholder — confirmar código com fabricante antes do pedido)", heights: gh("Mini-Pilar HI TFX", { torque: "15 Ncm", chave: "Hex 1.27mm", type: "Mini-Pilar Multi-Unit", material: "Ti Grau 4", shape: "sra" }, [["1.5", "TF-HI-MU-15"], ["2.5", "TF-HI-MU-25"], ["3.5", "TF-HI-MU-35"]]) },
                 ]
               },
             }
@@ -388,14 +388,14 @@ export const DB = {
               unitaria: {
                 label: "Prótese Unitária", desc: "Pilar HE parafusado ou Munhão cimentado", icon: "🦷",
                 subtypes: [
-                  { key: "pilar", label: "Pilar HE Parafusado", icon: "🔩", desc: "Pilar HE para coroa unitária parafusada Titanium Fix", heights: gh("Pilar HE TFX", { torque: "20 Ncm", chave: "Hex 0.9mm", type: "Pilar Protético", material: "Ti Grau 4", shape: "variobase" }, [["1.5", "TF-HE-PAR-15"], ["2.5", "TF-HE-PAR-25"], ["3.5", "TF-HE-PAR-35"], ["4.5", "TF-HE-PAR-45"]]) },
-                  { key: "munhao", label: "Munhão HE Cimentado", icon: "🪝", desc: "Munhão HE para coroa cimentada Titanium Fix", heights: gh("Munhão HE TFX", { torque: "20 Ncm", chave: "Hex 0.9mm", type: "Munhão Cimentado", material: "Ti Grau 4", shape: "pilar_cim" }, [["1.5", "TF-HE-CIM-15"], ["2.5", "TF-HE-CIM-25"], ["3.5", "TF-HE-CIM-35"], ["4.5", "TF-HE-CIM-45"]]) },
+                  { key: "pilar", label: "Pilar HE Parafusado", icon: "🔩", desc: "Pilar HE para coroa unitária parafusada Titanium Fix (Ref. placeholder — confirmar código com fabricante antes do pedido)", heights: gh("Pilar HE TFX", { torque: "20 Ncm", chave: "Hex 0.9mm", type: "Pilar Protético", material: "Ti Grau 4", shape: "variobase" }, [["1.5", "TF-HE-PAR-15"], ["2.5", "TF-HE-PAR-25"], ["3.5", "TF-HE-PAR-35"], ["4.5", "TF-HE-PAR-45"]]) },
+                  { key: "munhao", label: "Munhão HE Cimentado", icon: "🪝", desc: "Munhão HE para coroa cimentada Titanium Fix (Ref. placeholder — confirmar código com fabricante antes do pedido)", heights: gh("Munhão HE TFX", { torque: "20 Ncm", chave: "Hex 0.9mm", type: "Munhão Cimentado", material: "Ti Grau 4", shape: "pilar_cim" }, [["1.5", "TF-HE-CIM-15"], ["2.5", "TF-HE-CIM-25"], ["3.5", "TF-HE-CIM-35"], ["4.5", "TF-HE-CIM-45"]]) },
                 ]
               },
               multipla: {
                 label: "Prótese Unida / Múltipla", desc: "Mini-Pilar HE para próteses fixas múltiplas", icon: "🦷🦷",
                 subtypes: [
-                  { key: "mua", label: "Mini-Pilar HE TFX", icon: "⚙️", desc: "Para próteses fixas múltiplas Titanium Fix HE", heights: gh("Mini-Pilar HE TFX", { torque: "15 Ncm", chave: "Hex 0.9mm", type: "Mini-Pilar Multi-Unit", material: "Ti Grau 4", shape: "sra" }, [["1.5", "TF-HE-MU-15"], ["2.5", "TF-HE-MU-25"], ["3.5", "TF-HE-MU-35"]]) },
+                  { key: "mua", label: "Mini-Pilar HE TFX", icon: "⚙️", desc: "Para próteses fixas múltiplas Titanium Fix HE (Ref. placeholder — confirmar código com fabricante antes do pedido)", heights: gh("Mini-Pilar HE TFX", { torque: "15 Ncm", chave: "Hex 0.9mm", type: "Mini-Pilar Multi-Unit", material: "Ti Grau 4", shape: "sra" }, [["1.5", "TF-HE-MU-15"], ["2.5", "TF-HE-MU-25"], ["3.5", "TF-HE-MU-35"]]) },
                 ]
               },
             }
@@ -416,14 +416,14 @@ export const DB = {
               unitaria: {
                 label: "Prótese Unitária", desc: "Pilar Flash CM parafusado ou Munhão cimentado", icon: "🦷",
                 subtypes: [
-                  { key: "pilar", label: "Pilar Flash CM Parafusado", icon: "🔩", desc: "Pilar CM Flash para coroa unitária parafusada", heights: gh("Pilar Flash CM Conexão", { torque: "30 Ncm", chave: "Hex 1.20mm", type: "Pilar Protético", material: "Ti Grau 4 Hard", shape: "variobase" }, [["1.5", "CNX-CM-PAR-15"], ["2.5", "CNX-CM-PAR-25"], ["3.5", "CNX-CM-PAR-35"], ["4.5", "CNX-CM-PAR-45"]]) },
-                  { key: "munhao", label: "Munhão Flash CM Cimentado", icon: "🪝", desc: "Munhão CM Flash para coroa cimentada", heights: gh("Munhão Flash CM Conexão", { torque: "30 Ncm", chave: "Hex 1.20mm", type: "Munhão Cimentado", material: "Ti Grau 4 Hard", shape: "pilar_cim" }, [["1.5", "CNX-CM-CIM-15"], ["2.5", "CNX-CM-CIM-25"], ["3.5", "CNX-CM-CIM-35"], ["4.5", "CNX-CM-CIM-45"]]) },
+                  { key: "pilar", label: "Pilar Flash CM Parafusado", icon: "🔩", desc: "Pilar CM Flash para coroa unitária parafusada (Ref. placeholder — confirmar código com fabricante antes do pedido)", heights: gh("Pilar Flash CM Conexão", { torque: "30 Ncm", chave: "Hex 1.20mm", type: "Pilar Protético", material: "Ti Grau 4 Hard", shape: "variobase" }, [["1.5", "CNX-CM-PAR-15"], ["2.5", "CNX-CM-PAR-25"], ["3.5", "CNX-CM-PAR-35"], ["4.5", "CNX-CM-PAR-45"]]) },
+                  { key: "munhao", label: "Munhão Flash CM Cimentado", icon: "🪝", desc: "Munhão CM Flash para coroa cimentada (Ref. placeholder — confirmar código com fabricante antes do pedido)", heights: gh("Munhão Flash CM Conexão", { torque: "30 Ncm", chave: "Hex 1.20mm", type: "Munhão Cimentado", material: "Ti Grau 4 Hard", shape: "pilar_cim" }, [["1.5", "CNX-CM-CIM-15"], ["2.5", "CNX-CM-CIM-25"], ["3.5", "CNX-CM-CIM-35"], ["4.5", "CNX-CM-CIM-45"]]) },
                 ]
               },
               multipla: {
                 label: "Prótese Unida / Múltipla", desc: "Mini-Pilar Flash CM para próteses fixas múltiplas", icon: "🦷🦷",
                 subtypes: [
-                  { key: "mua", label: "Mini-Pilar Flash CM Conexão", icon: "⚙️", desc: "Para próteses fixas múltiplas Conexão CM", heights: gh("Mini-Pilar Flash CM Conexão", { torque: "15 Ncm", chave: "Hex 1.20mm", type: "Mini-Pilar Multi-Unit", material: "Ti Grau 4 Hard", shape: "sra" }, [["1.5", "CNX-CM-MU-15"], ["2.5", "CNX-CM-MU-25"], ["3.5", "CNX-CM-MU-35"]]) },
+                  { key: "mua", label: "Mini-Pilar Flash CM Conexão", icon: "⚙️", desc: "Para próteses fixas múltiplas Conexão CM (Ref. placeholder — confirmar código com fabricante antes do pedido)", heights: gh("Mini-Pilar Flash CM Conexão", { torque: "15 Ncm", chave: "Hex 1.20mm", type: "Mini-Pilar Multi-Unit", material: "Ti Grau 4 Hard", shape: "sra" }, [["1.5", "CNX-CM-MU-15"], ["2.5", "CNX-CM-MU-25"], ["3.5", "CNX-CM-MU-35"]]) },
                 ]
               },
             }
@@ -439,14 +439,14 @@ export const DB = {
               unitaria: {
                 label: "Prótese Unitária", desc: "Pilar HE Easy parafusado ou Munhão cimentado", icon: "🦷",
                 subtypes: [
-                  { key: "pilar", label: "Pilar HE Easy Parafusado", icon: "🔩", desc: "Pilar HE Easy para coroa unitária parafusada", heights: gh("Pilar HE Conexão", { torque: "20 Ncm", chave: "Hex 0.9mm", type: "Pilar Protético", material: "Ti Grau 4 Hard", shape: "variobase" }, [["1.5", "CNX-HE-PAR-15"], ["2.5", "CNX-HE-PAR-25"], ["3.5", "CNX-HE-PAR-35"], ["4.5", "CNX-HE-PAR-45"]]) },
-                  { key: "munhao", label: "Munhão HE Easy Cimentado", icon: "🪝", desc: "Munhão HE Easy para coroa cimentada", heights: gh("Munhão HE Conexão", { torque: "20 Ncm", chave: "Hex 0.9mm", type: "Munhão Cimentado", material: "Ti Grau 4 Hard", shape: "pilar_cim" }, [["1.5", "CNX-HE-CIM-15"], ["2.5", "CNX-HE-CIM-25"], ["3.5", "CNX-HE-CIM-35"], ["4.5", "CNX-HE-CIM-45"]]) },
+                  { key: "pilar", label: "Pilar HE Easy Parafusado", icon: "🔩", desc: "Pilar HE Easy para coroa unitária parafusada (Ref. placeholder — confirmar código com fabricante antes do pedido)", heights: gh("Pilar HE Conexão", { torque: "20 Ncm", chave: "Hex 0.9mm", type: "Pilar Protético", material: "Ti Grau 4 Hard", shape: "variobase" }, [["1.5", "CNX-HE-PAR-15"], ["2.5", "CNX-HE-PAR-25"], ["3.5", "CNX-HE-PAR-35"], ["4.5", "CNX-HE-PAR-45"]]) },
+                  { key: "munhao", label: "Munhão HE Easy Cimentado", icon: "🪝", desc: "Munhão HE Easy para coroa cimentada (Ref. placeholder — confirmar código com fabricante antes do pedido)", heights: gh("Munhão HE Conexão", { torque: "20 Ncm", chave: "Hex 0.9mm", type: "Munhão Cimentado", material: "Ti Grau 4 Hard", shape: "pilar_cim" }, [["1.5", "CNX-HE-CIM-15"], ["2.5", "CNX-HE-CIM-25"], ["3.5", "CNX-HE-CIM-35"], ["4.5", "CNX-HE-CIM-45"]]) },
                 ]
               },
               multipla: {
                 label: "Prótese Unida / Múltipla", desc: "Mini-Pilar HE Easy para próteses fixas múltiplas", icon: "🦷🦷",
                 subtypes: [
-                  { key: "mua", label: "Mini-Pilar HE Easy Conexão", icon: "⚙️", desc: "Para próteses fixas múltiplas Conexão HE", heights: gh("Mini-Pilar HE Conexão", { torque: "15 Ncm", chave: "Hex 0.9mm", type: "Mini-Pilar Multi-Unit", material: "Ti Grau 4 Hard", shape: "sra" }, [["1.5", "CNX-HE-MU-15"], ["2.5", "CNX-HE-MU-25"], ["3.5", "CNX-HE-MU-35"]]) },
+                  { key: "mua", label: "Mini-Pilar HE Easy Conexão", icon: "⚙️", desc: "Para próteses fixas múltiplas Conexão HE (Ref. placeholder — confirmar código com fabricante antes do pedido)", heights: gh("Mini-Pilar HE Conexão", { torque: "15 Ncm", chave: "Hex 0.9mm", type: "Mini-Pilar Multi-Unit", material: "Ti Grau 4 Hard", shape: "sra" }, [["1.5", "CNX-HE-MU-15"], ["2.5", "CNX-HE-MU-25"], ["3.5", "CNX-HE-MU-35"]]) },
                 ]
               },
             }
@@ -467,14 +467,14 @@ export const DB = {
               unitaria: {
                 label: "Prótese Unitária", desc: "Pilar CM parafusado ou Munhão cimentado", icon: "🦷",
                 subtypes: [
-                  { key: "pilar", label: "Pilar CM Arcsys Parafusado", icon: "🔩", desc: "Pilar CM indexado para coroa unitária parafusada", heights: gh("Pilar CM Arcsys", { torque: "30 Ncm", chave: "Hex 1.20mm", type: "Pilar Protético", material: "Ti Grau 4", shape: "variobase" }, [["1.5", "ARC-CM-PAR-15"], ["2.5", "ARC-CM-PAR-25"], ["3.5", "ARC-CM-PAR-35"], ["4.5", "ARC-CM-PAR-45"]]) },
-                  { key: "munhao", label: "Munhão CM Arcsys Cimentado", icon: "🪝", desc: "Munhão CM indexado para coroa cimentada", heights: gh("Munhão CM Arcsys", { torque: "30 Ncm", chave: "Hex 1.20mm", type: "Munhão Cimentado", material: "Ti Grau 4", shape: "pilar_cim" }, [["1.5", "ARC-CM-CIM-15"], ["2.5", "ARC-CM-CIM-25"], ["3.5", "ARC-CM-CIM-35"], ["4.5", "ARC-CM-CIM-45"]]) },
+                  { key: "pilar", label: "Pilar CM Arcsys Parafusado", icon: "🔩", desc: "Pilar CM indexado para coroa unitária parafusada (Ref. placeholder — confirmar código com fabricante antes do pedido)", heights: gh("Pilar CM Arcsys", { torque: "30 Ncm", chave: "Hex 1.20mm", type: "Pilar Protético", material: "Ti Grau 4", shape: "variobase" }, [["1.5", "ARC-CM-PAR-15"], ["2.5", "ARC-CM-PAR-25"], ["3.5", "ARC-CM-PAR-35"], ["4.5", "ARC-CM-PAR-45"]]) },
+                  { key: "munhao", label: "Munhão CM Arcsys Cimentado", icon: "🪝", desc: "Munhão CM indexado para coroa cimentada (Ref. placeholder — confirmar código com fabricante antes do pedido)", heights: gh("Munhão CM Arcsys", { torque: "30 Ncm", chave: "Hex 1.20mm", type: "Munhão Cimentado", material: "Ti Grau 4", shape: "pilar_cim" }, [["1.5", "ARC-CM-CIM-15"], ["2.5", "ARC-CM-CIM-25"], ["3.5", "ARC-CM-CIM-35"], ["4.5", "ARC-CM-CIM-45"]]) },
                 ]
               },
               multipla: {
                 label: "Prótese Unida / Múltipla", desc: "Mini-Pilar CM para próteses fixas múltiplas", icon: "🦷🦷",
                 subtypes: [
-                  { key: "mua", label: "Mini-Pilar CM Arcsys", icon: "⚙️", desc: "Para próteses fixas múltiplas Arcsys CM", heights: gh("Mini-Pilar CM Arcsys", { torque: "15 Ncm", chave: "Hex 1.20mm", type: "Mini-Pilar Multi-Unit", material: "Ti Grau 4", shape: "sra" }, [["1.5", "ARC-CM-MU-15"], ["2.5", "ARC-CM-MU-25"], ["3.5", "ARC-CM-MU-35"]]) },
+                  { key: "mua", label: "Mini-Pilar CM Arcsys", icon: "⚙️", desc: "Para próteses fixas múltiplas Arcsys CM (Ref. placeholder — confirmar código com fabricante antes do pedido)", heights: gh("Mini-Pilar CM Arcsys", { torque: "15 Ncm", chave: "Hex 1.20mm", type: "Mini-Pilar Multi-Unit", material: "Ti Grau 4", shape: "sra" }, [["1.5", "ARC-CM-MU-15"], ["2.5", "ARC-CM-MU-25"], ["3.5", "ARC-CM-MU-35"]]) },
                 ]
               },
             }
@@ -490,14 +490,14 @@ export const DB = {
               unitaria: {
                 label: "Prótese Unitária", desc: "Pilar HI parafusado ou Munhão cimentado", icon: "🦷",
                 subtypes: [
-                  { key: "pilar", label: "Pilar HI Arcsys Parafusado", icon: "🔩", desc: "Pilar HI para coroa unitária parafusada", heights: gh("Pilar HI Arcsys", { torque: "25 Ncm", chave: "Hex 1.27mm", type: "Pilar Protético", material: "Ti Grau 4", shape: "variobase" }, [["1.5", "ARC-HI-PAR-15"], ["2.5", "ARC-HI-PAR-25"], ["3.5", "ARC-HI-PAR-35"], ["4.5", "ARC-HI-PAR-45"]]) },
-                  { key: "munhao", label: "Munhão HI Arcsys Cimentado", icon: "🪝", desc: "Munhão HI para coroa cimentada Arcsys", heights: gh("Munhão HI Arcsys", { torque: "25 Ncm", chave: "Hex 1.27mm", type: "Munhão Cimentado", material: "Ti Grau 4", shape: "pilar_cim" }, [["1.5", "ARC-HI-CIM-15"], ["2.5", "ARC-HI-CIM-25"], ["3.5", "ARC-HI-CIM-35"], ["4.5", "ARC-HI-CIM-45"]]) },
+                  { key: "pilar", label: "Pilar HI Arcsys Parafusado", icon: "🔩", desc: "Pilar HI para coroa unitária parafusada (Ref. placeholder — confirmar código com fabricante antes do pedido)", heights: gh("Pilar HI Arcsys", { torque: "25 Ncm", chave: "Hex 1.27mm", type: "Pilar Protético", material: "Ti Grau 4", shape: "variobase" }, [["1.5", "ARC-HI-PAR-15"], ["2.5", "ARC-HI-PAR-25"], ["3.5", "ARC-HI-PAR-35"], ["4.5", "ARC-HI-PAR-45"]]) },
+                  { key: "munhao", label: "Munhão HI Arcsys Cimentado", icon: "🪝", desc: "Munhão HI para coroa cimentada Arcsys (Ref. placeholder — confirmar código com fabricante antes do pedido)", heights: gh("Munhão HI Arcsys", { torque: "25 Ncm", chave: "Hex 1.27mm", type: "Munhão Cimentado", material: "Ti Grau 4", shape: "pilar_cim" }, [["1.5", "ARC-HI-CIM-15"], ["2.5", "ARC-HI-CIM-25"], ["3.5", "ARC-HI-CIM-35"], ["4.5", "ARC-HI-CIM-45"]]) },
                 ]
               },
               multipla: {
                 label: "Prótese Unida / Múltipla", desc: "Mini-Pilar HI para próteses fixas múltiplas", icon: "🦷🦷",
                 subtypes: [
-                  { key: "mua", label: "Mini-Pilar HI Arcsys", icon: "⚙️", desc: "Para próteses fixas múltiplas Arcsys HI", heights: gh("Mini-Pilar HI Arcsys", { torque: "15 Ncm", chave: "Hex 1.27mm", type: "Mini-Pilar Multi-Unit", material: "Ti Grau 4", shape: "sra" }, [["1.5", "ARC-HI-MU-15"], ["2.5", "ARC-HI-MU-25"], ["3.5", "ARC-HI-MU-35"]]) },
+                  { key: "mua", label: "Mini-Pilar HI Arcsys", icon: "⚙️", desc: "Para próteses fixas múltiplas Arcsys HI (Ref. placeholder — confirmar código com fabricante antes do pedido)", heights: gh("Mini-Pilar HI Arcsys", { torque: "15 Ncm", chave: "Hex 1.27mm", type: "Mini-Pilar Multi-Unit", material: "Ti Grau 4", shape: "sra" }, [["1.5", "ARC-HI-MU-15"], ["2.5", "ARC-HI-MU-25"], ["3.5", "ARC-HI-MU-35"]]) },
                 ]
               },
             }
@@ -518,14 +518,14 @@ export const DB = {
               unitaria: {
                 label: "Prótese Unitária", desc: "Pilar Maestro parafusado ou Ideale cimentado", icon: "🦷",
                 subtypes: [
-                  { key: "pilar", label: "Pilar Maestro CM Parafusado", icon: "🔩", desc: "Pilar CM Maestro para coroa unitária parafusada", heights: gh("Pilar Maestro CM Implacil", { torque: "25 Ncm", chave: "Hex 1.20mm", type: "Pilar Protético", material: "Ti Grau 4", shape: "variobase" }, [["1.5", "IDB-CM-PAR-15"], ["2.5", "IDB-CM-PAR-25"], ["3.5", "IDB-CM-PAR-35"], ["4.5", "IDB-CM-PAR-45"]]) },
-                  { key: "munhao", label: "Pilar Ideale CM Cimentado", icon: "🪝", desc: "Pilar Ideale CM para coroa cimentada", heights: gh("Pilar Ideale CM Implacil", { torque: "25 Ncm", chave: "Hex 1.20mm", type: "Munhão Cimentado", material: "Ti Grau 4", shape: "pilar_cim" }, [["1.5", "IDB-CM-CIM-15"], ["2.5", "IDB-CM-CIM-25"], ["3.5", "IDB-CM-CIM-35"], ["4.5", "IDB-CM-CIM-45"]]) },
+                  { key: "pilar", label: "Pilar Ideale Reto CM", icon: "🔩", desc: "Pilar CM Maestro para coroa unitária parafusada (Ref. placeholder — confirmar SKU com representante Implacil)", heights: gh("Pilar Ideale Reto CM Implacil", { torque: "25 Ncm", chave: "Hex 1.20mm", type: "Pilar Protético", material: "Ti Grau 4", shape: "variobase" }, [["1.5", "IDB-CM-PAR-15"], ["2.5", "IDB-CM-PAR-25"], ["3.5", "IDB-CM-PAR-35"], ["4.5", "IDB-CM-PAR-45"]]) },
+                  { key: "munhao", label: "Pilar Ideale Angulado CM", icon: "🪝", desc: "Pilar Ideale CM para coroa cimentada (Ref. placeholder — confirmar SKU com representante Implacil)", heights: gh("Pilar Ideale Angulado CM Implacil", { torque: "25 Ncm", chave: "Hex 1.20mm", type: "Munhão Cimentado", material: "Ti Grau 4", shape: "pilar_cim" }, [["1.5", "IDB-CM-CIM-15"], ["2.5", "IDB-CM-CIM-25"], ["3.5", "IDB-CM-CIM-35"], ["4.5", "IDB-CM-CIM-45"]]) },
                 ]
               },
               multipla: {
                 label: "Prótese Unida / Múltipla", desc: "Mini-Pilar Maestro para próteses fixas múltiplas", icon: "🦷🦷",
                 subtypes: [
-                  { key: "mua", label: "Mini-Pilar Maestro CM Implacil", icon: "⚙️", desc: "Para próteses fixas múltiplas Implacil CM", heights: gh("Mini-Pilar Maestro CM Implacil", { torque: "15 Ncm", chave: "Hex 1.20mm", type: "Mini-Pilar Multi-Unit", material: "Ti Grau 4", shape: "sra" }, [["1.5", "IDB-CM-MU-15"], ["2.5", "IDB-CM-MU-25"], ["3.5", "IDB-CM-MU-35"]]) },
+                  { key: "mua", label: "Mini-Pilar Maestro CM Implacil", icon: "⚙️", desc: "Para próteses fixas múltiplas Implacil CM (Ref. placeholder — confirmar SKU com representante Implacil)", heights: gh("Mini-Pilar Maestro CM Implacil", { torque: "15 Ncm", chave: "Hex 1.20mm", type: "Mini-Pilar Multi-Unit", material: "Ti Grau 4", shape: "sra" }, [["1.5", "IDB-CM-MU-15"], ["2.5", "IDB-CM-MU-25"], ["3.5", "IDB-CM-MU-35"]]) },
                 ]
               },
             }
@@ -541,14 +541,14 @@ export const DB = {
               unitaria: {
                 label: "Prótese Unitária", desc: "Pilar HI parafusado ou Munhão cimentado", icon: "🦷",
                 subtypes: [
-                  { key: "pilar", label: "Pilar HI Implacil Parafusado", icon: "🔩", desc: "Pilar HI para coroa unitária parafusada", heights: gh("Pilar HI Implacil", { torque: "25 Ncm", chave: "Hex 1.27mm", type: "Pilar Protético", material: "Ti Grau 4", shape: "variobase" }, [["1.5", "IDB-HI-PAR-15"], ["2.5", "IDB-HI-PAR-25"], ["3.5", "IDB-HI-PAR-35"], ["4.5", "IDB-HI-PAR-45"]]) },
-                  { key: "munhao", label: "Munhão HI Implacil Cimentado", icon: "🪝", desc: "Munhão HI para coroa cimentada", heights: gh("Munhão HI Implacil", { torque: "25 Ncm", chave: "Hex 1.27mm", type: "Munhão Cimentado", material: "Ti Grau 4", shape: "pilar_cim" }, [["1.5", "IDB-HI-CIM-15"], ["2.5", "IDB-HI-CIM-25"], ["3.5", "IDB-HI-CIM-35"], ["4.5", "IDB-HI-CIM-45"]]) },
+                  { key: "pilar", label: "Pilar Ideale Reto HI", icon: "🔩", desc: "Pilar HI para coroa unitária parafusada (Ref. placeholder — confirmar SKU com representante Implacil)", heights: gh("Pilar Ideale Reto HI Implacil", { torque: "25 Ncm", chave: "Hex 1.27mm", type: "Pilar Protético", material: "Ti Grau 4", shape: "variobase" }, [["1.5", "IDB-HI-PAR-15"], ["2.5", "IDB-HI-PAR-25"], ["3.5", "IDB-HI-PAR-35"], ["4.5", "IDB-HI-PAR-45"]]) },
+                  { key: "munhao", label: "Pilar Ideale Angulado HI", icon: "🪝", desc: "Munhão HI para coroa cimentada (Ref. placeholder — confirmar SKU com representante Implacil)", heights: gh("Pilar Ideale Angulado HI Implacil", { torque: "25 Ncm", chave: "Hex 1.27mm", type: "Munhão Cimentado", material: "Ti Grau 4", shape: "pilar_cim" }, [["1.5", "IDB-HI-CIM-15"], ["2.5", "IDB-HI-CIM-25"], ["3.5", "IDB-HI-CIM-35"], ["4.5", "IDB-HI-CIM-45"]]) },
                 ]
               },
               multipla: {
                 label: "Prótese Unida / Múltipla", desc: "Mini-Pilar HI para próteses fixas múltiplas", icon: "🦷🦷",
                 subtypes: [
-                  { key: "mua", label: "Mini-Pilar HI Implacil", icon: "⚙️", desc: "Para próteses fixas múltiplas Implacil HI", heights: gh("Mini-Pilar HI Implacil", { torque: "15 Ncm", chave: "Hex 1.27mm", type: "Mini-Pilar Multi-Unit", material: "Ti Grau 4", shape: "sra" }, [["1.5", "IDB-HI-MU-15"], ["2.5", "IDB-HI-MU-25"], ["3.5", "IDB-HI-MU-35"]]) },
+                  { key: "mua", label: "Mini-Pilar HI Implacil", icon: "⚙️", desc: "Para próteses fixas múltiplas Implacil HI (Ref. placeholder — confirmar SKU com representante Implacil)", heights: gh("Mini-Pilar HI Implacil", { torque: "15 Ncm", chave: "Hex 1.27mm", type: "Mini-Pilar Multi-Unit", material: "Ti Grau 4", shape: "sra" }, [["1.5", "IDB-HI-MU-15"], ["2.5", "IDB-HI-MU-25"], ["3.5", "IDB-HI-MU-35"]]) },
                 ]
               },
             }
@@ -564,14 +564,14 @@ export const DB = {
               unitaria: {
                 label: "Prótese Unitária", desc: "Pilar HE parafusado ou Munhão cimentado", icon: "🦷",
                 subtypes: [
-                  { key: "pilar", label: "Pilar HE Implacil Parafusado", icon: "🔩", desc: "Pilar HE para coroa unitária parafusada", heights: gh("Pilar HE Implacil", { torque: "20 Ncm", chave: "Hex 0.9mm", type: "Pilar Protético", material: "Ti Grau 4", shape: "variobase" }, [["1.5", "IDB-HE-PAR-15"], ["2.5", "IDB-HE-PAR-25"], ["3.5", "IDB-HE-PAR-35"], ["4.5", "IDB-HE-PAR-45"]]) },
-                  { key: "munhao", label: "Munhão HE Implacil Cimentado", icon: "🪝", desc: "Munhão HE para coroa cimentada", heights: gh("Munhão HE Implacil", { torque: "20 Ncm", chave: "Hex 0.9mm", type: "Munhão Cimentado", material: "Ti Grau 4", shape: "pilar_cim" }, [["1.5", "IDB-HE-CIM-15"], ["2.5", "IDB-HE-CIM-25"], ["3.5", "IDB-HE-CIM-35"], ["4.5", "IDB-HE-CIM-45"]]) },
+                  { key: "pilar", label: "Pilar Ideale Reto HE", icon: "🔩", desc: "Pilar HE para coroa unitária parafusada (Ref. placeholder — confirmar SKU com representante Implacil)", heights: gh("Pilar Ideale Reto HE Implacil", { torque: "20 Ncm", chave: "Hex 0.9mm", type: "Pilar Protético", material: "Ti Grau 4", shape: "variobase" }, [["1.5", "IDB-HE-PAR-15"], ["2.5", "IDB-HE-PAR-25"], ["3.5", "IDB-HE-PAR-35"], ["4.5", "IDB-HE-PAR-45"]]) },
+                  { key: "munhao", label: "Pilar Ideale Angulado HE", icon: "🪝", desc: "Munhão HE para coroa cimentada (Ref. placeholder — confirmar SKU com representante Implacil)", heights: gh("Pilar Ideale Angulado HE Implacil", { torque: "20 Ncm", chave: "Hex 0.9mm", type: "Munhão Cimentado", material: "Ti Grau 4", shape: "pilar_cim" }, [["1.5", "IDB-HE-CIM-15"], ["2.5", "IDB-HE-CIM-25"], ["3.5", "IDB-HE-CIM-35"], ["4.5", "IDB-HE-CIM-45"]]) },
                 ]
               },
               multipla: {
                 label: "Prótese Unida / Múltipla", desc: "Mini-Pilar HE para próteses fixas múltiplas", icon: "🦷🦷",
                 subtypes: [
-                  { key: "mua", label: "Mini-Pilar HE Implacil", icon: "⚙️", desc: "Para próteses fixas múltiplas Implacil HE", heights: gh("Mini-Pilar HE Implacil", { torque: "15 Ncm", chave: "Hex 0.9mm", type: "Mini-Pilar Multi-Unit", material: "Ti Grau 4", shape: "sra" }, [["1.5", "IDB-HE-MU-15"], ["2.5", "IDB-HE-MU-25"], ["3.5", "IDB-HE-MU-35"]]) },
+                  { key: "mua", label: "Mini-Pilar HE Implacil", icon: "⚙️", desc: "Para próteses fixas múltiplas Implacil HE (Ref. placeholder — confirmar SKU com representante Implacil)", heights: gh("Mini-Pilar HE Implacil", { torque: "15 Ncm", chave: "Hex 0.9mm", type: "Mini-Pilar Multi-Unit", material: "Ti Grau 4", shape: "sra" }, [["1.5", "IDB-HE-MU-15"], ["2.5", "IDB-HE-MU-25"], ["3.5", "IDB-HE-MU-35"]]) },
                 ]
               },
             }
@@ -592,14 +592,14 @@ export const DB = {
               unitaria: {
                 label: "Prótese Unitária", desc: "Pilar NobelActive parafusado ou cimentado", icon: "🦷",
                 subtypes: [
-                  { key: "pilar", label: "Pilar NobelActive Parafusado", icon: "🔩", desc: "Pilar cônico interno para coroa unitária parafusada", heights: gh("Pilar NobelActive", { torque: "35 Ncm", chave: "Nobel Hex 1.25mm", type: "Pilar Protético", material: "Ti Grau 4", shape: "variobase" }, [["1.5", "30836-1"], ["2.5", "30836-2"], ["3.5", "30836-3"], ["4.5", "30836-4"]]) },
-                  { key: "munhao", label: "Pilar NA Cimentado", icon: "🪝", desc: "Pilar cônico para coroa cimentada", heights: gh("Pilar NA Cim.", { torque: "35 Ncm", chave: "Nobel Hex 1.25mm", type: "Munhão Cimentado", material: "Ti Grau 4", shape: "pilar_cim" }, [["1.5", "30837-1"], ["2.5", "30837-2"], ["3.5", "30837-3"], ["4.5", "30837-4"]]) },
+                  { key: "pilar", label: "Pilar NobelActive Parafusado", icon: "🔩", desc: "Pilar cônico interno para coroa unitária parafusada (Ref. placeholder — confirmar código com fabricante antes do pedido)", heights: gh("Pilar NobelActive", { torque: "35 Ncm", chave: "Nobel Hex 1.25mm", type: "Pilar Protético", material: "Ti Grau 4", shape: "variobase" }, [["1.5", "30836-1"], ["2.5", "30836-2"], ["3.5", "30836-3"], ["4.5", "30836-4"]]) },
+                  { key: "munhao", label: "Pilar NA Cimentado", icon: "🪝", desc: "Pilar cônico para coroa cimentada (Ref. placeholder — confirmar código com fabricante antes do pedido)", heights: gh("Pilar NA Cim.", { torque: "35 Ncm", chave: "Nobel Hex 1.25mm", type: "Munhão Cimentado", material: "Ti Grau 4", shape: "pilar_cim" }, [["1.5", "30837-1"], ["2.5", "30837-2"], ["3.5", "30837-3"], ["4.5", "30837-4"]]) },
                 ]
               },
               multipla: {
                 label: "Prótese Unida / Múltipla", desc: "Multi-Unit Abutment para full arch e múltiplas", icon: "🦷🦷",
                 subtypes: [
-                  { key: "mua", label: "Multi-Unit Abutment NobelActive", icon: "⚙️", desc: "MUA para próteses fixas múltiplas e full arch", heights: gh("MUA NobelActive", { torque: "15 Ncm", chave: "Nobel Hex 1.25mm", type: "Multi-Unit Abutment", material: "Ti Grau 4", shape: "sra" }, [["1.5", "32626-1"], ["2.5", "32626-2"], ["3.5", "32626-3"]]) },
+                  { key: "mua", label: "Multi-Unit Abutment NobelActive", icon: "⚙️", desc: "MUA para próteses fixas múltiplas e full arch (Ref. placeholder — confirmar código com fabricante antes do pedido)", heights: gh("MUA NobelActive", { torque: "15 Ncm", chave: "Nobel Hex 1.25mm", type: "Multi-Unit Abutment", material: "Ti Grau 4", shape: "sra" }, [["1.5", "32626-1"], ["2.5", "32626-2"], ["3.5", "32626-3"]]) },
                 ]
               },
             }
@@ -615,14 +615,14 @@ export const DB = {
               unitaria: {
                 label: "Prótese Unitária", desc: "Pilar NobelReplace parafusado ou cimentado", icon: "🦷",
                 subtypes: [
-                  { key: "pilar", label: "Pilar NobelReplace Parafusado", icon: "🔩", desc: "Pilar Tri-Channel para coroa unitária parafusada", heights: gh("Pilar NobelReplace", { torque: "35 Ncm", chave: "Nobel Hex 1.25mm", type: "Pilar Protético", material: "Ti Grau 4", shape: "variobase" }, [["1.5", "33424-1"], ["2.5", "33424-2"], ["3.5", "33424-3"], ["4.5", "33424-4"]]) },
-                  { key: "munhao", label: "Pilar NR Cimentado", icon: "🪝", desc: "Pilar Tri-Channel para coroa cimentada convencional", heights: gh("Pilar NR Cim.", { torque: "35 Ncm", chave: "Nobel Hex 1.25mm", type: "Munhão Cimentado", material: "Ti Grau 4", shape: "pilar_cim" }, [["1.5", "33425-1"], ["2.5", "33425-2"], ["3.5", "33425-3"], ["4.5", "33425-4"]]) },
+                  { key: "pilar", label: "Pilar NobelReplace Parafusado", icon: "🔩", desc: "Pilar Tri-Channel para coroa unitária parafusada (Ref. placeholder — confirmar código com fabricante antes do pedido)", heights: gh("Pilar NobelReplace", { torque: "35 Ncm", chave: "Nobel Hex 1.25mm", type: "Pilar Protético", material: "Ti Grau 4", shape: "variobase" }, [["1.5", "33424-1"], ["2.5", "33424-2"], ["3.5", "33424-3"], ["4.5", "33424-4"]]) },
+                  { key: "munhao", label: "Pilar NR Cimentado", icon: "🪝", desc: "Pilar Tri-Channel para coroa cimentada convencional (Ref. placeholder — confirmar código com fabricante antes do pedido)", heights: gh("Pilar NR Cim.", { torque: "35 Ncm", chave: "Nobel Hex 1.25mm", type: "Munhão Cimentado", material: "Ti Grau 4", shape: "pilar_cim" }, [["1.5", "33425-1"], ["2.5", "33425-2"], ["3.5", "33425-3"], ["4.5", "33425-4"]]) },
                 ]
               },
               multipla: {
-                label: "Prótese Unida / Múltipla", desc: "MUA Tri-Channel para protocolo All-on-4/6", icon: "🦷🦷",
+                label: "Prótese Unida / Múltipla", desc: "MUA Tri-Channel para protocolo All-on-4/6 (Ref. placeholder — confirmar código com fabricante antes do pedido)", icon: "🦷🦷",
                 subtypes: [
-                  { key: "mua", label: "Multi-Unit Abutment NobelReplace", icon: "⚙️", desc: "MUA Tri-Channel para protocolo All-on-4/6", heights: gh("MUA NobelReplace", { torque: "15 Ncm", chave: "Nobel Hex 1.25mm", type: "Multi-Unit Abutment", material: "Ti Grau 4", shape: "sra" }, [["1.5", "32983-1"], ["2.5", "32983-2"], ["3.5", "32983-3"]]) },
+                  { key: "mua", label: "Multi-Unit Abutment NobelReplace", icon: "⚙️", desc: "MUA Tri-Channel para protocolo All-on-4/6 (Ref. placeholder — confirmar código com fabricante antes do pedido)", heights: gh("MUA NobelReplace", { torque: "15 Ncm", chave: "Nobel Hex 1.25mm", type: "Multi-Unit Abutment", material: "Ti Grau 4", shape: "sra" }, [["1.5", "32983-1"], ["2.5", "32983-2"], ["3.5", "32983-3"]]) },
                 ]
               },
             }
@@ -643,14 +643,14 @@ export const DB = {
               unitaria: {
                 label: "Prótese Unitária", desc: "Pilar TS parafusado ou cimentado", icon: "🦷",
                 subtypes: [
-                  { key: "pilar", label: "Pilar TS Parafusado", icon: "🔩", desc: "Pilar cônico interno para coroa unitária parafusada", heights: gh("Pilar TS Osstem", { torque: "30 Ncm", chave: "Hex 1.20mm", type: "Pilar Protético", material: "Ti Grau 4", shape: "variobase" }, [["1.5", "TSNBA-15"], ["2.5", "TSNBA-25"], ["3.5", "TSNBA-35"], ["4.5", "TSNBA-45"]]) },
-                  { key: "munhao", label: "Pilar TS Cimentado", icon: "🪝", desc: "Pilar cônico para coroa cimentada sobre TS", heights: gh("Pilar TS Cim. Osstem", { torque: "30 Ncm", chave: "Hex 1.20mm", type: "Munhão Cimentado", material: "Ti Grau 4", shape: "pilar_cim" }, [["1.5", "TSCBA-15"], ["2.5", "TSCBA-25"], ["3.5", "TSCBA-35"], ["4.5", "TSCBA-45"]]) },
+                  { key: "pilar", label: "Pilar TS Parafusado", icon: "🔩", desc: "Pilar cônico interno para coroa unitária parafusada (Ref. placeholder — confirmar código com fabricante antes do pedido)", heights: gh("Pilar TS Osstem", { torque: "30 Ncm", chave: "Hex 1.20mm", type: "Pilar Protético", material: "Ti Grau 4", shape: "variobase" }, [["1.5", "TSNBA-15"], ["2.5", "TSNBA-25"], ["3.5", "TSNBA-35"], ["4.5", "TSNBA-45"]]) },
+                  { key: "munhao", label: "Pilar TS Cimentado", icon: "🪝", desc: "Pilar cônico para coroa cimentada sobre TS (Ref. placeholder — confirmar código com fabricante antes do pedido)", heights: gh("Pilar TS Cim. Osstem", { torque: "30 Ncm", chave: "Hex 1.20mm", type: "Munhão Cimentado", material: "Ti Grau 4", shape: "pilar_cim" }, [["1.5", "TSCBA-15"], ["2.5", "TSCBA-25"], ["3.5", "TSCBA-35"], ["4.5", "TSCBA-45"]]) },
                 ]
               },
               multipla: {
                 label: "Prótese Unida / Múltipla", desc: "Multi-Unit TS para próteses fixas múltiplas", icon: "🦷🦷",
                 subtypes: [
-                  { key: "mua", label: "Multi-Unit TS Osstem", icon: "⚙️", desc: "MUA para próteses fixas múltiplas — sistema TS", heights: gh("MUA TS Osstem", { torque: "15 Ncm", chave: "Hex 1.20mm", type: "Multi-Unit Abutment", material: "Ti Grau 4", shape: "sra" }, [["1.5", "TSMUA-15"], ["2.5", "TSMUA-25"], ["3.5", "TSMUA-35"]]) },
+                  { key: "mua", label: "Multi-Unit TS Osstem", icon: "⚙️", desc: "MUA para próteses fixas múltiplas — sistema TS (Ref. placeholder — confirmar código com fabricante antes do pedido)", heights: gh("MUA TS Osstem", { torque: "15 Ncm", chave: "Hex 1.20mm", type: "Multi-Unit Abutment", material: "Ti Grau 4", shape: "sra" }, [["1.5", "TSMUA-15"], ["2.5", "TSMUA-25"], ["3.5", "TSMUA-35"]]) },
                 ]
               },
             }
@@ -666,14 +666,14 @@ export const DB = {
               unitaria: {
                 label: "Prótese Unitária", desc: "Pilar SS parafusado ou cimentado", icon: "🦷",
                 subtypes: [
-                  { key: "pilar", label: "Pilar SS Parafusado", icon: "🔩", desc: "Pilar HE para coroa unitária parafusada — sistema SS", heights: gh("Pilar SS Osstem", { torque: "20 Ncm", chave: "Hex 0.9mm", type: "Pilar Protético", material: "Ti Grau 4", shape: "variobase" }, [["1.5", "SSNBA-15"], ["2.5", "SSNBA-25"], ["3.5", "SSNBA-35"], ["4.5", "SSNBA-45"]]) },
-                  { key: "munhao", label: "Pilar SS Cimentado", icon: "🪝", desc: "Pilar HE para coroa cimentada — sistema SS", heights: gh("Pilar SS Cim. Osstem", { torque: "20 Ncm", chave: "Hex 0.9mm", type: "Munhão Cimentado", material: "Ti Grau 4", shape: "pilar_cim" }, [["1.5", "SSCBA-15"], ["2.5", "SSCBA-25"], ["3.5", "SSCBA-35"], ["4.5", "SSCBA-45"]]) },
+                  { key: "pilar", label: "Pilar SS Parafusado", icon: "🔩", desc: "Pilar HE para coroa unitária parafusada — sistema SS (Ref. placeholder — confirmar código com fabricante antes do pedido)", heights: gh("Pilar SS Osstem", { torque: "20 Ncm", chave: "Hex 0.9mm", type: "Pilar Protético", material: "Ti Grau 4", shape: "variobase" }, [["1.5", "SSNBA-15"], ["2.5", "SSNBA-25"], ["3.5", "SSNBA-35"], ["4.5", "SSNBA-45"]]) },
+                  { key: "munhao", label: "Pilar SS Cimentado", icon: "🪝", desc: "Pilar HE para coroa cimentada — sistema SS (Ref. placeholder — confirmar código com fabricante antes do pedido)", heights: gh("Pilar SS Cim. Osstem", { torque: "20 Ncm", chave: "Hex 0.9mm", type: "Munhão Cimentado", material: "Ti Grau 4", shape: "pilar_cim" }, [["1.5", "SSCBA-15"], ["2.5", "SSCBA-25"], ["3.5", "SSCBA-35"], ["4.5", "SSCBA-45"]]) },
                 ]
               },
               multipla: {
                 label: "Prótese Unida / Múltipla", desc: "Multi-Unit SS para próteses fixas múltiplas", icon: "🦷🦷",
                 subtypes: [
-                  { key: "mua", label: "Multi-Unit SS Osstem", icon: "⚙️", desc: "MUA HE para próteses fixas múltiplas", heights: gh("MUA SS Osstem", { torque: "15 Ncm", chave: "Hex 0.9mm", type: "Multi-Unit Abutment", material: "Ti Grau 4", shape: "sra" }, [["1.5", "SSMUA-15"], ["2.5", "SSMUA-25"], ["3.5", "SSMUA-35"]]) },
+                  { key: "mua", label: "Multi-Unit SS Osstem", icon: "⚙️", desc: "MUA HE para próteses fixas múltiplas (Ref. placeholder — confirmar código com fabricante antes do pedido)", heights: gh("MUA SS Osstem", { torque: "15 Ncm", chave: "Hex 0.9mm", type: "Multi-Unit Abutment", material: "Ti Grau 4", shape: "sra" }, [["1.5", "SSMUA-15"], ["2.5", "SSMUA-25"], ["3.5", "SSMUA-35"]]) },
                 ]
               },
             }
@@ -694,14 +694,14 @@ export const DB = {
               unitaria: {
                 label: "Prótese Unitária", desc: "Pilar Xive parafusado ou cimentado", icon: "🦷",
                 subtypes: [
-                  { key: "pilar", label: "Pilar Xive Parafusado", icon: "🔩", desc: "Pilar cônico interno TG para coroa unitária parafusada", heights: gh("Pilar Xive", { torque: "24 Ncm", chave: "Hex 1.22mm", type: "Pilar Protético", material: "Ti Grau 4", shape: "variobase" }, [["1.5", "XO4.5STP-15"], ["2.5", "XO4.5STP-25"], ["3.5", "XO4.5STP-35"], ["4.5", "XO4.5STP-45"]]) },
-                  { key: "munhao", label: "Pilar Xive Cimentado", icon: "🪝", desc: "Pilar cônico cimentado com colar anatômico", heights: gh("Pilar Xive Cim.", { torque: "24 Ncm", chave: "Hex 1.22mm", type: "Munhão Cimentado", material: "Ti Grau 4", shape: "pilar_cim" }, [["1.5", "XO4.5STC-15"], ["2.5", "XO4.5STC-25"], ["3.5", "XO4.5STC-35"], ["4.5", "XO4.5STC-45"]]) },
+                  { key: "pilar", label: "Pilar Xive Parafusado", icon: "🔩", desc: "Pilar cônico interno TG para coroa unitária parafusada (Ref. placeholder — confirmar código com fabricante antes do pedido)", heights: gh("Pilar Xive", { torque: "24 Ncm", chave: "Hex 1.22mm", type: "Pilar Protético", material: "Ti Grau 4", shape: "variobase" }, [["1.5", "XO4.5STP-15"], ["2.5", "XO4.5STP-25"], ["3.5", "XO4.5STP-35"], ["4.5", "XO4.5STP-45"]]) },
+                  { key: "munhao", label: "Pilar Xive Cimentado", icon: "🪝", desc: "Pilar cônico cimentado com colar anatômico (Ref. placeholder — confirmar código com fabricante antes do pedido)", heights: gh("Pilar Xive Cim.", { torque: "24 Ncm", chave: "Hex 1.22mm", type: "Munhão Cimentado", material: "Ti Grau 4", shape: "pilar_cim" }, [["1.5", "XO4.5STC-15"], ["2.5", "XO4.5STC-25"], ["3.5", "XO4.5STC-35"], ["4.5", "XO4.5STC-45"]]) },
                 ]
               },
               multipla: {
                 label: "Prótese Unida / Múltipla", desc: "Multi-Unit Xive para próteses fixas múltiplas", icon: "🦷🦷",
                 subtypes: [
-                  { key: "mua", label: "Multi-Unit Xive", icon: "⚙️", desc: "Para próteses fixas múltiplas — sistema Xive", heights: gh("MUA Xive", { torque: "15 Ncm", chave: "Hex 1.22mm", type: "Multi-Unit Abutment", material: "Ti Grau 4", shape: "sra" }, [["1.5", "XO4.5MU-15"], ["2.5", "XO4.5MU-25"], ["3.5", "XO4.5MU-35"]]) },
+                  { key: "mua", label: "Multi-Unit Xive", icon: "⚙️", desc: "Para próteses fixas múltiplas — sistema Xive (Ref. placeholder — confirmar código com fabricante antes do pedido)", heights: gh("MUA Xive", { torque: "15 Ncm", chave: "Hex 1.22mm", type: "Multi-Unit Abutment", material: "Ti Grau 4", shape: "sra" }, [["1.5", "XO4.5MU-15"], ["2.5", "XO4.5MU-25"], ["3.5", "XO4.5MU-35"]]) },
                 ]
               },
             }
@@ -717,14 +717,14 @@ export const DB = {
               unitaria: {
                 label: "Prótese Unitária", desc: "Pilar Balance parafusado ou cimentado", icon: "🦷",
                 subtypes: [
-                  { key: "pilar", label: "Pilar Balance Parafusado", icon: "🔩", desc: "Pilar Balance para coroa unitária — cone morse puro", heights: gh("Pilar Balance Ankylos", { torque: "15 Ncm", chave: "Hex 1.00mm", type: "Pilar Balance", material: "Ti Grau 4", shape: "variobase" }, [["1.5", "A-BTF-11"], ["2.5", "A-BTF-12"], ["3.5", "A-BTF-13"], ["4.5", "A-BTF-14"]]) },
-                  { key: "munhao", label: "Pilar Balance Cimentado", icon: "🪝", desc: "Fixação friccional por cone morse puro — sem parafuso", heights: gh("Pilar Balance Cim. Ankylos", { torque: "15 Ncm", chave: "Hex 1.00mm", type: "Munhão Cimentado", material: "Ti Grau 4", shape: "pilar_cim" }, [["1.5", "A-BTC-11"], ["2.5", "A-BTC-12"], ["3.5", "A-BTC-13"], ["4.5", "A-BTC-14"]]) },
+                  { key: "pilar", label: "Pilar Balance Parafusado", icon: "🔩", desc: "Pilar Balance para coroa unitária — cone morse puro (Ref. placeholder — confirmar código com fabricante antes do pedido)", heights: gh("Pilar Balance Ankylos", { torque: "15 Ncm", chave: "Hex 1.00mm", type: "Pilar Balance", material: "Ti Grau 4", shape: "variobase" }, [["1.5", "A-BTF-11"], ["2.5", "A-BTF-12"], ["3.5", "A-BTF-13"], ["4.5", "A-BTF-14"]]) },
+                  { key: "munhao", label: "Pilar Balance Cimentado", icon: "🪝", desc: "Fixação friccional por cone morse puro — sem parafuso (Ref. placeholder — confirmar código com fabricante antes do pedido)", heights: gh("Pilar Balance Cim. Ankylos", { torque: "15 Ncm", chave: "Hex 1.00mm", type: "Munhão Cimentado", material: "Ti Grau 4", shape: "pilar_cim" }, [["1.5", "A-BTC-11"], ["2.5", "A-BTC-12"], ["3.5", "A-BTC-13"], ["4.5", "A-BTC-14"]]) },
                 ]
               },
               multipla: {
                 label: "Prótese Unida / Múltipla", desc: "SynCone telescópico para protocolo Ankylos", icon: "🦷🦷",
                 subtypes: [
-                  { key: "mua", label: "SynCone (Protocolo Ankylos)", icon: "⚙️", desc: "Abutment telescópico cônico para protocolo Ankylos", heights: gh("SynCone Ankylos", { torque: "15 Ncm", chave: "Hex 1.00mm", type: "Abutment Telescópico", material: "Ti Grau 4", shape: "sra" }, [["1.5", "A-SYN-15"], ["2.5", "A-SYN-25"], ["3.5", "A-SYN-35"]]) },
+                  { key: "mua", label: "SynCone (Protocolo Ankylos)", icon: "⚙️", desc: "Abutment telescópico cônico para protocolo Ankylos (Ref. placeholder — confirmar código com fabricante antes do pedido)", heights: gh("SynCone Ankylos", { torque: "15 Ncm", chave: "Hex 1.00mm", type: "Abutment Telescópico", material: "Ti Grau 4", shape: "sra" }, [["1.5", "A-SYN-15"], ["2.5", "A-SYN-25"], ["3.5", "A-SYN-35"]]) },
                 ]
               },
             }
