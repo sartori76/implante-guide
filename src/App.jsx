@@ -546,6 +546,12 @@ function FamilySelect({ state, go }) {
             <div style={{ flex: 1 }}>
               <div style={{ fontWeight: 700, color: "white", fontSize: 14, marginBottom: 3 }}>{fam.label}</div>
               <div style={{ fontSize: 10, color: "#94a3b8", lineHeight: 1.4 }}>{fam.desc}</div>
+              {fam.avisoIncompatibilidade && (
+                <div style={{ marginTop: 5, fontSize: 9, color: "#ef4444", fontWeight: 700, lineHeight: 1.35, display: "flex", gap: 4 }}>
+                  <span aria-hidden="true">⚠️</span>
+                  <span>Não compatível com componentes Conical Connection (CC)</span>
+                </div>
+              )}
             </div>
             <ChevronRight size={14} color="#475569" />
           </button>
@@ -605,10 +611,16 @@ function BodySelect({ state, go }) {
   // Título/sub/info da tela são parametrizáveis pela linha; default mantém Straumann (RB/WB).
   const selectTitle = line.selectTitle || "Corpo do Implante";
   const selectSub = line.selectSub || "Regular Body (RB) ou Wide Body (WB)?";
+  const aviso = line.avisoIncompatibilidade || fam.avisoIncompatibilidade;
   return (
     <div style={G.page} className="fadein">
       <Hdr title={selectTitle} sub={selectSub} color={brand.color} onBack={() => go("lineSelect", state, "back")} onHome={() => go("home", {})} />
       <Breadcrumb steps={[brand.label, fam.label, line.label]} brandColor={brand.color} />
+      {aviso && (
+        <InfoBox color="#ef4444" icon={<Info size={11} color="#ef4444" style={{ flexShrink: 0, marginTop: 1 }} />}>
+          <strong style={{ color: "white" }}>Incompatibilidade:</strong> {aviso}
+        </InfoBox>
+      )}
       <InfoBox color="#3b82f6" icon={<Info size={11} color="#3b82f6" style={{ flexShrink: 0, marginTop: 1 }} />}>
         {line.selectInfo || <>Verifique o <strong style={{ color: "white" }}>diâmetro do implante</strong> na documentação clínica ou na embalagem para identificar o corpo correto.</>}
       </InfoBox>
@@ -680,11 +692,17 @@ function ObjectiveSelect({ state, go }) {
   const objectives = Object.entries(line.objectives).filter(([, obj]) =>
     !state.body || (obj.subtypes || []).some(s => !s.body || s.body === state.body)
   );
+  const aviso = line.avisoIncompatibilidade || fam.avisoIncompatibilidade;
   return (
     <div style={G.page} className="fadein">
       <Hdr title="Objetivo Protético" sub="Unitária ou Prótese Unida?" onBack={() => go(backScreen, state, "back")} onHome={() => go("home", {})} />
       <Breadcrumb steps={[brand.label, fam.label, line.label, tlxPlat ? `${tlxPlat.key} ${tlxPlat.diam}` : bodyOpt ? `${bodyOpt.key} ${bodyOpt.diam}` : null, null].filter(Boolean)} brandColor={brand.color} />
       <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+        {aviso && (
+          <InfoBox color="#ef4444" icon={<Info size={11} color="#ef4444" style={{ flexShrink: 0, marginTop: 1 }} />}>
+            <strong style={{ color: "white" }}>Incompatibilidade:</strong> {aviso}
+          </InfoBox>
+        )}
         {line.connectionMode === "UNIFIED" && (
           <InfoBox color="#10b981" icon={<Info size={11} color="#10b981" style={{ flexShrink: 0, marginTop: 1 }} />}>
             <strong style={{ color: "white" }}>Plataforma única {line.plataformaUnica}.</strong> Conexão unificada — a mesma plataforma {line.plataformaUnica} serve todos os diâmetros, sem derivação.

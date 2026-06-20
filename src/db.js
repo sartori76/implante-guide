@@ -678,6 +678,35 @@ export const DB = {
           },
         },
       },
+      // ═══ Tri-Channel / Tri-Lobe (LEGADO) — família SEPARADA, NÃO compatível com CC ═══
+      trilobe: {
+        label: "Tri-Channel / Tri-Lobe (legado)",
+        desc: "NobelReplace original de conexão tri-lobular. Sistema legado — interface protética própria.",
+        icon: "⬢",
+        connectionFamily: "Tri-Channel / Tri-Lobe",
+        avisoIncompatibilidade: "Conexão Tri-Channel / Tri-Lobe (legado): NÃO é compatível com componentes Conical Connection (CC). Use exclusivamente componentes Tri-Lobe.",
+        lines: {
+          nrep_trilobe: {
+            label: "NobelReplace Tri-Lobe", desc: "NobelReplace de conexão tri-lobular (legado). Plataforma derivada do diâmetro (NP / RP / WP / 6.0).", icon: "⬢",
+            connection: "Tri-Channel / Tri-Lobe",
+            connectionFamily: "Tri-Channel / Tri-Lobe",
+            connectionMode: "DERIVED_FROM_DIAMETER",
+            componentesNamespace: "nobel_trilobe",
+            avisoIncompatibilidade: "Conexão Tri-Channel / Tri-Lobe (legado): NÃO é compatível com componentes Conical Connection (CC). Use exclusivamente componentes Tri-Lobe.",
+            hasBodySelect: true,
+            selectTitle: "Plataforma protética",
+            selectSub: "Derivada do diâmetro do implante (Tri-Lobe)",
+            selectInfo: "A plataforma Tri-Lobe é DETERMINADA pelo diâmetro do implante instalado — nunca escolhida livremente. Confirme no registro cirúrgico / embalagem (anel colorido: NP fúcsia · RP amarelo · WP azul · 6.0 verde).",
+            bodyOptions: [
+              { key: "NP", label: "NP — Narrow Platform", diam: "Diâmetros estreitos", desc: "Anel fúcsia. Plataforma estreita Tri-Lobe.", color: "#E6007E" },
+              { key: "RP", label: "RP — Regular Platform", diam: "Diâmetros regulares", desc: "Anel amarelo. Plataforma regular Tri-Lobe.", color: "#FFD400" },
+              { key: "WP", label: "WP — Wide Platform", diam: "Diâmetros largos", desc: "Anel azul. Plataforma larga Tri-Lobe.", color: "#009FE3" },
+              { key: "6.0", label: "Plataforma 6.0", diam: "∅ 6,0 mm", desc: "Anel verde. Plataforma 6.0 Tri-Lobe.", color: "#00A651" },
+            ],
+            objectives: {},
+          },
+        },
+      },
     }
   },
   osstem: {
