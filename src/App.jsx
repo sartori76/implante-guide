@@ -671,12 +671,15 @@ function ObjectiveSelect({ state, go }) {
   const backScreen = line.isTLX ? "tlxPlatform" : line.hasBodySelect ? "bodySelect" : (lines.length > 1 ? "lineSelect" : "familySelect");
   const tlxPlat = line.isTLX ? line.tlxPlatforms?.find(p => p.key === state.tlxPlatform) : null;
   const bodyOpt = line.hasBodySelect && state.body ? line.bodyOptions?.find(b => b.key === state.body) : null;
+  const objectives = Object.entries(line.objectives).filter(([, obj]) =>
+    !state.body || (obj.subtypes || []).some(s => !s.body || s.body === state.body)
+  );
   return (
     <div style={G.page} className="fadein">
       <Hdr title="Objetivo Protético" sub="Unitária ou Prótese Unida?" onBack={() => go(backScreen, state, "back")} onHome={() => go("home", {})} />
       <Breadcrumb steps={[brand.label, fam.label, line.label, tlxPlat ? `${tlxPlat.key} ${tlxPlat.diam}` : bodyOpt ? `${bodyOpt.key} ${bodyOpt.diam}` : null, null].filter(Boolean)} brandColor={brand.color} />
       <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-        {Object.entries(line.objectives).map(([key, obj]) => (
+        {objectives.map(([key, obj]) => (
           <button key={key} className="hov" onClick={() => go("subtypeSelect", { ...state, objective: key })}
             style={{ ...card, padding: "18px", border: `1px solid ${key === "unitaria" ? "rgba(59,130,246,.35)" : "rgba(16,185,129,.35)"}` }}>
             <div style={{ fontSize: key === "unitaria" ? 26 : 18, width: 50, height: 50, borderRadius: 12, background: key === "unitaria" ? "rgba(59,130,246,.18)" : "rgba(16,185,129,.15)", border: `1px solid ${key === "unitaria" ? "rgba(59,130,246,.4)" : "rgba(16,185,129,.4)"}`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, whiteSpace: "nowrap", letterSpacing: key === "unitaria" ? 0 : 1 }}>{obj.icon}</div>
