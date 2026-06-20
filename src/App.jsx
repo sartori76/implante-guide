@@ -674,7 +674,7 @@ function ObjectiveSelect({ state, go }) {
   return (
     <div style={G.page} className="fadein">
       <Hdr title="Objetivo Protético" sub="Unitária ou Prótese Unida?" onBack={() => go(backScreen, state, "back")} onHome={() => go("home", {})} />
-      <Breadcrumb steps={[brand.label, fam.label, line.label, tlxPlat ? `${tlxPlat.key} ${tlxPlat.diam}` : bodyOpt ? bodyOpt.key : null, null].filter(Boolean)} brandColor={brand.color} />
+      <Breadcrumb steps={[brand.label, fam.label, line.label, tlxPlat ? `${tlxPlat.key} ${tlxPlat.diam}` : bodyOpt ? `${bodyOpt.key} ${bodyOpt.diam}` : null, null].filter(Boolean)} brandColor={brand.color} />
       <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
         {Object.entries(line.objectives).map(([key, obj]) => (
           <button key={key} className="hov" onClick={() => go("subtypeSelect", { ...state, objective: key })}
@@ -711,7 +711,7 @@ function SubtypeSelect({ state, go }) {
   return (
     <div style={G.page} className="fadein">
       <Hdr title="Componente Protético" sub={obj.label} onBack={() => go("objectiveSelect", state, "back")} onHome={() => go("home", {})} />
-      <Breadcrumb steps={[brand.label, fam.label, line.label, tlxPlat ? tlxPlat.key : bodyOpt ? bodyOpt.key : null, obj.label].filter(Boolean)} brandColor={brand.color} />
+      <Breadcrumb steps={[brand.label, fam.label, line.label, tlxPlat ? tlxPlat.key : bodyOpt ? `${bodyOpt.key} ${bodyOpt.diam}` : null, obj.label].filter(Boolean)} brandColor={brand.color} />
       <div style={{ display: "flex", flexDirection: "column", gap: 9 }}>
         {subs.map((st) => (
           <button key={st.key} className="hov" onClick={() => go(isTLX ? "result" : "heightSelect", { ...state, subtype: st.key, gengivalHeight: isTLX ? "unico" : null })}
@@ -755,8 +755,10 @@ function HeightSelect({ state, go }) {
               <p style={{ margin: "2px 0 0", fontSize: 10, color: "#94a3b8", lineHeight: 1.4 }}>{HEIGHT_DESCS[h] || ""}</p>
             </div>
             <div style={{ textAlign: "right", flexShrink: 0 }}>
-              <div style={{ fontSize: 8, color: "#64748b", marginBottom: 1 }}>REF.</div>
-              <div style={{ ...G.mono, fontSize: 9, color: "#60a5fa" }}>{st.heights[h]?.sku || "—"}</div>
+              {st.heights[h]?.sku
+                ? <><div style={{ fontSize: 8, color: "#64748b", marginBottom: 1 }}>REF.</div><div style={{ ...G.mono, fontSize: 9, color: "#60a5fa" }}>{st.heights[h].sku}</div></>
+                : <div style={{ fontSize: 8, color: "#f59e0b", background: "rgba(245,158,11,.15)", border: "1px solid rgba(245,158,11,.4)", borderRadius: 4, padding: "2px 5px", fontWeight: 700 }}>verificar eShop</div>
+              }
             </div>
           </button>
         ))}
@@ -804,7 +806,7 @@ function Result({ state, go, addToCart, reset, addToHistory }) {
           <span style={{ color: "#e2e8f0", fontSize: 20 }}>↺</span>
         </button>
       </div>
-      <Breadcrumb steps={[brand.label, fam.label, line.label, tlxPlat ? tlxPlat.key : bodyOpt ? bodyOpt.key : null, obj.label].filter(Boolean)} brandColor={brand.color} />
+      <Breadcrumb steps={[brand.label, fam.label, line.label, tlxPlat ? tlxPlat.key : bodyOpt ? `${bodyOpt.key} ${bodyOpt.diam}` : null, obj.label].filter(Boolean)} brandColor={brand.color} />
       <div style={{ borderRadius: 16, padding: "18px", background: "rgba(30,41,59,0.95)", border: "1px solid rgba(59,130,246,.4)", boxShadow: "0 16px 44px rgba(0,0,0,.5)" }}>
         <div style={{ display: "flex", flexWrap: "wrap", gap: 5, marginBottom: 13 }}>
           <div style={{ padding: "3px 8px", borderRadius: 6, background: `${brand.color}33`, border: `1px solid ${brand.color}77` }}><span style={{ fontSize: 9, fontWeight: 700, color: "white" }}>{brand.label}</span></div>
@@ -818,8 +820,10 @@ function Result({ state, go, addToCart, reset, addToHistory }) {
         <div style={{ fontSize: 8, color: "#94a3b8", fontWeight: 600, letterSpacing: .5, textTransform: "uppercase", marginBottom: 3 }}>{comp.type}</div>
         <h3 style={{ margin: "0 0 7px", fontSize: 14, fontWeight: 700, color: "white", lineHeight: 1.3 }}>{comp.name}</h3>
         <div style={{ display: "flex", alignItems: "center", gap: 5, marginBottom: 14 }}>
-          <span style={{ fontSize: 8, color: "#94a3b8" }}>REF.</span>
-          <span style={{ ...G.mono, fontSize: 11, fontWeight: 600, color: "#60a5fa", background: "rgba(59,130,246,.15)", padding: "2px 6px", borderRadius: 5 }}>{comp.sku}</span>
+          {comp.sku
+            ? <><span style={{ fontSize: 8, color: "#94a3b8" }}>REF.</span><span style={{ ...G.mono, fontSize: 11, fontWeight: 600, color: "#60a5fa", background: "rgba(59,130,246,.15)", padding: "2px 6px", borderRadius: 5 }}>{comp.sku}</span></>
+            : <span style={{ fontSize: 10, color: "#f59e0b", background: "rgba(245,158,11,.15)", border: "1px solid rgba(245,158,11,.4)", borderRadius: 6, padding: "3px 8px", fontWeight: 700 }}>⚠ SKU não verificado — consultar eShop Straumann</span>
+          }
         </div>
         <div style={{ display: "flex", justifyContent: "center", marginBottom: 14 }}>
           {st.imgRef
@@ -863,7 +867,7 @@ function Result({ state, go, addToCart, reset, addToHistory }) {
           const texto = [
             `${brand.label} — ${line.label}`,
             comp.name,
-            `REF: ${comp.sku}`,
+            comp.sku ? `REF: ${comp.sku}` : `REF: (verificar no eShop Straumann)`,
             `Torque: ${comp.torque}`,
             `Chave: ${comp.chave}`,
             `Material: ${comp.material}`,
