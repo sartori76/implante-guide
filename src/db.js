@@ -16,24 +16,28 @@ export const DB = {
         label: "Bone Level", desc: "Implante de nível ósseo — plataforma ao nível da crista óssea", icon: "🦴",
         lines: {
           blblt: {
-            label: "BL / BLT", desc: "Bone Level e Bone Level Tapered — CrossFit® NC (∅3,3mm) ou RC (∅4,1–4,8mm)", icon: "⬡", connection: "CrossFit®",
+            label: "BL / BLT", desc: "Bone Level e Bone Level Tapered — CrossFit® SC (∅2,9mm), NC (∅3,3mm) ou RC (∅4,1–4,8mm)", icon: "⬡", connection: "CrossFit®",
             hasBodySelect: true,
             bodyOptions: [
-              { key: "NC", label: "NC — Narrow CrossFit®", diam: "∅ 3,3 mm", desc: "Implantes de diâmetro reduzido. Plataforma NC (anel amarelo na embalagem).", color: "#eab308" },
-              { key: "RC", label: "RC — Regular CrossFit®", diam: "∅ 4,1 mm / ∅ 4,8 mm", desc: "Implantes de diâmetro regular e largo. Plataforma RC compartilhada (anel magenta). Componentes idênticos para ∅4,1 e ∅4,8.", color: "#d946ef" },
+              { key: "SC", label: "SC — Small CrossFit®", diam: "∅ 2,9 mm", desc: "Implante de diâmetro reduzido. Plataforma SC (anel azul). Restauração cimentada ou parafusada.", color: "#009FE3" },
+              { key: "NC", label: "NC — Narrow CrossFit®", diam: "∅ 3,3 mm", desc: "Implantes de diâmetro reduzido. Plataforma NC (anel amarelo na embalagem).", color: "#FFD400" },
+              { key: "RC", label: "RC — Regular CrossFit®", diam: "∅ 4,1 mm / ∅ 4,8 mm", desc: "Implantes de diâmetro regular e largo. Plataforma RC compartilhada (anel magenta). Componentes idênticos para ∅4,1 e ∅4,8.", color: "#D6006E" },
             ],
             objectives: {
               unitaria: {
                 label: "Prótese Unitária", desc: "Componente: Variobase® — coroa parafusada ou cimentada", icon: "🦷",
                 subtypes: [
                   // ── NC ∅3,3mm ────────────────────────────────────────────────────
-                  { key: "variobase_nc", body: "NC", label: "Variobase® NC", icon: "⬡", desc: "Base universal para coroa parafusada CAD/CAM. ∅ emergência 3,5 mm. Parafuso SCS incluso.", heights: { "1.0": { name: "Variobase NC GH 1,0mm", sku: null, skuStatus: "nao_verificado", torque: "35 Ncm", chave: "SCS 1.25mm", type: "Variobase", material: "Ti Grau 5", shape: "variobase" }, "2.0": { name: "Variobase NC GH 2,0mm", sku: null, skuStatus: "nao_verificado", torque: "35 Ncm", chave: "SCS 1.25mm", type: "Variobase", material: "Ti Grau 5", shape: "variobase" }, "3.0": { name: "Variobase NC GH 3,0mm", sku: null, skuStatus: "nao_verificado", torque: "35 Ncm", chave: "SCS 1.25mm", type: "Variobase", material: "Ti Grau 5", shape: "variobase" } } },
+                  { key: "variobase_nc", body: "NC", label: "Variobase® NC", icon: "⬡", desc: "Base universal para coroa parafusada CAD/CAM. ∅ base 3,8 mm · poste 5,5 mm. Parafuso basal 35 Ncm. Parafuso SCS incluso.", heights: { "1.0": { name: "Variobase NC GH 1,0mm", sku: "022.0027", alturaGengival: "1mm", diametroBase: "3,8mm", alturaPoste: "5,5mm", torque: "35 Ncm", chave: "SCS 1.25mm", type: "Variobase", material: "Ti Grau 5", shape: "variobase", tipo: "reto/unitário" }, "2.0": { name: "Variobase NC GH 2,0mm", sku: "022.0106", alturaGengival: "2mm", diametroBase: "3,8mm", alturaPoste: "5,5mm", torque: "35 Ncm", chave: "SCS 1.25mm", type: "Variobase", material: "Ti Grau 5", shape: "variobase", tipo: "reto/unitário" }, "3.0": { name: "Variobase NC GH 3,0mm", sku: "022.0108", alturaGengival: "3mm", diametroBase: "3,8mm", alturaPoste: "5,5mm", torque: "35 Ncm", chave: "SCS 1.25mm", type: "Variobase", material: "Ti Grau 5", shape: "variobase", tipo: "reto/unitário" } } },
                   { key: "pilar_nc", body: "NC", label: "Pilar Anatômico NC (0° / 15°)", icon: "↗", desc: "Pilar anatômico parafusado NC — corrige angulação 0° ou 15°. Chave SCS.", heights: { "1.5": { name: "Pilar Anatômico NC 0° GH 1,5mm", sku: null, skuStatus: "nao_verificado", torque: "35 Ncm", chave: "SCS 1.25mm", type: "Pilar Anatômico NC", material: "Ti Grau 5", shape: "pilar_ang" }, "3.0": { name: "Pilar Anatômico NC 0° GH 3,0mm", sku: null, skuStatus: "nao_verificado", torque: "35 Ncm", chave: "SCS 1.25mm", type: "Pilar Anatômico NC", material: "Ti Grau 5", shape: "pilar_ang" } } },
                   { key: "pilar_cim_nc", body: "NC", label: "Pilar Cimentável NC", icon: "🪝", desc: "Pilar cimentável NC. ∅ emergência ~4,5mm. Chave SCS.", heights: { "1.0": { name: "Pilar Cimentável NC GH 1,0mm", sku: null, skuStatus: "nao_verificado", torque: "35 Ncm", chave: "SCS 1.25mm", type: "Pilar Cimentável NC", material: "Ti Grau 5", shape: "pilar_cim" }, "2.0": { name: "Pilar Cimentável NC GH 2,0mm", sku: null, skuStatus: "nao_verificado", torque: "35 Ncm", chave: "SCS 1.25mm", type: "Pilar Cimentável NC", material: "Ti Grau 5", shape: "pilar_cim" }, "3.0": { name: "Pilar Cimentável NC GH 3,0mm", sku: null, skuStatus: "nao_verificado", torque: "35 Ncm", chave: "SCS 1.25mm", type: "Pilar Cimentável NC", material: "Ti Grau 5", shape: "pilar_cim" } } },
                   // ── RC ∅4,1mm / ∅4,8mm ──────────────────────────────────────────
-                  { key: "variobase_rc", body: "RC", label: "Variobase® RC", icon: "⬡", desc: "Base universal para coroa parafusada CAD/CAM. ∅ emergência 4,5 mm ou 5 mm. Parafuso SCS incluso.", heights: gh("Variobase RC", { torque: "35 Ncm", chave: "SCS 1.25mm", type: "Variobase", material: "Ti Grau 5", shape: "variobase" }, [["1.0", "022.0026"], ["2.0", "022.0107"], ["3.0", "022.0109"]]) },
+                  { key: "variobase_rc", body: "RC", label: "Variobase® RC", icon: "⬡", desc: "Base universal para coroa parafusada CAD/CAM. ∅ base 4,5 mm · poste 5,5 mm. Parafuso basal 35 Ncm. Parafuso SCS incluso.", heights: { "1.0": { name: "Variobase RC GH 1,0mm", sku: "022.0026", alturaGengival: "1mm", diametroBase: "4,5mm", alturaPoste: "5,5mm", torque: "35 Ncm", chave: "SCS 1.25mm", type: "Variobase", material: "Ti Grau 5", shape: "variobase", tipo: "reto/unitário" }, "2.0": { name: "Variobase RC GH 2,0mm", sku: "022.0107", alturaGengival: "2mm", diametroBase: "4,5mm", alturaPoste: "5,5mm", torque: "35 Ncm", chave: "SCS 1.25mm", type: "Variobase", material: "Ti Grau 5", shape: "variobase", tipo: "reto/unitário" }, "3.0": { name: "Variobase RC GH 3,0mm", sku: "022.0109", alturaGengival: "3mm", diametroBase: "4,5mm", alturaPoste: "5,5mm", torque: "35 Ncm", chave: "SCS 1.25mm", type: "Variobase", material: "Ti Grau 5", shape: "variobase", tipo: "reto/unitário" } } },
                   { key: "pilar_rc", body: "RC", label: "Pilar Anatômico RC (0° / 15°)", icon: "↗", desc: "Pilar anatômico parafusado — corrige angulação 0° ou 15°. Chave SCS.", heights: gh("Pilar Anatômico RC 0°", { torque: "35 Ncm", chave: "SCS 1.25mm", type: "Pilar Anatômico RC", material: "Ti Grau 5", shape: "pilar_ang" }, [["2.0", "022.4102"], ["3.5", "022.4104"]]) },
                   { key: "pilar_cim_rc", body: "RC", label: "Pilar Cimentável RC", icon: "🪝", desc: "Pilar cimentável com perfil anatômico. ∅ 5mm ou 6,5mm. Chave SCS.", heights: gh("Pilar Cimentável RC ∅5mm", { torque: "35 Ncm", chave: "SCS 1.25mm", type: "Pilar Cimentável RC", material: "Ti Grau 5", shape: "pilar_cim" }, [["1.0", "022.4321"], ["2.0", "022.4322"], ["3.0", "022.4323"]]) },
+                  // ── SC ∅2,9mm (Small CrossFit®) ─────────────────────────────────
+                  // diametroBase e alturaPoste NÃO são publicados no catálogo oficial Straumann para o SC → null + dataStatus.
+                  { key: "vb_sc", body: "SC", label: "Pilar Variobase® SC", icon: "⬡", desc: "Variobase SC para prótese unitária cimentada ou parafusada. ∅2,9mm. Acompanha parafuso 025.0031.", heights: { "1.0": { name: "Variobase SC GH 1,0mm", sku: "022.0038", alturaGengival: "1mm", diametroBase: null, alturaPoste: null, torque: "35 Ncm", chave: "SCS 1.25mm", type: "Variobase SC", material: "Ti Grau 5", shape: "variobase", tipo: "cimentada ou parafusada", dataStatus: "nao_publicado_fabricante" }, "2.0": { name: "Variobase SC GH 2,0mm", sku: "022.0039", alturaGengival: "2mm", diametroBase: null, alturaPoste: null, torque: "35 Ncm", chave: "SCS 1.25mm", type: "Variobase SC", material: "Ti Grau 5", shape: "variobase", tipo: "cimentada ou parafusada", dataStatus: "nao_publicado_fabricante" }, "3.0": { name: "Variobase SC GH 3,0mm", sku: "022.0040", alturaGengival: "3mm", diametroBase: null, alturaPoste: null, torque: "35 Ncm", chave: "SCS 1.25mm", type: "Variobase SC", material: "Ti Grau 5", shape: "variobase", tipo: "cimentada ou parafusada", dataStatus: "nao_publicado_fabricante" } } },
                 ]
               },
               multipla: {
@@ -64,17 +68,6 @@ export const DB = {
                 label: "Prótese Unida / Múltipla", desc: "Componente: SRA BLX — Screw-Retained Abutment para próteses fixas unidas", icon: "🦷🦷",
                 subtypes: [
                   { key: "sra_blx", label: "SRA BLX — Screw-Retained Abutment", icon: "⬢", desc: "Pilar SRA BLX para próteses fixas múltiplas. Disponível em 0°, 17° e 30°.", heights: gh("SRA BLX 0°", { torque: "15 Ncm", chave: "SCS 1.25mm", type: "SRA Multi-Unit BLX", material: "Ti Grau 5", shape: "sra" }, [["1.5", "062.4722S"], ["2.5", "062.4723S"], ["3.5", "062.4724S"], ["4.5", "062.4725S"]]) },
-                ]
-              },
-            }
-          },
-          sc: {
-            label: "SC (Small CrossFit™)", desc: "Implante de diâmetro reduzido ∅2,9mm — conexão Small CrossFit® (SC). Cimentada ou parafusada.", icon: "💎", connection: "Small CrossFit® SC",
-            objectives: {
-              unitaria: {
-                label: "Prótese Unitária", desc: "Pilar Variobase® SC — para próteses unitárias. Acompanha parafuso 025.0031.", icon: "🦷",
-                subtypes: [
-                  { key: "vb_sc", label: "Pilar Variobase® SC", icon: "⬡", desc: "Variobase SC para prótese unitária cimentada ou parafusada. ∅2,9mm. Acompanha parafuso 025.0031.", heights: gh("Variobase SC", { torque: "35 Ncm", chave: "SCS 1.25mm", type: "Variobase SC", material: "Ti Grau 5", shape: "variobase" }, [["1.0", "022.0038"], ["2.0", "022.0039"], ["3.0", "022.0040"]]) },
                 ]
               },
             }
