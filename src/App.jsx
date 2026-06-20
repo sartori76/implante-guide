@@ -855,6 +855,39 @@ function Result({ state, go, addToCart, reset, addToHistory }) {
             </div>
           </div>
         </div>
+        {(comp.alturaGengival || comp.tipo || comp.diametroBase || comp.alturaPoste) && (
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginTop: 6 }}>
+            {comp.alturaGengival && (
+              <div style={{ flex: "1 1 100%", padding: "12px 14px", borderRadius: 9, background: "rgba(16,185,129,.14)", border: "1px solid rgba(16,185,129,.45)", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 4 }}><span style={{ fontSize: 14 }}>📐</span><span style={{ fontSize: 9, color: "#6ee7b7", fontWeight: 700, textTransform: "uppercase", letterSpacing: .5 }}>Altura Gengival</span></div>
+                <span style={{ ...G.mono, fontSize: 20, fontWeight: 800, color: "#10b981" }}>AG: {comp.alturaGengival}</span>
+              </div>
+            )}
+            {comp.tipo && (
+              <div style={{ flex: "1 1 100%", padding: "10px 12px", borderRadius: 9, background: "rgba(51,65,85,0.8)", border: "1px solid #64748b" }}>
+                <div style={{ fontSize: 8, color: "#94a3b8", fontWeight: 700, textTransform: "uppercase", marginBottom: 2 }}>Tipo</div>
+                <span style={{ fontSize: 11, color: "#cbd5e1", fontWeight: 600 }}>{comp.tipo}</span>
+              </div>
+            )}
+            {comp.diametroBase && (
+              <div style={{ flex: "1 1 calc(50% - 3px)", padding: "10px 12px", borderRadius: 9, background: "rgba(51,65,85,0.8)", border: "1px solid #64748b" }}>
+                <div style={{ fontSize: 8, color: "#94a3b8", fontWeight: 700, textTransform: "uppercase", marginBottom: 2 }}>∅ Base</div>
+                <span style={{ ...G.mono, fontSize: 12, color: "#cbd5e1", fontWeight: 700 }}>{comp.diametroBase}</span>
+              </div>
+            )}
+            {comp.alturaPoste && (
+              <div style={{ flex: "1 1 calc(50% - 3px)", padding: "10px 12px", borderRadius: 9, background: "rgba(51,65,85,0.8)", border: "1px solid #64748b" }}>
+                <div style={{ fontSize: 8, color: "#94a3b8", fontWeight: 700, textTransform: "uppercase", marginBottom: 2 }}>Altura do Poste (AP)</div>
+                <span style={{ ...G.mono, fontSize: 12, color: "#cbd5e1", fontWeight: 700 }}>{comp.alturaPoste}</span>
+              </div>
+            )}
+            {comp.dataStatus === "nao_publicado_fabricante" && (!comp.diametroBase || !comp.alturaPoste) && (
+              <div style={{ flex: "1 1 100%", fontSize: 9, color: "#94a3b8", fontStyle: "italic", lineHeight: 1.4, padding: "1px 2px" }}>
+                {[!comp.diametroBase && "∅ base", !comp.alturaPoste && "altura do poste"].filter(Boolean).join(" e ")}: não publicado pelo fabricante.
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Botão Adicionar ao Pedido — ícone SVG inline, stroke hardcoded */}
