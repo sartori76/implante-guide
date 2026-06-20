@@ -589,51 +589,62 @@ export const DB = {
   nobel: {
     label: "Nobel Biocare", logo: "NOB", color: "#f59e0b", site: "nobelbiocare.com",
     families: {
-      nobelActive: {
-        label: "NobelActive (Cone Interno)", desc: "Cone interno NobelActive — torque 35 Ncm. Chave Nobel Hex 1.25mm.", icon: "◆",
+      // ═══ Conical Connection (CC) — plataforma DERIVADA do diâmetro ═══
+      cc: {
+        label: "Conical Connection (CC)",
+        desc: "Conexão cônica interna Nobel. Plataforma derivada do diâmetro do implante (NP fúcsia · RP amarelo · WP azul · 3.0).",
+        icon: "◆",
         lines: {
-          nobelActive_main: {
-            label: "NobelActive Cone Interno", desc: "NobelActive — torque 35 Ncm. Nobel Hex 1.25mm.", icon: "◆", connection: "Cone Interno NobelActive",
-            objectives: {
-              unitaria: {
-                label: "Prótese Unitária", desc: "Pilar NobelActive parafusado ou cimentado", icon: "🦷",
-                subtypes: [
-                  { key: "pilar", label: "Pilar NobelActive Parafusado", icon: "🔩", desc: "Pilar cônico interno para coroa unitária parafusada (Ref. placeholder — confirmar código com fabricante antes do pedido)", heights: gh("Pilar NobelActive", { torque: "35 Ncm", chave: "Nobel Hex 1.25mm", type: "Pilar Protético", material: "Ti Grau 4", shape: "variobase" }, [["1.5", "30836-1"], ["2.5", "30836-2"], ["3.5", "30836-3"], ["4.5", "30836-4"]]) },
-                  { key: "munhao", label: "Pilar NA Cimentado", icon: "🪝", desc: "Pilar cônico para coroa cimentada (Ref. placeholder — confirmar código com fabricante antes do pedido)", heights: gh("Pilar NA Cim.", { torque: "35 Ncm", chave: "Nobel Hex 1.25mm", type: "Munhão Cimentado", material: "Ti Grau 4", shape: "pilar_cim" }, [["1.5", "30837-1"], ["2.5", "30837-2"], ["3.5", "30837-3"], ["4.5", "30837-4"]]) },
-                ]
-              },
-              multipla: {
-                label: "Prótese Unida / Múltipla", desc: "Multi-Unit Abutment para full arch e múltiplas", icon: "🦷🦷",
-                subtypes: [
-                  { key: "mua", label: "Multi-Unit Abutment NobelActive", icon: "⚙️", desc: "MUA para próteses fixas múltiplas e full arch (Ref. placeholder — confirmar código com fabricante antes do pedido)", heights: gh("MUA NobelActive", { torque: "15 Ncm", chave: "Nobel Hex 1.25mm", type: "Multi-Unit Abutment", material: "Ti Grau 4", shape: "sra" }, [["1.5", "32626-1"], ["2.5", "32626-2"], ["3.5", "32626-3"]]) },
-                ]
-              },
-            }
-          }
-        }
-      },
-      nobelReplace: {
-        label: "NobelReplace (Tri-Channel)", desc: "Tri-Channel NobelReplace — torque 35 Ncm. Chave Nobel Hex 1.25mm.", icon: "⬢",
-        lines: {
-          nobelReplace_main: {
-            label: "NobelReplace Tri-Channel", desc: "NobelReplace — torque 35 Ncm. Nobel Hex 1.25mm.", icon: "⬢", connection: "Tri-Channel NobelReplace",
-            objectives: {
-              unitaria: {
-                label: "Prótese Unitária", desc: "Pilar NobelReplace parafusado ou cimentado", icon: "🦷",
-                subtypes: [
-                  { key: "pilar", label: "Pilar NobelReplace Parafusado", icon: "🔩", desc: "Pilar Tri-Channel para coroa unitária parafusada (Ref. placeholder — confirmar código com fabricante antes do pedido)", heights: gh("Pilar NobelReplace", { torque: "35 Ncm", chave: "Nobel Hex 1.25mm", type: "Pilar Protético", material: "Ti Grau 4", shape: "variobase" }, [["1.5", "33424-1"], ["2.5", "33424-2"], ["3.5", "33424-3"], ["4.5", "33424-4"]]) },
-                  { key: "munhao", label: "Pilar NR Cimentado", icon: "🪝", desc: "Pilar Tri-Channel para coroa cimentada convencional (Ref. placeholder — confirmar código com fabricante antes do pedido)", heights: gh("Pilar NR Cim.", { torque: "35 Ncm", chave: "Nobel Hex 1.25mm", type: "Munhão Cimentado", material: "Ti Grau 4", shape: "pilar_cim" }, [["1.5", "33425-1"], ["2.5", "33425-2"], ["3.5", "33425-3"], ["4.5", "33425-4"]]) },
-                ]
-              },
-              multipla: {
-                label: "Prótese Unida / Múltipla", desc: "MUA Tri-Channel para protocolo All-on-4/6 (Ref. placeholder — confirmar código com fabricante antes do pedido)", icon: "🦷🦷",
-                subtypes: [
-                  { key: "mua", label: "Multi-Unit Abutment NobelReplace", icon: "⚙️", desc: "MUA Tri-Channel para protocolo All-on-4/6 (Ref. placeholder — confirmar código com fabricante antes do pedido)", heights: gh("MUA NobelReplace", { torque: "15 Ncm", chave: "Nobel Hex 1.25mm", type: "Multi-Unit Abutment", material: "Ti Grau 4", shape: "sra" }, [["1.5", "32983-1"], ["2.5", "32983-2"], ["3.5", "32983-3"]]) },
-                ]
-              },
-            }
-          }
-        }
+          na_cc: {
+            label: "NobelActive — CC", desc: "NobelActive com Conical Connection. Plataforma derivada do diâmetro (3.0 / NP / RP / WP).", icon: "◆",
+            connection: "Conical Connection (CC)",
+            connectionFamily: "Conical Connection (CC)",
+            connectionMode: "DERIVED_FROM_DIAMETER",
+            hasBodySelect: true,
+            selectTitle: "Plataforma protética",
+            selectSub: "Derivada do diâmetro do implante",
+            selectInfo: "A plataforma da Conical Connection é DETERMINADA pelo diâmetro do implante instalado — nunca escolhida livremente. Confirme no registro cirúrgico / embalagem (anel colorido: NP fúcsia · RP amarelo · WP azul).",
+            bodyOptions: [
+              { key: "3.0", label: "Plataforma 3.0", diam: "∅ 3,0 mm", desc: "Exclusiva do NobelActive 3,0 mm (diâmetro reduzido). Sem anel colorido.", color: null },
+              { key: "NP", label: "NP — Narrow Platform", diam: "Diâmetros estreitos", desc: "Anel fúcsia. Plataforma estreita da Conical Connection.", color: "#E6007E" },
+              { key: "RP", label: "RP — Regular Platform", diam: "Diâmetros regulares", desc: "Anel amarelo. Plataforma regular da Conical Connection.", color: "#FFD400" },
+              { key: "WP", label: "WP — Wide Platform", diam: "Diâmetros largos", desc: "Anel azul. Plataforma larga da Conical Connection.", color: "#009FE3" },
+            ],
+            objectives: {},
+          },
+          npar_cc: {
+            label: "NobelParallel CC", desc: "NobelParallel Conical Connection. Plataforma derivada do diâmetro (NP / RP / WP).", icon: "◆",
+            connection: "Conical Connection (CC)",
+            connectionFamily: "Conical Connection (CC)",
+            connectionMode: "DERIVED_FROM_DIAMETER",
+            hasBodySelect: true,
+            selectTitle: "Plataforma protética",
+            selectSub: "Derivada do diâmetro do implante",
+            selectInfo: "A plataforma da Conical Connection é DETERMINADA pelo diâmetro do implante instalado — nunca escolhida livremente. Confirme no registro cirúrgico / embalagem (anel colorido: NP fúcsia · RP amarelo · WP azul).",
+            bodyOptions: [
+              { key: "NP", label: "NP — Narrow Platform", diam: "Diâmetros estreitos", desc: "Anel fúcsia. Plataforma estreita da Conical Connection.", color: "#E6007E" },
+              { key: "RP", label: "RP — Regular Platform", diam: "Diâmetros regulares", desc: "Anel amarelo. Plataforma regular da Conical Connection.", color: "#FFD400" },
+              { key: "WP", label: "WP — Wide Platform", diam: "Diâmetros largos", desc: "Anel azul. Plataforma larga da Conical Connection.", color: "#009FE3" },
+            ],
+            objectives: {},
+          },
+          nrep_cc: {
+            label: "NobelReplace CC", desc: "NobelReplace Conical Connection (cônico interno). Plataforma derivada do diâmetro (NP / RP / WP).", icon: "◆",
+            connection: "Conical Connection (CC)",
+            connectionFamily: "Conical Connection (CC)",
+            connectionMode: "DERIVED_FROM_DIAMETER",
+            hasBodySelect: true,
+            selectTitle: "Plataforma protética",
+            selectSub: "Derivada do diâmetro do implante",
+            selectInfo: "A plataforma da Conical Connection é DETERMINADA pelo diâmetro do implante instalado — nunca escolhida livremente. Confirme no registro cirúrgico / embalagem (anel colorido: NP fúcsia · RP amarelo · WP azul).",
+            bodyOptions: [
+              { key: "NP", label: "NP — Narrow Platform", diam: "Diâmetros estreitos", desc: "Anel fúcsia. Plataforma estreita da Conical Connection.", color: "#E6007E" },
+              { key: "RP", label: "RP — Regular Platform", diam: "Diâmetros regulares", desc: "Anel amarelo. Plataforma regular da Conical Connection.", color: "#FFD400" },
+              { key: "WP", label: "WP — Wide Platform", diam: "Diâmetros largos", desc: "Anel azul. Plataforma larga da Conical Connection.", color: "#009FE3" },
+            ],
+            objectives: {},
+          },
+        },
       },
     }
   },

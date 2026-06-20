@@ -602,28 +602,34 @@ function BodySelect({ state, go }) {
   const brand = DB[state.brand];
   const fam = brand.families[state.family];
   const line = fam.lines[state.line];
+  // Título/sub/info da tela são parametrizáveis pela linha; default mantém Straumann (RB/WB).
+  const selectTitle = line.selectTitle || "Corpo do Implante";
+  const selectSub = line.selectSub || "Regular Body (RB) ou Wide Body (WB)?";
   return (
     <div style={G.page} className="fadein">
-      <Hdr title="Corpo do Implante" sub="Regular Body (RB) ou Wide Body (WB)?" color={brand.color} onBack={() => go("lineSelect", state, "back")} onHome={() => go("home", {})} />
+      <Hdr title={selectTitle} sub={selectSub} color={brand.color} onBack={() => go("lineSelect", state, "back")} onHome={() => go("home", {})} />
       <Breadcrumb steps={[brand.label, fam.label, line.label]} brandColor={brand.color} />
       <InfoBox color="#3b82f6" icon={<Info size={11} color="#3b82f6" style={{ flexShrink: 0, marginTop: 1 }} />}>
-        Verifique o <strong style={{ color: "white" }}>diâmetro do implante</strong> na documentação clínica ou na embalagem para identificar o corpo correto.
+        {line.selectInfo || <>Verifique o <strong style={{ color: "white" }}>diâmetro do implante</strong> na documentação clínica ou na embalagem para identificar o corpo correto.</>}
       </InfoBox>
       <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-        {line.bodyOptions.map((b) => (
+        {line.bodyOptions.map((b) => {
+          const c = b.color || "#64748b"; // plataforma "sem cor" (ex.: 3.0) usa cinza neutro
+          return (
           <button key={b.key} className="hov" onClick={() => go("objectiveSelect", { ...state, body: b.key })}
-            style={{ ...card, padding: "16px", border: `1px solid ${b.color}55` }}>
-            <div style={{ width: 44, height: 44, borderRadius: 11, background: `${b.color}22`, border: `1px solid ${b.color}66`, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", flexShrink: 0, gap: 2 }}>
-              <span style={{ fontSize: 11, color: b.color, fontWeight: 800 }}>{b.key}</span>
+            style={{ ...card, padding: "16px", border: `1px solid ${c}55` }}>
+            <div style={{ width: 44, height: 44, borderRadius: 11, background: `${c}22`, border: `1px solid ${c}66`, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", flexShrink: 0, gap: 2 }}>
+              <span style={{ fontSize: 11, color: c, fontWeight: 800 }}>{b.key}</span>
             </div>
             <div style={{ flex: 1 }}>
               <div style={{ fontWeight: 700, color: "white", fontSize: 13, marginBottom: 2 }}>{b.label}</div>
-              <div style={{ fontWeight: 800, color: b.color, fontSize: 12, marginBottom: 3 }}>{b.diam}</div>
+              <div style={{ fontWeight: 800, color: c, fontSize: 12, marginBottom: 3 }}>{b.diam}</div>
               <div style={{ fontSize: 10, color: "#94a3b8", lineHeight: 1.4 }}>{b.desc}</div>
             </div>
             <ChevronRight size={14} color="#475569" />
           </button>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
@@ -679,6 +685,11 @@ function ObjectiveSelect({ state, go }) {
       <Hdr title="Objetivo Protético" sub="Unitária ou Prótese Unida?" onBack={() => go(backScreen, state, "back")} onHome={() => go("home", {})} />
       <Breadcrumb steps={[brand.label, fam.label, line.label, tlxPlat ? `${tlxPlat.key} ${tlxPlat.diam}` : bodyOpt ? `${bodyOpt.key} ${bodyOpt.diam}` : null, null].filter(Boolean)} brandColor={brand.color} />
       <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+        {objectives.length === 0 && (
+          <InfoBox color="#3b82f6" icon={<Info size={11} color="#3b82f6" style={{ flexShrink: 0, marginTop: 1 }} />}>
+            <strong style={{ color: "white" }}>Componentes em breve.</strong> Esta versão cobre a navegação e a derivação de plataforma. Os componentes protéticos e SKUs desta linha serão adicionados em etapa posterior.
+          </InfoBox>
+        )}
         {objectives.map(([key, obj]) => (
           <button key={key} className="hov" onClick={() => go("subtypeSelect", { ...state, objective: key })}
             style={{ ...card, padding: "18px", border: `1px solid ${key === "unitaria" ? "rgba(59,130,246,.35)" : "rgba(16,185,129,.35)"}` }}>
