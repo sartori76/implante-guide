@@ -685,6 +685,11 @@ function ObjectiveSelect({ state, go }) {
       <Hdr title="Objetivo Protético" sub="Unitária ou Prótese Unida?" onBack={() => go(backScreen, state, "back")} onHome={() => go("home", {})} />
       <Breadcrumb steps={[brand.label, fam.label, line.label, tlxPlat ? `${tlxPlat.key} ${tlxPlat.diam}` : bodyOpt ? `${bodyOpt.key} ${bodyOpt.diam}` : null, null].filter(Boolean)} brandColor={brand.color} />
       <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+        {line.connectionMode === "UNIFIED" && (
+          <InfoBox color="#10b981" icon={<Info size={11} color="#10b981" style={{ flexShrink: 0, marginTop: 1 }} />}>
+            <strong style={{ color: "white" }}>Plataforma única {line.plataformaUnica}.</strong> Conexão unificada — a mesma plataforma {line.plataformaUnica} serve todos os diâmetros, sem derivação.
+          </InfoBox>
+        )}
         {objectives.length === 0 && (
           <InfoBox color="#3b82f6" icon={<Info size={11} color="#3b82f6" style={{ flexShrink: 0, marginTop: 1 }} />}>
             <strong style={{ color: "white" }}>Componentes em breve.</strong> Esta versão cobre a navegação e a derivação de plataforma. Os componentes protéticos e SKUs desta linha serão adicionados em etapa posterior.

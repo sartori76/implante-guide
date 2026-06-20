@@ -646,6 +646,38 @@ export const DB = {
           },
         },
       },
+      // ═══ Conical Connection "S" — plataforma NP UNIFICADA (sem derivação) ═══
+      ccS: {
+        label: "Conical Connection S (Plataforma NP unificada)",
+        desc: "Variantes \"S\": plataforma NP única em todos os diâmetros — sem derivação por diâmetro.",
+        icon: "◆",
+        lines: {
+          na_s: {
+            label: "NobelActive S", desc: "NobelActive S — Conical Connection com plataforma NP unificada (todos os diâmetros).", icon: "◆",
+            connection: "Conical Connection (CC)",
+            connectionFamily: "Conical Connection (CC)",
+            connectionMode: "UNIFIED",
+            plataformaUnica: "NP",
+            objectives: {},
+          },
+          npar_s: {
+            label: "NobelParallel S", desc: "NobelParallel S — Conical Connection com plataforma NP unificada (todos os diâmetros).", icon: "◆",
+            connection: "Conical Connection (CC)",
+            connectionFamily: "Conical Connection (CC)",
+            connectionMode: "UNIFIED",
+            plataformaUnica: "NP",
+            objectives: {},
+          },
+          nrep_s: {
+            label: "NobelReplace S", desc: "NobelReplace S — Conical Connection com plataforma NP unificada (todos os diâmetros).", icon: "◆",
+            connection: "Conical Connection (CC)",
+            connectionFamily: "Conical Connection (CC)",
+            connectionMode: "UNIFIED",
+            plataformaUnica: "NP",
+            objectives: {},
+          },
+        },
+      },
     }
   },
   osstem: {
