@@ -798,7 +798,21 @@ export const DB = {
               { key: "WP", label: "WP — Wide Platform", diam: "Diâmetros largos", desc: "Anel azul. Plataforma larga Tri-Lobe.", color: "#009FE3" },
               { key: "6.0", label: "Plataforma 6.0", diam: "∅ 6,0 mm", desc: "Anel verde. Plataforma 6.0 Tri-Lobe.", color: "#00A651" },
             ],
-            objectives: {},
+            objectives: {
+              unitaria: {
+                label: "Prótese Unitária", desc: "Componentes Tri-Lobe (legado) — base CAD/CAM parafusada ou pilar cimentável. Referências a confirmar no eShop.", icon: "🦷",
+                subtypes: [
+                  { key: "nobel_trilobe_base_cad", label: "Base CAD/CAM parafusada (Ti-base) Tri-Lobe", icon: "🔩", desc: "Base protética Tri-Lobe para coroa unitária parafusada CAD/CAM. Exclusiva da conexão Tri-Channel / Tri-Lobe (NÃO compatível com CC). Referência a confirmar no eShop Nobel.", heights: ghS("Base CAD/CAM Tri-Lobe", "Base protética parafusada", "variobase", ["1.0", "2.0", "3.0"]) },
+                  { key: "nobel_trilobe_pilar_cim", label: "Pilar cimentável Tri-Lobe", icon: "🪝", desc: "Pilar cimentável Tri-Lobe para coroa unitária. Exclusivo da conexão Tri-Channel / Tri-Lobe (NÃO compatível com CC). Referência a confirmar no eShop Nobel.", heights: ghS("Pilar cimentável Tri-Lobe", "Pilar cimentável", "pilar_cim", ["1.0", "2.0", "3.0"]) },
+                ]
+              },
+              multipla: {
+                label: "Prótese Unida / Múltipla", desc: "Multi-Unit Abutment Tri-Lobe para próteses fixas múltiplas. Referências a confirmar no eShop.", icon: "🦷🦷",
+                subtypes: [
+                  { key: "nobel_trilobe_mua", label: "Multi-Unit Abutment Tri-Lobe", icon: "⚙️", desc: "MUA Tri-Lobe para próteses fixas múltiplas / protocolo. Exclusivo da conexão Tri-Channel / Tri-Lobe (NÃO compatível com CC). Referência a confirmar no eShop Nobel.", heights: ghS("Multi-Unit Abutment Tri-Lobe", "Multi-Unit Abutment", "sra", ["1.5", "2.5", "3.5"]) },
+                ]
+              },
+            },
           },
         },
       },
