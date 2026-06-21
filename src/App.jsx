@@ -608,13 +608,16 @@ function BodySelect({ state, go }) {
   const brand = DB[state.brand];
   const fam = brand.families[state.family];
   const line = fam.lines[state.line];
+  const lines = Object.entries(fam.lines);
+  // Família com 1 linha pula lineSelect (auto-skip); voltar deve ir direto a familySelect.
+  const backScreen = lines.length > 1 ? "lineSelect" : "familySelect";
   // Título/sub/info da tela são parametrizáveis pela linha; default mantém Straumann (RB/WB).
   const selectTitle = line.selectTitle || "Corpo do Implante";
   const selectSub = line.selectSub || "Regular Body (RB) ou Wide Body (WB)?";
   const aviso = line.avisoIncompatibilidade || fam.avisoIncompatibilidade;
   return (
     <div style={G.page} className="fadein">
-      <Hdr title={selectTitle} sub={selectSub} color={brand.color} onBack={() => go("lineSelect", state, "back")} onHome={() => go("home", {})} />
+      <Hdr title={selectTitle} sub={selectSub} color={brand.color} onBack={() => go(backScreen, state, "back")} onHome={() => go("home", {})} />
       <Breadcrumb steps={[brand.label, fam.label, line.label]} brandColor={brand.color} />
       {aviso && (
         <InfoBox color="#ef4444" icon={<Info size={11} color="#ef4444" style={{ flexShrink: 0, marginTop: 1 }} />}>
