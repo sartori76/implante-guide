@@ -546,6 +546,12 @@ function FamilySelect({ state, go }) {
             <div style={{ flex: 1 }}>
               <div style={{ fontWeight: 700, color: "white", fontSize: 14, marginBottom: 3 }}>{fam.label}</div>
               <div style={{ fontSize: 10, color: "#94a3b8", lineHeight: 1.4 }}>{fam.desc}</div>
+              {fam.avisoIncompatibilidade && (
+                <div style={{ marginTop: 5, fontSize: 9, color: "#ef4444", fontWeight: 700, lineHeight: 1.35, display: "flex", gap: 4 }}>
+                  <span aria-hidden="true">⚠️</span>
+                  <span>Não compatível com componentes Conical Connection (CC)</span>
+                </div>
+              )}
             </div>
             <ChevronRight size={14} color="#475569" />
           </button>
@@ -602,28 +608,43 @@ function BodySelect({ state, go }) {
   const brand = DB[state.brand];
   const fam = brand.families[state.family];
   const line = fam.lines[state.line];
+  const lines = Object.entries(fam.lines);
+  // Família com 1 linha pula lineSelect (auto-skip); voltar deve ir direto a familySelect.
+  const backScreen = lines.length > 1 ? "lineSelect" : "familySelect";
+  // Título/sub/info da tela são parametrizáveis pela linha; default mantém Straumann (RB/WB).
+  const selectTitle = line.selectTitle || "Corpo do Implante";
+  const selectSub = line.selectSub || "Regular Body (RB) ou Wide Body (WB)?";
+  const aviso = line.avisoIncompatibilidade || fam.avisoIncompatibilidade;
   return (
     <div style={G.page} className="fadein">
-      <Hdr title="Corpo do Implante" sub="Regular Body (RB) ou Wide Body (WB)?" color={brand.color} onBack={() => go("lineSelect", state, "back")} onHome={() => go("home", {})} />
+      <Hdr title={selectTitle} sub={selectSub} color={brand.color} onBack={() => go(backScreen, state, "back")} onHome={() => go("home", {})} />
       <Breadcrumb steps={[brand.label, fam.label, line.label]} brandColor={brand.color} />
+      {aviso && (
+        <InfoBox color="#ef4444" icon={<Info size={11} color="#ef4444" style={{ flexShrink: 0, marginTop: 1 }} />}>
+          <strong style={{ color: "white" }}>Incompatibilidade:</strong> {aviso}
+        </InfoBox>
+      )}
       <InfoBox color="#3b82f6" icon={<Info size={11} color="#3b82f6" style={{ flexShrink: 0, marginTop: 1 }} />}>
-        Verifique o <strong style={{ color: "white" }}>diâmetro do implante</strong> na documentação clínica ou na embalagem para identificar o corpo correto.
+        {line.selectInfo || <>Verifique o <strong style={{ color: "white" }}>diâmetro do implante</strong> na documentação clínica ou na embalagem para identificar o corpo correto.</>}
       </InfoBox>
       <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-        {line.bodyOptions.map((b) => (
+        {line.bodyOptions.map((b) => {
+          const c = b.color || "#64748b"; // plataforma "sem cor" (ex.: 3.0) usa cinza neutro
+          return (
           <button key={b.key} className="hov" onClick={() => go("objectiveSelect", { ...state, body: b.key })}
-            style={{ ...card, padding: "16px", border: `1px solid ${b.color}55` }}>
-            <div style={{ width: 44, height: 44, borderRadius: 11, background: `${b.color}22`, border: `1px solid ${b.color}66`, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", flexShrink: 0, gap: 2 }}>
-              <span style={{ fontSize: 11, color: b.color, fontWeight: 800 }}>{b.key}</span>
+            style={{ ...card, padding: "16px", border: `1px solid ${c}55` }}>
+            <div style={{ width: 44, height: 44, borderRadius: 11, background: `${c}22`, border: `1px solid ${c}66`, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", flexShrink: 0, gap: 2 }}>
+              <span style={{ fontSize: 11, color: c, fontWeight: 800 }}>{b.key}</span>
             </div>
             <div style={{ flex: 1 }}>
               <div style={{ fontWeight: 700, color: "white", fontSize: 13, marginBottom: 2 }}>{b.label}</div>
-              <div style={{ fontWeight: 800, color: b.color, fontSize: 12, marginBottom: 3 }}>{b.diam}</div>
+              <div style={{ fontWeight: 800, color: c, fontSize: 12, marginBottom: 3 }}>{b.diam}</div>
               <div style={{ fontSize: 10, color: "#94a3b8", lineHeight: 1.4 }}>{b.desc}</div>
             </div>
             <ChevronRight size={14} color="#475569" />
           </button>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
@@ -674,11 +695,27 @@ function ObjectiveSelect({ state, go }) {
   const objectives = Object.entries(line.objectives).filter(([, obj]) =>
     !state.body || (obj.subtypes || []).some(s => !s.body || s.body === state.body)
   );
+  const aviso = line.avisoIncompatibilidade || fam.avisoIncompatibilidade;
   return (
     <div style={G.page} className="fadein">
       <Hdr title="Objetivo Protético" sub="Unitária ou Prótese Unida?" onBack={() => go(backScreen, state, "back")} onHome={() => go("home", {})} />
       <Breadcrumb steps={[brand.label, fam.label, line.label, tlxPlat ? `${tlxPlat.key} ${tlxPlat.diam}` : bodyOpt ? `${bodyOpt.key} ${bodyOpt.diam}` : null, null].filter(Boolean)} brandColor={brand.color} />
       <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+        {aviso && (
+          <InfoBox color="#ef4444" icon={<Info size={11} color="#ef4444" style={{ flexShrink: 0, marginTop: 1 }} />}>
+            <strong style={{ color: "white" }}>Incompatibilidade:</strong> {aviso}
+          </InfoBox>
+        )}
+        {line.connectionMode === "UNIFIED" && (
+          <InfoBox color="#10b981" icon={<Info size={11} color="#10b981" style={{ flexShrink: 0, marginTop: 1 }} />}>
+            <strong style={{ color: "white" }}>Plataforma única {line.plataformaUnica}.</strong> Conexão unificada — a mesma plataforma {line.plataformaUnica} serve todos os diâmetros, sem derivação.
+          </InfoBox>
+        )}
+        {objectives.length === 0 && (
+          <InfoBox color="#3b82f6" icon={<Info size={11} color="#3b82f6" style={{ flexShrink: 0, marginTop: 1 }} />}>
+            <strong style={{ color: "white" }}>Componentes em breve.</strong> Esta versão cobre a navegação e a derivação de plataforma. Os componentes protéticos e SKUs desta linha serão adicionados em etapa posterior.
+          </InfoBox>
+        )}
         {objectives.map(([key, obj]) => (
           <button key={key} className="hov" onClick={() => go("subtypeSelect", { ...state, objective: key })}
             style={{ ...card, padding: "18px", border: `1px solid ${key === "unitaria" ? "rgba(59,130,246,.35)" : "rgba(16,185,129,.35)"}` }}>
@@ -825,7 +862,7 @@ function Result({ state, go, addToCart, reset, addToHistory }) {
         <div style={{ display: "flex", alignItems: "center", gap: 5, marginBottom: 14 }}>
           {comp.sku
             ? <><span style={{ fontSize: 8, color: "#94a3b8" }}>REF.</span><span style={{ ...G.mono, fontSize: 11, fontWeight: 600, color: "#60a5fa", background: "rgba(59,130,246,.15)", padding: "2px 6px", borderRadius: 5 }}>{comp.sku}</span></>
-            : <span style={{ fontSize: 10, color: "#f59e0b", background: "rgba(245,158,11,.15)", border: "1px solid rgba(245,158,11,.4)", borderRadius: 6, padding: "3px 8px", fontWeight: 700 }}>⚠ SKU não verificado — consultar eShop Straumann</span>
+            : <span style={{ fontSize: 10, color: "#f59e0b", background: "rgba(245,158,11,.15)", border: "1px solid rgba(245,158,11,.4)", borderRadius: 6, padding: "3px 8px", fontWeight: 700 }}>⚠ SKU não verificado — consultar eShop {brand.label}</span>
           }
         </div>
         <div style={{ display: "flex", justifyContent: "center", marginBottom: 14 }}>
@@ -839,14 +876,14 @@ function Result({ state, go, addToCart, reset, addToHistory }) {
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 6 }}>
           <div style={{ padding: "14px", borderRadius: 9, background: "rgba(245,158,11,.12)", border: "1px solid rgba(245,158,11,.4)" }}>
             <div style={{ display: "flex", alignItems: "center", gap: 4, marginBottom: 4 }}><Zap size={9} color="#f59e0b" /><span style={{ fontSize: 8, color: "#fcd34d", fontWeight: 700, textTransform: "uppercase" }}>Torque</span></div>
-            <span style={{ ...G.mono, fontSize: 28, fontWeight: 800, color: "#f59e0b", letterSpacing: -0.5 }}>{comp.torque}</span>
+            <span style={{ ...G.mono, fontSize: 28, fontWeight: 800, color: "#f59e0b", letterSpacing: -0.5 }}>{comp.torque || "—"}</span>
           </div>
           <div style={{ padding: "14px", borderRadius: 9, background: "rgba(59,130,246,.12)", border: "1px solid rgba(59,130,246,.4)" }}>
             <div style={{ display: "flex", alignItems: "center", gap: 4, marginBottom: 4 }}><Shield size={9} color="#60a5fa" /><span style={{ fontSize: 8, color: "#93c5fd", fontWeight: 700, textTransform: "uppercase" }}>Chave</span></div>
-            <span style={{ ...G.mono, fontSize: 18, fontWeight: 800, color: "#60a5fa" }}>{comp.chave}</span>
+            <span style={{ ...G.mono, fontSize: 18, fontWeight: 800, color: "#60a5fa" }}>{comp.chave || "—"}</span>
           </div>
           <div style={{ padding: "11px", borderRadius: 9, background: "rgba(51,65,85,0.8)", border: "1px solid #64748b", gridColumn: "span 2", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-            <div><div style={{ fontSize: 8, color: "#94a3b8", fontWeight: 700, textTransform: "uppercase", marginBottom: 2 }}>Material</div><span style={{ fontSize: 10, color: "#cbd5e1" }}>{comp.material}</span></div>
+            <div><div style={{ fontSize: 8, color: "#94a3b8", fontWeight: 700, textTransform: "uppercase", marginBottom: 2 }}>Material</div><span style={{ fontSize: 10, color: "#cbd5e1" }}>{comp.material || "a confirmar"}</span></div>
             <div style={{ textAlign: "right" }}>
               <div style={{ fontSize: 8, color: "#94a3b8", fontWeight: 700, textTransform: "uppercase", marginBottom: 2 }}>{tlxPlat ? "Plataforma" : "Alt. Gengival"}</div>
               <span style={{ ...G.mono, fontSize: 11, fontWeight: 700, color: tlxPlat ? tlxPlat.color : "#10b981" }}>
@@ -903,10 +940,10 @@ function Result({ state, go, addToCart, reset, addToHistory }) {
           const texto = [
             `${brand.label} — ${line.label}`,
             comp.name,
-            comp.sku ? `REF: ${comp.sku}` : `REF: (verificar no eShop Straumann)`,
-            `Torque: ${comp.torque}`,
-            `Chave: ${comp.chave}`,
-            `Material: ${comp.material}`,
+            comp.sku ? `REF: ${comp.sku}` : `REF: (verificar no eShop ${brand.label})`,
+            `Torque: ${comp.torque || "(a confirmar)"}`,
+            `Chave: ${comp.chave || "(a confirmar)"}`,
+            `Material: ${comp.material || "(a confirmar)"}`,
             tlxPlat ? `Plataforma: ${tlxPlat.key} ${tlxPlat.diam}` : `Altura Gengival: ${state.gengivalHeight.replace(".", ",")}mm`,
           ].join("\n");
           navigator.clipboard.writeText(texto);

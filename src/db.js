@@ -7,7 +7,53 @@ export function gh(baseName, baseInfo, pairs) {
   return out;
 }
 
+// ─── Helper: heights "scaffold" sem SKU ──────────────────────────────────────
+// Estrutura de navegação sem dado clínico inventado: REF/torque/chave/material
+// ficam null (a UI mostra "verificar eShop"). Só name/type/shape são preenchidos.
+function ghS(baseName, type, shape, heightKeys) {
+  const out = {};
+  heightKeys.forEach((h) => {
+    out[h] = { name: `${baseName} GH ${h.replace(".", ",")}mm`, sku: null, skuStatus: "nao_verificado", heightStatus: "placeholder", torque: null, chave: null, type, material: null, shape };
+  });
+  return out;
+}
+
 // ─── BASE DE DADOS ────────────────────────────────────────────────────────────
+// ─── Componentes Nobel por conexão/plataforma (fonte ÚNICA, deduplicada) ──────
+// Sem dado clínico inventado: REF/torque/chave/material = null; alturas são
+// PLACEHOLDERS a confirmar (heightStatus). As 3 linhas CC compartilham CC_FAMILY
+// (mesma referência); as linhas S referenciam só o NP da CC (CC_NP_ONLY, mesmos
+// objetos → REF preenchido uma vez vale para CC-NP e para S).
+const PLAT_HEIGHTS = ["1.0", "2.0", "3.0"];       // placeholder a confirmar
+const PLAT_HEIGHTS_MUA = ["1.5", "2.5", "3.5"];   // placeholder a confirmar
+
+function connComponents(sysLabel, plats, keyPrefix = "", extraDesc = "") {
+  const unitaria = [], multipla = [];
+  for (const p of plats) {
+    unitaria.push(
+      { key: `${keyPrefix}base_cad_${p}`, body: p, label: "Base CAD/CAM parafusada (Ti-base)", icon: "🔩", desc: `Base protética para coroa unitária parafusada CAD/CAM — ${sysLabel} ${p}.${extraDesc} Referência a confirmar no eShop Nobel.`, heights: ghS(`Base CAD/CAM ${sysLabel} ${p}`, "Base protética parafusada", "variobase", PLAT_HEIGHTS) },
+      { key: `${keyPrefix}pilar_cim_${p}`, body: p, label: "Pilar cimentável", icon: "🪝", desc: `Pilar para coroa unitária cimentada — ${sysLabel} ${p}.${extraDesc} Referência a confirmar no eShop Nobel.`, heights: ghS(`Pilar cimentável ${sysLabel} ${p}`, "Pilar cimentável", "pilar_cim", PLAT_HEIGHTS) },
+    );
+    multipla.push(
+      { key: `${keyPrefix}mua_${p}`, body: p, label: "Multi-Unit Abutment", icon: "⚙️", desc: `MUA para próteses fixas múltiplas — ${sysLabel} ${p}.${extraDesc} Referência a confirmar no eShop Nobel.`, heights: ghS(`Multi-Unit Abutment ${sysLabel} ${p}`, "Multi-Unit Abutment", "sra", PLAT_HEIGHTS_MUA) },
+    );
+  }
+  return {
+    unitaria: { label: "Prótese Unitária", desc: "Base CAD/CAM parafusada ou pilar cimentável (referências a confirmar no eShop).", icon: "🦷", subtypes: unitaria },
+    multipla: { label: "Prótese Unida / Múltipla", desc: "Multi-Unit Abutment para próteses fixas múltiplas (referências a confirmar no eShop).", icon: "🦷🦷", subtypes: multipla },
+  };
+}
+
+// CC: plataformas derivadas do diâmetro (3.0 só no NobelActive; gating via bodyOptions).
+const CC_FAMILY = connComponents("Conical Connection", ["3.0", "NP", "RP", "WP"]);
+// S (UNIFIED): mesmos objetos NP da CC — dedup real.
+const CC_NP_ONLY = {
+  unitaria: { ...CC_FAMILY.unitaria, subtypes: CC_FAMILY.unitaria.subtypes.filter((s) => s.body === "NP") },
+  multipla: { ...CC_FAMILY.multipla, subtypes: CC_FAMILY.multipla.subtypes.filter((s) => s.body === "NP") },
+};
+// Tri-Lobe (legado): família/IDs próprios; incompatível com CC.
+const TRILOBE_FAMILY = connComponents("Tri-Lobe", ["NP", "RP", "WP", "6.0"], "nobel_trilobe_", " Exclusivo Tri-Channel/Tri-Lobe (NÃO compatível com CC).");
+
 export const DB = {
   straumann: {
     label: "Straumann", logo: "STR", color: "#3b82f6", site: "straumann.com.br",
@@ -589,51 +635,123 @@ export const DB = {
   nobel: {
     label: "Nobel Biocare", logo: "NOB", color: "#f59e0b", site: "nobelbiocare.com",
     families: {
-      nobelActive: {
-        label: "NobelActive (Cone Interno)", desc: "Cone interno NobelActive — torque 35 Ncm. Chave Nobel Hex 1.25mm.", icon: "◆",
+      // ═══ Conical Connection (CC) — plataforma DERIVADA do diâmetro ═══
+      cc: {
+        label: "Conical Connection (CC)",
+        desc: "Conexão cônica interna Nobel. Plataforma derivada do diâmetro do implante (NP fúcsia · RP amarelo · WP azul · 3.0).",
+        icon: "◆",
         lines: {
-          nobelActive_main: {
-            label: "NobelActive Cone Interno", desc: "NobelActive — torque 35 Ncm. Nobel Hex 1.25mm.", icon: "◆", connection: "Cone Interno NobelActive",
-            objectives: {
-              unitaria: {
-                label: "Prótese Unitária", desc: "Pilar NobelActive parafusado ou cimentado", icon: "🦷",
-                subtypes: [
-                  { key: "pilar", label: "Pilar NobelActive Parafusado", icon: "🔩", desc: "Pilar cônico interno para coroa unitária parafusada (Ref. placeholder — confirmar código com fabricante antes do pedido)", heights: gh("Pilar NobelActive", { torque: "35 Ncm", chave: "Nobel Hex 1.25mm", type: "Pilar Protético", material: "Ti Grau 4", shape: "variobase" }, [["1.5", "30836-1"], ["2.5", "30836-2"], ["3.5", "30836-3"], ["4.5", "30836-4"]]) },
-                  { key: "munhao", label: "Pilar NA Cimentado", icon: "🪝", desc: "Pilar cônico para coroa cimentada (Ref. placeholder — confirmar código com fabricante antes do pedido)", heights: gh("Pilar NA Cim.", { torque: "35 Ncm", chave: "Nobel Hex 1.25mm", type: "Munhão Cimentado", material: "Ti Grau 4", shape: "pilar_cim" }, [["1.5", "30837-1"], ["2.5", "30837-2"], ["3.5", "30837-3"], ["4.5", "30837-4"]]) },
-                ]
-              },
-              multipla: {
-                label: "Prótese Unida / Múltipla", desc: "Multi-Unit Abutment para full arch e múltiplas", icon: "🦷🦷",
-                subtypes: [
-                  { key: "mua", label: "Multi-Unit Abutment NobelActive", icon: "⚙️", desc: "MUA para próteses fixas múltiplas e full arch (Ref. placeholder — confirmar código com fabricante antes do pedido)", heights: gh("MUA NobelActive", { torque: "15 Ncm", chave: "Nobel Hex 1.25mm", type: "Multi-Unit Abutment", material: "Ti Grau 4", shape: "sra" }, [["1.5", "32626-1"], ["2.5", "32626-2"], ["3.5", "32626-3"]]) },
-                ]
-              },
-            }
-          }
-        }
+          na_cc: {
+            label: "NobelActive — CC", desc: "NobelActive com Conical Connection. Plataforma derivada do diâmetro (3.0 / NP / RP / WP).", icon: "◆",
+            connection: "Conical Connection (CC)",
+            connectionFamily: "Conical Connection (CC)",
+            connectionMode: "DERIVED_FROM_DIAMETER",
+            hasBodySelect: true,
+            selectTitle: "Plataforma protética",
+            selectSub: "Derivada do diâmetro do implante",
+            selectInfo: "A plataforma da Conical Connection é DETERMINADA pelo diâmetro do implante instalado — nunca escolhida livremente. Confirme no registro cirúrgico / embalagem (anel colorido: NP fúcsia · RP amarelo · WP azul).",
+            bodyOptions: [
+              { key: "3.0", label: "Plataforma 3.0", diam: "∅ 3,0 mm", desc: "Exclusiva do NobelActive 3,0 mm (diâmetro reduzido). Sem anel colorido.", color: null },
+              { key: "NP", label: "NP — Narrow Platform", diam: "Diâmetros estreitos", desc: "Anel fúcsia. Plataforma estreita da Conical Connection.", color: "#E6007E" },
+              { key: "RP", label: "RP — Regular Platform", diam: "Diâmetros regulares", desc: "Anel amarelo. Plataforma regular da Conical Connection.", color: "#FFD400" },
+              { key: "WP", label: "WP — Wide Platform", diam: "Diâmetros largos", desc: "Anel azul. Plataforma larga da Conical Connection.", color: "#009FE3" },
+            ],
+            objectives: CC_FAMILY,
+          },
+          npar_cc: {
+            label: "NobelParallel CC", desc: "NobelParallel Conical Connection. Plataforma derivada do diâmetro (NP / RP / WP).", icon: "◆",
+            connection: "Conical Connection (CC)",
+            connectionFamily: "Conical Connection (CC)",
+            connectionMode: "DERIVED_FROM_DIAMETER",
+            hasBodySelect: true,
+            selectTitle: "Plataforma protética",
+            selectSub: "Derivada do diâmetro do implante",
+            selectInfo: "A plataforma da Conical Connection é DETERMINADA pelo diâmetro do implante instalado — nunca escolhida livremente. Confirme no registro cirúrgico / embalagem (anel colorido: NP fúcsia · RP amarelo · WP azul).",
+            bodyOptions: [
+              { key: "NP", label: "NP — Narrow Platform", diam: "Diâmetros estreitos", desc: "Anel fúcsia. Plataforma estreita da Conical Connection.", color: "#E6007E" },
+              { key: "RP", label: "RP — Regular Platform", diam: "Diâmetros regulares", desc: "Anel amarelo. Plataforma regular da Conical Connection.", color: "#FFD400" },
+              { key: "WP", label: "WP — Wide Platform", diam: "Diâmetros largos", desc: "Anel azul. Plataforma larga da Conical Connection.", color: "#009FE3" },
+            ],
+            objectives: CC_FAMILY,
+          },
+          nrep_cc: {
+            label: "NobelReplace CC", desc: "NobelReplace Conical Connection (cônico interno). Plataforma derivada do diâmetro (NP / RP / WP).", icon: "◆",
+            connection: "Conical Connection (CC)",
+            connectionFamily: "Conical Connection (CC)",
+            connectionMode: "DERIVED_FROM_DIAMETER",
+            hasBodySelect: true,
+            selectTitle: "Plataforma protética",
+            selectSub: "Derivada do diâmetro do implante",
+            selectInfo: "A plataforma da Conical Connection é DETERMINADA pelo diâmetro do implante instalado — nunca escolhida livremente. Confirme no registro cirúrgico / embalagem (anel colorido: NP fúcsia · RP amarelo · WP azul).",
+            bodyOptions: [
+              { key: "NP", label: "NP — Narrow Platform", diam: "Diâmetros estreitos", desc: "Anel fúcsia. Plataforma estreita da Conical Connection.", color: "#E6007E" },
+              { key: "RP", label: "RP — Regular Platform", diam: "Diâmetros regulares", desc: "Anel amarelo. Plataforma regular da Conical Connection.", color: "#FFD400" },
+              { key: "WP", label: "WP — Wide Platform", diam: "Diâmetros largos", desc: "Anel azul. Plataforma larga da Conical Connection.", color: "#009FE3" },
+            ],
+            objectives: CC_FAMILY,
+          },
+        },
       },
-      nobelReplace: {
-        label: "NobelReplace (Tri-Channel)", desc: "Tri-Channel NobelReplace — torque 35 Ncm. Chave Nobel Hex 1.25mm.", icon: "⬢",
+      // ═══ Conical Connection "S" — plataforma NP UNIFICADA (sem derivação) ═══
+      ccS: {
+        label: "Conical Connection S (Plataforma NP unificada)",
+        desc: "Variantes \"S\": plataforma NP única em todos os diâmetros — sem derivação por diâmetro.",
+        icon: "◆",
         lines: {
-          nobelReplace_main: {
-            label: "NobelReplace Tri-Channel", desc: "NobelReplace — torque 35 Ncm. Nobel Hex 1.25mm.", icon: "⬢", connection: "Tri-Channel NobelReplace",
-            objectives: {
-              unitaria: {
-                label: "Prótese Unitária", desc: "Pilar NobelReplace parafusado ou cimentado", icon: "🦷",
-                subtypes: [
-                  { key: "pilar", label: "Pilar NobelReplace Parafusado", icon: "🔩", desc: "Pilar Tri-Channel para coroa unitária parafusada (Ref. placeholder — confirmar código com fabricante antes do pedido)", heights: gh("Pilar NobelReplace", { torque: "35 Ncm", chave: "Nobel Hex 1.25mm", type: "Pilar Protético", material: "Ti Grau 4", shape: "variobase" }, [["1.5", "33424-1"], ["2.5", "33424-2"], ["3.5", "33424-3"], ["4.5", "33424-4"]]) },
-                  { key: "munhao", label: "Pilar NR Cimentado", icon: "🪝", desc: "Pilar Tri-Channel para coroa cimentada convencional (Ref. placeholder — confirmar código com fabricante antes do pedido)", heights: gh("Pilar NR Cim.", { torque: "35 Ncm", chave: "Nobel Hex 1.25mm", type: "Munhão Cimentado", material: "Ti Grau 4", shape: "pilar_cim" }, [["1.5", "33425-1"], ["2.5", "33425-2"], ["3.5", "33425-3"], ["4.5", "33425-4"]]) },
-                ]
-              },
-              multipla: {
-                label: "Prótese Unida / Múltipla", desc: "MUA Tri-Channel para protocolo All-on-4/6 (Ref. placeholder — confirmar código com fabricante antes do pedido)", icon: "🦷🦷",
-                subtypes: [
-                  { key: "mua", label: "Multi-Unit Abutment NobelReplace", icon: "⚙️", desc: "MUA Tri-Channel para protocolo All-on-4/6 (Ref. placeholder — confirmar código com fabricante antes do pedido)", heights: gh("MUA NobelReplace", { torque: "15 Ncm", chave: "Nobel Hex 1.25mm", type: "Multi-Unit Abutment", material: "Ti Grau 4", shape: "sra" }, [["1.5", "32983-1"], ["2.5", "32983-2"], ["3.5", "32983-3"]]) },
-                ]
-              },
-            }
-          }
-        }
+          na_s: {
+            label: "NobelActive S", desc: "NobelActive S — Conical Connection com plataforma NP unificada (todos os diâmetros).", icon: "◆",
+            connection: "Conical Connection (CC)",
+            connectionFamily: "Conical Connection (CC)",
+            connectionMode: "UNIFIED",
+            plataformaUnica: "NP",
+            objectives: CC_NP_ONLY,
+          },
+          npar_s: {
+            label: "NobelParallel S", desc: "NobelParallel S — Conical Connection com plataforma NP unificada (todos os diâmetros).", icon: "◆",
+            connection: "Conical Connection (CC)",
+            connectionFamily: "Conical Connection (CC)",
+            connectionMode: "UNIFIED",
+            plataformaUnica: "NP",
+            objectives: CC_NP_ONLY,
+          },
+          nrep_s: {
+            label: "NobelReplace S", desc: "NobelReplace S — Conical Connection com plataforma NP unificada (todos os diâmetros).", icon: "◆",
+            connection: "Conical Connection (CC)",
+            connectionFamily: "Conical Connection (CC)",
+            connectionMode: "UNIFIED",
+            plataformaUnica: "NP",
+            objectives: CC_NP_ONLY,
+          },
+        },
+      },
+      // ═══ Tri-Channel / Tri-Lobe (LEGADO) — família SEPARADA, NÃO compatível com CC ═══
+      trilobe: {
+        label: "Tri-Channel / Tri-Lobe (legado)",
+        desc: "NobelReplace original de conexão tri-lobular. Sistema legado — interface protética própria.",
+        icon: "⬢",
+        connectionFamily: "Tri-Channel / Tri-Lobe",
+        avisoIncompatibilidade: "Conexão Tri-Channel / Tri-Lobe (legado): NÃO é compatível com componentes Conical Connection (CC). Use exclusivamente componentes Tri-Lobe.",
+        lines: {
+          nrep_trilobe: {
+            label: "NobelReplace Tri-Lobe", desc: "NobelReplace de conexão tri-lobular (legado). Plataforma derivada do diâmetro (NP / RP / WP / 6.0).", icon: "⬢",
+            connection: "Tri-Channel / Tri-Lobe",
+            connectionFamily: "Tri-Channel / Tri-Lobe",
+            connectionMode: "DERIVED_FROM_DIAMETER",
+            componentesNamespace: "nobel_trilobe",
+            avisoIncompatibilidade: "Conexão Tri-Channel / Tri-Lobe (legado): NÃO é compatível com componentes Conical Connection (CC). Use exclusivamente componentes Tri-Lobe.",
+            hasBodySelect: true,
+            selectTitle: "Plataforma protética",
+            selectSub: "Derivada do diâmetro do implante (Tri-Lobe)",
+            selectInfo: "A plataforma Tri-Lobe é DETERMINADA pelo diâmetro do implante instalado — nunca escolhida livremente. Confirme no registro cirúrgico / embalagem (anel colorido: NP fúcsia · RP amarelo · WP azul · 6.0 verde).",
+            bodyOptions: [
+              { key: "NP", label: "NP — Narrow Platform", diam: "Diâmetros estreitos", desc: "Anel fúcsia. Plataforma estreita Tri-Lobe.", color: "#E6007E" },
+              { key: "RP", label: "RP — Regular Platform", diam: "Diâmetros regulares", desc: "Anel amarelo. Plataforma regular Tri-Lobe.", color: "#FFD400" },
+              { key: "WP", label: "WP — Wide Platform", diam: "Diâmetros largos", desc: "Anel azul. Plataforma larga Tri-Lobe.", color: "#009FE3" },
+              { key: "6.0", label: "Plataforma 6.0", diam: "∅ 6,0 mm", desc: "Anel verde. Plataforma 6.0 Tri-Lobe.", color: "#00A651" },
+            ],
+            objectives: TRILOBE_FAMILY,
+          },
+        },
       },
     }
   },
