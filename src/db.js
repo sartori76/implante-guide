@@ -13,12 +13,47 @@ export function gh(baseName, baseInfo, pairs) {
 function ghS(baseName, type, shape, heightKeys) {
   const out = {};
   heightKeys.forEach((h) => {
-    out[h] = { name: `${baseName} GH ${h.replace(".", ",")}mm`, sku: null, skuStatus: "nao_verificado", torque: null, chave: null, type, material: null, shape };
+    out[h] = { name: `${baseName} GH ${h.replace(".", ",")}mm`, sku: null, skuStatus: "nao_verificado", heightStatus: "placeholder", torque: null, chave: null, type, material: null, shape };
   });
   return out;
 }
 
 // ─── BASE DE DADOS ────────────────────────────────────────────────────────────
+// ─── Componentes Nobel por conexão/plataforma (fonte ÚNICA, deduplicada) ──────
+// Sem dado clínico inventado: REF/torque/chave/material = null; alturas são
+// PLACEHOLDERS a confirmar (heightStatus). As 3 linhas CC compartilham CC_FAMILY
+// (mesma referência); as linhas S referenciam só o NP da CC (CC_NP_ONLY, mesmos
+// objetos → REF preenchido uma vez vale para CC-NP e para S).
+const PLAT_HEIGHTS = ["1.0", "2.0", "3.0"];       // placeholder a confirmar
+const PLAT_HEIGHTS_MUA = ["1.5", "2.5", "3.5"];   // placeholder a confirmar
+
+function connComponents(sysLabel, plats, keyPrefix = "", extraDesc = "") {
+  const unitaria = [], multipla = [];
+  for (const p of plats) {
+    unitaria.push(
+      { key: `${keyPrefix}base_cad_${p}`, body: p, label: "Base CAD/CAM parafusada (Ti-base)", icon: "🔩", desc: `Base protética para coroa unitária parafusada CAD/CAM — ${sysLabel} ${p}.${extraDesc} Referência a confirmar no eShop Nobel.`, heights: ghS(`Base CAD/CAM ${sysLabel} ${p}`, "Base protética parafusada", "variobase", PLAT_HEIGHTS) },
+      { key: `${keyPrefix}pilar_cim_${p}`, body: p, label: "Pilar cimentável", icon: "🪝", desc: `Pilar para coroa unitária cimentada — ${sysLabel} ${p}.${extraDesc} Referência a confirmar no eShop Nobel.`, heights: ghS(`Pilar cimentável ${sysLabel} ${p}`, "Pilar cimentável", "pilar_cim", PLAT_HEIGHTS) },
+    );
+    multipla.push(
+      { key: `${keyPrefix}mua_${p}`, body: p, label: "Multi-Unit Abutment", icon: "⚙️", desc: `MUA para próteses fixas múltiplas — ${sysLabel} ${p}.${extraDesc} Referência a confirmar no eShop Nobel.`, heights: ghS(`Multi-Unit Abutment ${sysLabel} ${p}`, "Multi-Unit Abutment", "sra", PLAT_HEIGHTS_MUA) },
+    );
+  }
+  return {
+    unitaria: { label: "Prótese Unitária", desc: "Base CAD/CAM parafusada ou pilar cimentável (referências a confirmar no eShop).", icon: "🦷", subtypes: unitaria },
+    multipla: { label: "Prótese Unida / Múltipla", desc: "Multi-Unit Abutment para próteses fixas múltiplas (referências a confirmar no eShop).", icon: "🦷🦷", subtypes: multipla },
+  };
+}
+
+// CC: plataformas derivadas do diâmetro (3.0 só no NobelActive; gating via bodyOptions).
+const CC_FAMILY = connComponents("Conical Connection", ["3.0", "NP", "RP", "WP"]);
+// S (UNIFIED): mesmos objetos NP da CC — dedup real.
+const CC_NP_ONLY = {
+  unitaria: { ...CC_FAMILY.unitaria, subtypes: CC_FAMILY.unitaria.subtypes.filter((s) => s.body === "NP") },
+  multipla: { ...CC_FAMILY.multipla, subtypes: CC_FAMILY.multipla.subtypes.filter((s) => s.body === "NP") },
+};
+// Tri-Lobe (legado): família/IDs próprios; incompatível com CC.
+const TRILOBE_FAMILY = connComponents("Tri-Lobe", ["NP", "RP", "WP", "6.0"], "nobel_trilobe_", " Exclusivo Tri-Channel/Tri-Lobe (NÃO compatível com CC).");
+
 export const DB = {
   straumann: {
     label: "Straumann", logo: "STR", color: "#3b82f6", site: "straumann.com.br",
@@ -621,21 +656,7 @@ export const DB = {
               { key: "RP", label: "RP — Regular Platform", diam: "Diâmetros regulares", desc: "Anel amarelo. Plataforma regular da Conical Connection.", color: "#FFD400" },
               { key: "WP", label: "WP — Wide Platform", diam: "Diâmetros largos", desc: "Anel azul. Plataforma larga da Conical Connection.", color: "#009FE3" },
             ],
-            objectives: {
-              unitaria: {
-                label: "Prótese Unitária", desc: "Base CAD/CAM parafusada ou pilar cimentável (referências a confirmar no eShop).", icon: "🦷",
-                subtypes: [
-                  { key: "base_cad", label: "Base CAD/CAM parafusada (Ti-base)", icon: "🔩", desc: "Base protética para coroa unitária parafusada CAD/CAM sobre Conical Connection (CC). Referência a confirmar no eShop Nobel.", heights: ghS("Base CAD/CAM NobelActive CC", "Base protética parafusada", "variobase", ["1.0", "2.0", "3.0"]) },
-                  { key: "pilar_cim", label: "Pilar cimentável", icon: "🪝", desc: "Pilar para coroa unitária cimentada sobre Conical Connection (CC). Referência a confirmar no eShop Nobel.", heights: ghS("Pilar cimentável NobelActive CC", "Pilar cimentável", "pilar_cim", ["1.0", "2.0", "3.0"]) },
-                ]
-              },
-              multipla: {
-                label: "Prótese Unida / Múltipla", desc: "Multi-Unit Abutment para próteses fixas múltiplas (referências a confirmar no eShop).", icon: "🦷🦷",
-                subtypes: [
-                  { key: "mua", label: "Multi-Unit Abutment", icon: "⚙️", desc: "MUA para próteses fixas múltiplas / protocolo sobre Conical Connection (CC). Referência a confirmar no eShop Nobel.", heights: ghS("Multi-Unit Abutment NobelActive CC", "Multi-Unit Abutment", "sra", ["1.5", "2.5", "3.5"]) },
-                ]
-              },
-            },
+            objectives: CC_FAMILY,
           },
           npar_cc: {
             label: "NobelParallel CC", desc: "NobelParallel Conical Connection. Plataforma derivada do diâmetro (NP / RP / WP).", icon: "◆",
@@ -651,21 +672,7 @@ export const DB = {
               { key: "RP", label: "RP — Regular Platform", diam: "Diâmetros regulares", desc: "Anel amarelo. Plataforma regular da Conical Connection.", color: "#FFD400" },
               { key: "WP", label: "WP — Wide Platform", diam: "Diâmetros largos", desc: "Anel azul. Plataforma larga da Conical Connection.", color: "#009FE3" },
             ],
-            objectives: {
-              unitaria: {
-                label: "Prótese Unitária", desc: "Base CAD/CAM parafusada ou pilar cimentável (referências a confirmar no eShop).", icon: "🦷",
-                subtypes: [
-                  { key: "base_cad", label: "Base CAD/CAM parafusada (Ti-base)", icon: "🔩", desc: "Base protética para coroa unitária parafusada CAD/CAM sobre Conical Connection (CC). Referência a confirmar no eShop Nobel.", heights: ghS("Base CAD/CAM NobelParallel CC", "Base protética parafusada", "variobase", ["1.0", "2.0", "3.0"]) },
-                  { key: "pilar_cim", label: "Pilar cimentável", icon: "🪝", desc: "Pilar para coroa unitária cimentada sobre Conical Connection (CC). Referência a confirmar no eShop Nobel.", heights: ghS("Pilar cimentável NobelParallel CC", "Pilar cimentável", "pilar_cim", ["1.0", "2.0", "3.0"]) },
-                ]
-              },
-              multipla: {
-                label: "Prótese Unida / Múltipla", desc: "Multi-Unit Abutment para próteses fixas múltiplas (referências a confirmar no eShop).", icon: "🦷🦷",
-                subtypes: [
-                  { key: "mua", label: "Multi-Unit Abutment", icon: "⚙️", desc: "MUA para próteses fixas múltiplas / protocolo sobre Conical Connection (CC). Referência a confirmar no eShop Nobel.", heights: ghS("Multi-Unit Abutment NobelParallel CC", "Multi-Unit Abutment", "sra", ["1.5", "2.5", "3.5"]) },
-                ]
-              },
-            },
+            objectives: CC_FAMILY,
           },
           nrep_cc: {
             label: "NobelReplace CC", desc: "NobelReplace Conical Connection (cônico interno). Plataforma derivada do diâmetro (NP / RP / WP).", icon: "◆",
@@ -681,21 +688,7 @@ export const DB = {
               { key: "RP", label: "RP — Regular Platform", diam: "Diâmetros regulares", desc: "Anel amarelo. Plataforma regular da Conical Connection.", color: "#FFD400" },
               { key: "WP", label: "WP — Wide Platform", diam: "Diâmetros largos", desc: "Anel azul. Plataforma larga da Conical Connection.", color: "#009FE3" },
             ],
-            objectives: {
-              unitaria: {
-                label: "Prótese Unitária", desc: "Base CAD/CAM parafusada ou pilar cimentável (referências a confirmar no eShop).", icon: "🦷",
-                subtypes: [
-                  { key: "base_cad", label: "Base CAD/CAM parafusada (Ti-base)", icon: "🔩", desc: "Base protética para coroa unitária parafusada CAD/CAM sobre Conical Connection (CC). Referência a confirmar no eShop Nobel.", heights: ghS("Base CAD/CAM NobelReplace CC", "Base protética parafusada", "variobase", ["1.0", "2.0", "3.0"]) },
-                  { key: "pilar_cim", label: "Pilar cimentável", icon: "🪝", desc: "Pilar para coroa unitária cimentada sobre Conical Connection (CC). Referência a confirmar no eShop Nobel.", heights: ghS("Pilar cimentável NobelReplace CC", "Pilar cimentável", "pilar_cim", ["1.0", "2.0", "3.0"]) },
-                ]
-              },
-              multipla: {
-                label: "Prótese Unida / Múltipla", desc: "Multi-Unit Abutment para próteses fixas múltiplas (referências a confirmar no eShop).", icon: "🦷🦷",
-                subtypes: [
-                  { key: "mua", label: "Multi-Unit Abutment", icon: "⚙️", desc: "MUA para próteses fixas múltiplas / protocolo sobre Conical Connection (CC). Referência a confirmar no eShop Nobel.", heights: ghS("Multi-Unit Abutment NobelReplace CC", "Multi-Unit Abutment", "sra", ["1.5", "2.5", "3.5"]) },
-                ]
-              },
-            },
+            objectives: CC_FAMILY,
           },
         },
       },
@@ -711,21 +704,7 @@ export const DB = {
             connectionFamily: "Conical Connection (CC)",
             connectionMode: "UNIFIED",
             plataformaUnica: "NP",
-            objectives: {
-              unitaria: {
-                label: "Prótese Unitária", desc: "Base CAD/CAM parafusada ou pilar cimentável (referências a confirmar no eShop).", icon: "🦷",
-                subtypes: [
-                  { key: "base_cad", label: "Base CAD/CAM parafusada (Ti-base)", icon: "🔩", desc: "Base protética para coroa unitária parafusada CAD/CAM sobre Conical Connection (CC) — plataforma NP unificada. Referência a confirmar no eShop Nobel.", heights: ghS("Base CAD/CAM NobelActive S", "Base protética parafusada", "variobase", ["1.0", "2.0", "3.0"]) },
-                  { key: "pilar_cim", label: "Pilar cimentável", icon: "🪝", desc: "Pilar para coroa unitária cimentada sobre Conical Connection (CC) — plataforma NP unificada. Referência a confirmar no eShop Nobel.", heights: ghS("Pilar cimentável NobelActive S", "Pilar cimentável", "pilar_cim", ["1.0", "2.0", "3.0"]) },
-                ]
-              },
-              multipla: {
-                label: "Prótese Unida / Múltipla", desc: "Multi-Unit Abutment para próteses fixas múltiplas (referências a confirmar no eShop).", icon: "🦷🦷",
-                subtypes: [
-                  { key: "mua", label: "Multi-Unit Abutment", icon: "⚙️", desc: "MUA para próteses fixas múltiplas / protocolo sobre Conical Connection (CC) — plataforma NP unificada. Referência a confirmar no eShop Nobel.", heights: ghS("Multi-Unit Abutment NobelActive S", "Multi-Unit Abutment", "sra", ["1.5", "2.5", "3.5"]) },
-                ]
-              },
-            },
+            objectives: CC_NP_ONLY,
           },
           npar_s: {
             label: "NobelParallel S", desc: "NobelParallel S — Conical Connection com plataforma NP unificada (todos os diâmetros).", icon: "◆",
@@ -733,21 +712,7 @@ export const DB = {
             connectionFamily: "Conical Connection (CC)",
             connectionMode: "UNIFIED",
             plataformaUnica: "NP",
-            objectives: {
-              unitaria: {
-                label: "Prótese Unitária", desc: "Base CAD/CAM parafusada ou pilar cimentável (referências a confirmar no eShop).", icon: "🦷",
-                subtypes: [
-                  { key: "base_cad", label: "Base CAD/CAM parafusada (Ti-base)", icon: "🔩", desc: "Base protética para coroa unitária parafusada CAD/CAM sobre Conical Connection (CC) — plataforma NP unificada. Referência a confirmar no eShop Nobel.", heights: ghS("Base CAD/CAM NobelParallel S", "Base protética parafusada", "variobase", ["1.0", "2.0", "3.0"]) },
-                  { key: "pilar_cim", label: "Pilar cimentável", icon: "🪝", desc: "Pilar para coroa unitária cimentada sobre Conical Connection (CC) — plataforma NP unificada. Referência a confirmar no eShop Nobel.", heights: ghS("Pilar cimentável NobelParallel S", "Pilar cimentável", "pilar_cim", ["1.0", "2.0", "3.0"]) },
-                ]
-              },
-              multipla: {
-                label: "Prótese Unida / Múltipla", desc: "Multi-Unit Abutment para próteses fixas múltiplas (referências a confirmar no eShop).", icon: "🦷🦷",
-                subtypes: [
-                  { key: "mua", label: "Multi-Unit Abutment", icon: "⚙️", desc: "MUA para próteses fixas múltiplas / protocolo sobre Conical Connection (CC) — plataforma NP unificada. Referência a confirmar no eShop Nobel.", heights: ghS("Multi-Unit Abutment NobelParallel S", "Multi-Unit Abutment", "sra", ["1.5", "2.5", "3.5"]) },
-                ]
-              },
-            },
+            objectives: CC_NP_ONLY,
           },
           nrep_s: {
             label: "NobelReplace S", desc: "NobelReplace S — Conical Connection com plataforma NP unificada (todos os diâmetros).", icon: "◆",
@@ -755,21 +720,7 @@ export const DB = {
             connectionFamily: "Conical Connection (CC)",
             connectionMode: "UNIFIED",
             plataformaUnica: "NP",
-            objectives: {
-              unitaria: {
-                label: "Prótese Unitária", desc: "Base CAD/CAM parafusada ou pilar cimentável (referências a confirmar no eShop).", icon: "🦷",
-                subtypes: [
-                  { key: "base_cad", label: "Base CAD/CAM parafusada (Ti-base)", icon: "🔩", desc: "Base protética para coroa unitária parafusada CAD/CAM sobre Conical Connection (CC) — plataforma NP unificada. Referência a confirmar no eShop Nobel.", heights: ghS("Base CAD/CAM NobelReplace S", "Base protética parafusada", "variobase", ["1.0", "2.0", "3.0"]) },
-                  { key: "pilar_cim", label: "Pilar cimentável", icon: "🪝", desc: "Pilar para coroa unitária cimentada sobre Conical Connection (CC) — plataforma NP unificada. Referência a confirmar no eShop Nobel.", heights: ghS("Pilar cimentável NobelReplace S", "Pilar cimentável", "pilar_cim", ["1.0", "2.0", "3.0"]) },
-                ]
-              },
-              multipla: {
-                label: "Prótese Unida / Múltipla", desc: "Multi-Unit Abutment para próteses fixas múltiplas (referências a confirmar no eShop).", icon: "🦷🦷",
-                subtypes: [
-                  { key: "mua", label: "Multi-Unit Abutment", icon: "⚙️", desc: "MUA para próteses fixas múltiplas / protocolo sobre Conical Connection (CC) — plataforma NP unificada. Referência a confirmar no eShop Nobel.", heights: ghS("Multi-Unit Abutment NobelReplace S", "Multi-Unit Abutment", "sra", ["1.5", "2.5", "3.5"]) },
-                ]
-              },
-            },
+            objectives: CC_NP_ONLY,
           },
         },
       },
@@ -798,21 +749,7 @@ export const DB = {
               { key: "WP", label: "WP — Wide Platform", diam: "Diâmetros largos", desc: "Anel azul. Plataforma larga Tri-Lobe.", color: "#009FE3" },
               { key: "6.0", label: "Plataforma 6.0", diam: "∅ 6,0 mm", desc: "Anel verde. Plataforma 6.0 Tri-Lobe.", color: "#00A651" },
             ],
-            objectives: {
-              unitaria: {
-                label: "Prótese Unitária", desc: "Componentes Tri-Lobe (legado) — base CAD/CAM parafusada ou pilar cimentável. Referências a confirmar no eShop.", icon: "🦷",
-                subtypes: [
-                  { key: "nobel_trilobe_base_cad", label: "Base CAD/CAM parafusada (Ti-base) Tri-Lobe", icon: "🔩", desc: "Base protética Tri-Lobe para coroa unitária parafusada CAD/CAM. Exclusiva da conexão Tri-Channel / Tri-Lobe (NÃO compatível com CC). Referência a confirmar no eShop Nobel.", heights: ghS("Base CAD/CAM Tri-Lobe", "Base protética parafusada", "variobase", ["1.0", "2.0", "3.0"]) },
-                  { key: "nobel_trilobe_pilar_cim", label: "Pilar cimentável Tri-Lobe", icon: "🪝", desc: "Pilar cimentável Tri-Lobe para coroa unitária. Exclusivo da conexão Tri-Channel / Tri-Lobe (NÃO compatível com CC). Referência a confirmar no eShop Nobel.", heights: ghS("Pilar cimentável Tri-Lobe", "Pilar cimentável", "pilar_cim", ["1.0", "2.0", "3.0"]) },
-                ]
-              },
-              multipla: {
-                label: "Prótese Unida / Múltipla", desc: "Multi-Unit Abutment Tri-Lobe para próteses fixas múltiplas. Referências a confirmar no eShop.", icon: "🦷🦷",
-                subtypes: [
-                  { key: "nobel_trilobe_mua", label: "Multi-Unit Abutment Tri-Lobe", icon: "⚙️", desc: "MUA Tri-Lobe para próteses fixas múltiplas / protocolo. Exclusivo da conexão Tri-Channel / Tri-Lobe (NÃO compatível com CC). Referência a confirmar no eShop Nobel.", heights: ghS("Multi-Unit Abutment Tri-Lobe", "Multi-Unit Abutment", "sra", ["1.5", "2.5", "3.5"]) },
-                ]
-              },
-            },
+            objectives: TRILOBE_FAMILY,
           },
         },
       },
